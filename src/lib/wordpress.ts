@@ -279,7 +279,8 @@ function getFallbackHomeData() {
         logo_icon: 'spa',
         links: [{ label: 'Journal', url: '/journal' }, { label: 'Expert Directory', url: '/experts' }, { label: 'Community', url: '/community' }],
         login_label: 'Log In',
-        cta_label: 'Buddler werden',
+        cta_label: 'Jetzt loslegen',
+        cta_url: '/signup',
       },
     },
   }
@@ -369,19 +370,33 @@ function normalizeFeaturesSection(
   return merged
 }
 
+/** Normalize nav so CTA fields are read from nested (nav.cta_label) or flat (nav_cta_label) ACF response */
+function normalizeNav(
+  mergedNav: Record<string, unknown>,
+  acf: Record<string, unknown>
+): Record<string, unknown> {
+  const out = { ...mergedNav }
+  const ctaLabel = firstNonEmptyString(mergedNav.cta_label, acf.nav_cta_label)
+  const ctaUrl = firstNonEmptyString(mergedNav.cta_url, acf.nav_cta_url)
+  if (ctaLabel !== undefined) out.cta_label = ctaLabel
+  if (ctaUrl !== undefined) out.cta_url = ctaUrl
+  return out
+}
+
 /** Merged content for the home page (ACF + fallback defaults) */
 export function getHomeContent(data: HomeData) {
   const fallback = data.fallback ?? {}
   const acf = data.options ?? {}
   const f = fallback as Record<string, unknown>
   const a = acf as Record<string, unknown>
+  const mergedNav = mergeSection(f?.nav, a?.nav) as Record<string, unknown>
   return {
     hero: mergeSection(f?.hero, a?.hero),
     features_section: normalizeFeaturesSection(f?.features_section, a?.features_section, a),
     parallax_section: mergeSection(f?.parallax_section, a?.parallax_section),
     pricing_section: mergeSection(f?.pricing_section, a?.pricing_section),
     footer: mergeSection(f?.footer, a?.footer),
-    nav: mergeSection(f?.nav, a?.nav),
+    nav: normalizeNav(mergedNav, a),
   }
 }
 

@@ -41,6 +41,8 @@
   text-decoration: none;
   font-weight: 700;
   font-size: 1.25rem;
+  font-family: var(--font-serif);
+  letter-spacing: -0.025em;
   transition: opacity 0.2s;
 
   &:hover {

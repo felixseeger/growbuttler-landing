@@ -1020,7 +1020,7 @@
             "label": "CTA Label",
             "name": "cta_label",
             "type": "text",
-            "instructions": "Text für den CTA-Button im Header (z.B. „Jetzt Loslegen“).",
+            "instructions": "Text für den CTA-Button im Header (z.B. „Jetzt loslegen“).",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {

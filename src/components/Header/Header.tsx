@@ -26,6 +26,13 @@ const defaultLinks: NavLink[] = [
   { label: 'Community', url: '#' },
 ]
 
+const normalizeCtaLabel = (label: string): string => {
+  const t = label.trim()
+  if (!t) return label
+  const fixed = (t.startsWith('etzt ') ? 'J' + t : t).replace(/\bLoslegen\b/, 'loslegen')
+  return fixed
+}
+
 export default function Header({
   logoLabel = 'GrowButler',
   logoImage = null,
@@ -37,6 +44,7 @@ export default function Header({
 }: HeaderProps) {
   const safeLinks = Array.isArray(links) && links.length > 0 ? links : defaultLinks
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const displayCtaLabel = normalizeCtaLabel(ctaLabel)
 
   const closeMobileMenu = () => setIsMobileMenuOpen(false)
 
@@ -67,7 +75,7 @@ export default function Header({
         </div>
         <div className={styles.actions}>
           <Link href="/login" className={styles.login}>{loginLabel}</Link>
-          <Link href={ctaUrl} className={styles.cta}>{ctaLabel}</Link>
+          <Link href={ctaUrl} className={styles.cta}>{displayCtaLabel}</Link>
           <button
             type="button"
             className={styles.mobileMenuButton}
@@ -100,7 +108,7 @@ export default function Header({
                 {loginLabel}
               </Link>
               <Link href={ctaUrl} className={styles.mobileCta} onClick={closeMobileMenu}>
-                {ctaLabel}
+                {displayCtaLabel}
               </Link>
             </div>
           </div>

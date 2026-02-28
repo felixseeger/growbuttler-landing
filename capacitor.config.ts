@@ -5,14 +5,14 @@ const config: CapacitorConfig = {
   appName: 'GrowButtler',
   webDir: 'out',
   server: {
-    // Load from deployed URL (change for local dev)
     url: 'https://growbuttler-landing.vercel.app',
     cleartext: true
   },
   ios: {
     contentInset: 'automatic',
     scheme: 'GrowButtler',
-    backgroundColor: '#F5F1E8'
+    backgroundColor: '#F5F1E8',
+    allowsLinkPreview: false
   },
   android: {
     allowMixedContent: true,
@@ -20,16 +20,10 @@ const config: CapacitorConfig = {
   },
   plugins: {
     SplashScreen: {
-      launchShowDuration: 2000,
+      launchAutoHide: true,
+      launchShowDuration: 0,
       backgroundColor: '#F5F1E8',
-      showSpinner: false,
-      androidScaleType: 'CENTER_CROP',
-      splashFullScreen: true,
-      splashImmersive: true
-    },
-    StatusBar: {
-      style: 'DARK',
-      backgroundColor: '#F5F1E8'
+      showSpinner: false
     }
   }
 };

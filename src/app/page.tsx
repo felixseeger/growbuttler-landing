@@ -34,6 +34,7 @@ export default async function HomePage() {
         links={menuLinks}
         loginLabel={nav.login_label as string}
         ctaLabel={nav.cta_label as string}
+        ctaUrl={(nav.cta_url as string) || '/signup'}
       />
       <main className="flex-grow pt-24 pb-12">
         <Hero
