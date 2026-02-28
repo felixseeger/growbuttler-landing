@@ -80,6 +80,13 @@ export default function RootLayout({
         <link rel="alternate" hrefLang="en-US" href={`${baseUrl}/en`} />
         <link rel="alternate" hrefLang="de-DE" href={`${baseUrl}/de`} />
         <link rel="alternate" hrefLang="x-default" href={`${baseUrl}/`} />
+        
+        {/* PWA & Mobile App */}
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#2D5016" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="GrowButtler" />
       </head>
       <body className="flex flex-col min-h-screen">
         <div className="paper-texture" aria-hidden />
