@@ -2,20 +2,38 @@
 
 import { useEffect, useState } from 'react'
 
+function getFirstName(user: {
+  firstName?: string
+  name?: string
+  email?: string
+}): string {
+  if (user.firstName?.trim()) return user.firstName.trim()
+  const fullName = user.name?.trim()
+  // Only use name if it looks like a display name (not an email/username)
+  if (fullName && !fullName.includes('@')) {
+    const first = fullName.split(/\s+/)[0]
+    if (first) return first
+  }
+  // Never show full email; use local part as fallback (e.g. "felix" from "felix@…")
+  if (user.email?.includes('@')) {
+    const local = user.email.split('@')[0].trim()
+    if (local) return local.charAt(0).toUpperCase() + local.slice(1).toLowerCase()
+  }
+  return 'Kultivator'
+}
+
 export default function DashboardGreeting() {
-  const [userName, setUserName] = useState<string>('Kultivator')
+  const [firstName, setFirstName] = useState<string>('Kultivator')
   const [greeting, setGreeting] = useState<string>('Good morning')
 
   useEffect(() => {
-    // Fetch user info from the API
     fetch('/api/auth/me', {
       credentials: 'include',
     })
       .then((res) => res.json())
       .then((data) => {
         if (data.user) {
-          // Use firstName if available, otherwise fall back to full name or email
-          setUserName(data.user.firstName || data.user.name || data.user.email || 'Kultivator')
+          setFirstName(getFirstName(data.user))
         }
       })
       .catch((err) => {
@@ -35,7 +53,7 @@ export default function DashboardGreeting() {
 
   return (
     <h2>
-      {greeting}, {userName}.
+      {greeting}, {firstName}.
     </h2>
   )
 }
