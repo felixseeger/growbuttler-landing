@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import SubpageLayout from '@/components/SubpageLayout/SubpageLayout'
+import DashboardGreeting from '@/components/DashboardGreeting'
 import styles from './DashboardPage.module.scss'
 import Image from 'next/image'
 
@@ -15,7 +16,9 @@ export default function DashboardPage() {
         {/* Hero Header */}
         <section className={styles.hero}>
           <div>
-            <h2 className={styles.greeting}>Good morning, Alex.</h2>
+            <div className={styles.greeting}>
+              <DashboardGreeting />
+            </div>
             <p className={styles.status}>Your garden is thriving today.</p>
           </div>
           <button className={styles.seedBtn}>
