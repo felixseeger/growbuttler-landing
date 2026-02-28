@@ -1,0 +1,671 @@
+[
+  {
+    "key": "group_growbuttler_expertensuche",
+    "title": "GrowButtler: Expertensuche",
+    "fields": [
+      {
+        "key": "field_expert_page_header",
+        "label": "Seitenkopf",
+        "name": "page_header",
+        "type": "group",
+        "layout": "block",
+        "sub_fields": [
+          {
+            "key": "field_expert_page_header_title",
+            "label": "Titel",
+            "name": "title",
+            "type": "text",
+            "default_value": "Find Your Mentor",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_expert_page_header_subtitle",
+            "label": "Untertitel",
+            "name": "subtitle",
+            "type": "textarea",
+            "rows": 2,
+            "new_lines": "br",
+            "default_value": "Connect with master cultivators for personalized guidance on your grow.",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_expert_page_header_badge_label",
+            "label": "Badge Label",
+            "name": "badge_label",
+            "type": "text",
+            "default_value": "Vetted Masters",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_expert_page_header_badge_icon",
+            "label": "Badge Icon (Material Symbol)",
+            "name": "badge_icon",
+            "type": "text",
+            "default_value": "verified_user",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_expert_page_header_results_label",
+            "label": "Result Label",
+            "name": "results_label",
+            "type": "text",
+            "default_value": "Results",
+            "show_in_rest": 1
+          }
+        ],
+        "show_in_rest": 1
+      },
+      {
+        "key": "field_expert_search_filters",
+        "label": "Suche & Filter",
+        "name": "search_filters",
+        "type": "group",
+        "layout": "block",
+        "sub_fields": [
+          {
+            "key": "field_expert_search_placeholder",
+            "label": "Suchfeld Platzhalter",
+            "name": "search_placeholder",
+            "type": "text",
+            "default_value": "Search by name, location, or keyword...",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_expert_search_button_map_icon",
+            "label": "Map Toggle Icon",
+            "name": "map_toggle_icon",
+            "type": "text",
+            "default_value": "map",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_expert_filter_groups",
+            "label": "Filter Gruppen",
+            "name": "filter_groups",
+            "type": "repeater",
+            "layout": "table",
+            "button_label": "Filter hinzufügen",
+            "sub_fields": [
+              {
+                "key": "field_expert_filter_key",
+                "label": "Key",
+                "name": "key",
+                "type": "text",
+                "default_value": "",
+                "show_in_rest": 1
+              },
+              {
+                "key": "field_expert_filter_label",
+                "label": "Label",
+                "name": "label",
+                "type": "text",
+                "default_value": "",
+                "show_in_rest": 1
+              },
+              {
+                "key": "field_expert_filter_type",
+                "label": "Typ",
+                "name": "type",
+                "type": "select",
+                "choices": {
+                  "select": "Select",
+                  "range": "Range",
+                  "toggle": "Toggle",
+                  "multiselect": "Multi Select"
+                },
+                "default_value": "select",
+                "ui": 1,
+                "show_in_rest": 1
+              },
+              {
+                "key": "field_expert_filter_options",
+                "label": "Optionen",
+                "name": "options",
+                "type": "repeater",
+                "layout": "table",
+                "button_label": "Option hinzufügen",
+                "sub_fields": [
+                  {
+                    "key": "field_expert_filter_option_value",
+                    "label": "Value",
+                    "name": "value",
+                    "type": "text",
+                    "show_in_rest": 1
+                  },
+                  {
+                    "key": "field_expert_filter_option_label",
+                    "label": "Label",
+                    "name": "label",
+                    "type": "text",
+                    "show_in_rest": 1
+                  }
+                ],
+                "show_in_rest": 1
+              }
+            ],
+            "show_in_rest": 1
+          }
+        ],
+        "show_in_rest": 1
+      },
+      {
+        "key": "field_expert_results_section",
+        "label": "Ergebnisliste",
+        "name": "results_section",
+        "type": "group",
+        "layout": "block",
+        "sub_fields": [
+          {
+            "key": "field_expert_results_title",
+            "label": "Sektion Titel",
+            "name": "section_title",
+            "type": "text",
+            "default_value": "Top Experts in Berlin",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_expert_results_count_text",
+            "label": "Result Count Text",
+            "name": "result_count_text",
+            "type": "text",
+            "default_value": "12 Results",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_expert_cards",
+            "label": "Experten",
+            "name": "experts",
+            "type": "repeater",
+            "layout": "block",
+            "button_label": "Experte hinzufügen",
+            "sub_fields": [
+              {
+                "key": "field_expert_card_name",
+                "label": "Name",
+                "name": "name",
+                "type": "text",
+                "show_in_rest": 1
+              },
+              {
+                "key": "field_expert_card_avatar",
+                "label": "Avatar",
+                "name": "avatar",
+                "type": "image",
+                "return_format": "array",
+                "preview_size": "thumbnail",
+                "library": "all",
+                "show_in_rest": 1
+              },
+              {
+                "key": "field_expert_card_verified",
+                "label": "Verifiziert",
+                "name": "is_verified",
+                "type": "true_false",
+                "ui": 1,
+                "default_value": 1,
+                "show_in_rest": 1
+              },
+              {
+                "key": "field_expert_card_is_new",
+                "label": "Neu Badge",
+                "name": "is_new",
+                "type": "true_false",
+                "ui": 1,
+                "default_value": 0,
+                "show_in_rest": 1
+              },
+              {
+                "key": "field_expert_card_rating",
+                "label": "Rating",
+                "name": "rating",
+                "type": "text",
+                "default_value": "4.9",
+                "show_in_rest": 1
+              },
+              {
+                "key": "field_expert_card_reviews_count",
+                "label": "Anzahl Reviews",
+                "name": "reviews_count",
+                "type": "number",
+                "default_value": 0,
+                "min": 0,
+                "show_in_rest": 1
+              },
+              {
+                "key": "field_expert_card_location",
+                "label": "Ort",
+                "name": "location",
+                "type": "text",
+                "show_in_rest": 1
+              },
+              {
+                "key": "field_expert_card_price_amount",
+                "label": "Preis Betrag",
+                "name": "price_amount",
+                "type": "number",
+                "default_value": 45,
+                "min": 0,
+                "step": 1,
+                "show_in_rest": 1
+              },
+              {
+                "key": "field_expert_card_price_unit",
+                "label": "Preis Einheit",
+                "name": "price_unit",
+                "type": "text",
+                "default_value": "/hr",
+                "show_in_rest": 1
+              },
+              {
+                "key": "field_expert_card_tags",
+                "label": "Tags",
+                "name": "tags",
+                "type": "repeater",
+                "layout": "table",
+                "button_label": "Tag hinzufügen",
+                "sub_fields": [
+                  {
+                    "key": "field_expert_card_tag_item",
+                    "label": "Tag",
+                    "name": "item",
+                    "type": "text",
+                    "show_in_rest": 1
+                  }
+                ],
+                "show_in_rest": 1
+              },
+              {
+                "key": "field_expert_card_bio",
+                "label": "Kurzbeschreibung",
+                "name": "bio_snippet",
+                "type": "textarea",
+                "rows": 3,
+                "new_lines": "br",
+                "show_in_rest": 1
+              },
+              {
+                "key": "field_expert_card_profile_cta",
+                "label": "CTA Profil",
+                "name": "cta_profile_label",
+                "type": "text",
+                "default_value": "View Profile",
+                "show_in_rest": 1
+              },
+              {
+                "key": "field_expert_card_book_cta",
+                "label": "CTA Buchung",
+                "name": "cta_book_label",
+                "type": "text",
+                "default_value": "Book Now",
+                "show_in_rest": 1
+              },
+              {
+                "key": "field_expert_card_map_icon",
+                "label": "Map Pin Icon",
+                "name": "map_icon",
+                "type": "text",
+                "default_value": "spa",
+                "show_in_rest": 1
+              }
+            ],
+            "show_in_rest": 1
+          }
+        ],
+        "show_in_rest": 1
+      },
+      {
+        "key": "field_expert_pagination",
+        "label": "Pagination",
+        "name": "pagination",
+        "type": "group",
+        "layout": "block",
+        "sub_fields": [
+          {
+            "key": "field_expert_pagination_enabled",
+            "label": "Aktiv",
+            "name": "enabled",
+            "type": "true_false",
+            "ui": 1,
+            "default_value": 1,
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_expert_pagination_prev_label",
+            "label": "Zurück Label",
+            "name": "prev_label",
+            "type": "text",
+            "default_value": "Prev",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_expert_pagination_next_label",
+            "label": "Weiter Label",
+            "name": "next_label",
+            "type": "text",
+            "default_value": "Next",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_expert_pagination_current_page",
+            "label": "Aktuelle Seite",
+            "name": "current_page",
+            "type": "number",
+            "default_value": 1,
+            "min": 1,
+            "step": 1,
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_expert_pagination_total_pages",
+            "label": "Gesamtseiten",
+            "name": "total_pages",
+            "type": "number",
+            "default_value": 3,
+            "min": 1,
+            "step": 1,
+            "show_in_rest": 1
+          }
+        ],
+        "show_in_rest": 1
+      },
+      {
+        "key": "field_expert_map",
+        "label": "Map Ansicht",
+        "name": "map_view",
+        "type": "group",
+        "layout": "block",
+        "sub_fields": [
+          {
+            "key": "field_expert_map_enabled",
+            "label": "Aktiv",
+            "name": "enabled",
+            "type": "true_false",
+            "ui": 1,
+            "default_value": 1,
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_expert_map_background_image",
+            "label": "Map Hintergrundbild",
+            "name": "background_image",
+            "type": "image",
+            "return_format": "array",
+            "preview_size": "large",
+            "library": "all",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_expert_map_controls",
+            "label": "Map Controls",
+            "name": "controls",
+            "type": "repeater",
+            "layout": "table",
+            "button_label": "Control hinzufügen",
+            "sub_fields": [
+              {
+                "key": "field_expert_map_control_key",
+                "label": "Key",
+                "name": "key",
+                "type": "text",
+                "show_in_rest": 1
+              },
+              {
+                "key": "field_expert_map_control_icon",
+                "label": "Icon",
+                "name": "icon",
+                "type": "text",
+                "show_in_rest": 1
+              }
+            ],
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_expert_map_pins",
+            "label": "Map Pins",
+            "name": "pins",
+            "type": "repeater",
+            "layout": "block",
+            "button_label": "Pin hinzufügen",
+            "sub_fields": [
+              {
+                "key": "field_expert_map_pin_name",
+                "label": "Name",
+                "name": "name",
+                "type": "text",
+                "show_in_rest": 1
+              },
+              {
+                "key": "field_expert_map_pin_lat",
+                "label": "Latitude",
+                "name": "lat",
+                "type": "number",
+                "step": "0.000001",
+                "show_in_rest": 1
+              },
+              {
+                "key": "field_expert_map_pin_lng",
+                "label": "Longitude",
+                "name": "lng",
+                "type": "number",
+                "step": "0.000001",
+                "show_in_rest": 1
+              },
+              {
+                "key": "field_expert_map_pin_icon",
+                "label": "Icon",
+                "name": "icon",
+                "type": "text",
+                "default_value": "spa",
+                "show_in_rest": 1
+              },
+              {
+                "key": "field_expert_map_pin_tooltip",
+                "label": "Tooltip Text",
+                "name": "tooltip",
+                "type": "text",
+                "show_in_rest": 1
+              },
+              {
+                "key": "field_expert_map_pin_price",
+                "label": "Preis (Anzeige)",
+                "name": "price_label",
+                "type": "text",
+                "default_value": "€45",
+                "show_in_rest": 1
+              }
+            ],
+            "show_in_rest": 1
+          }
+        ],
+        "show_in_rest": 1
+      },
+      {
+        "key": "field_expert_booking_modal",
+        "label": "Buchungsmodal",
+        "name": "booking_modal",
+        "type": "group",
+        "layout": "block",
+        "sub_fields": [
+          {
+            "key": "field_expert_booking_modal_title",
+            "label": "Titel",
+            "name": "title",
+            "type": "text",
+            "default_value": "Book Consultation",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_expert_booking_modal_service_label",
+            "label": "Service Label",
+            "name": "service_label",
+            "type": "text",
+            "default_value": "15 min Video Diagnostics",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_expert_booking_modal_date_label",
+            "label": "Datumslabel",
+            "name": "date_label",
+            "type": "text",
+            "default_value": "Date",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_expert_booking_modal_confirm_label",
+            "label": "Bestätigungsbutton",
+            "name": "confirm_label",
+            "type": "text",
+            "default_value": "Confirm Booking",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_expert_booking_modal_time_slots",
+            "label": "Zeitslots",
+            "name": "time_slots",
+            "type": "repeater",
+            "layout": "table",
+            "button_label": "Zeitslot hinzufügen",
+            "sub_fields": [
+              {
+                "key": "field_expert_booking_modal_time_slot",
+                "label": "Zeit",
+                "name": "time",
+                "type": "text",
+                "show_in_rest": 1
+              }
+            ],
+            "show_in_rest": 1
+          }
+        ],
+        "show_in_rest": 1
+      },
+      {
+        "key": "field_expert_sidebar",
+        "label": "Sidebar (Desktop App Frame)",
+        "name": "sidebar",
+        "type": "group",
+        "layout": "block",
+        "sub_fields": [
+          {
+            "key": "field_expert_sidebar_brand_label",
+            "label": "Brand Label",
+            "name": "brand_label",
+            "type": "text",
+            "default_value": "GrowButler",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_expert_sidebar_sub_label",
+            "label": "Brand Sub Label",
+            "name": "brand_sub_label",
+            "type": "text",
+            "default_value": "My Garden",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_expert_sidebar_nav_items",
+            "label": "Navigation",
+            "name": "nav_items",
+            "type": "repeater",
+            "layout": "table",
+            "button_label": "Nav Item hinzufügen",
+            "sub_fields": [
+              {
+                "key": "field_expert_sidebar_nav_key",
+                "label": "Key",
+                "name": "key",
+                "type": "text",
+                "show_in_rest": 1
+              },
+              {
+                "key": "field_expert_sidebar_nav_label",
+                "label": "Label",
+                "name": "label",
+                "type": "text",
+                "show_in_rest": 1
+              },
+              {
+                "key": "field_expert_sidebar_nav_icon",
+                "label": "Icon",
+                "name": "icon",
+                "type": "text",
+                "show_in_rest": 1
+              },
+              {
+                "key": "field_expert_sidebar_nav_active",
+                "label": "Aktiv",
+                "name": "is_active",
+                "type": "true_false",
+                "ui": 1,
+                "default_value": 0,
+                "show_in_rest": 1
+              }
+            ],
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_expert_sidebar_harvest_title",
+            "label": "Harvest Titel",
+            "name": "harvest_title",
+            "type": "text",
+            "default_value": "NEXT HARVEST",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_expert_sidebar_harvest_days",
+            "label": "Harvest Zeitraum",
+            "name": "harvest_days",
+            "type": "text",
+            "default_value": "14 DAYS",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_expert_sidebar_harvest_progress",
+            "label": "Harvest Progress (0-100)",
+            "name": "harvest_progress",
+            "type": "number",
+            "default_value": 75,
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_expert_sidebar_harvest_plant_name",
+            "label": "Plant Name",
+            "name": "harvest_plant_name",
+            "type": "text",
+            "default_value": "Northern Lights #5",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_expert_sidebar_new_plant_cta",
+            "label": "New Plant CTA",
+            "name": "new_plant_cta",
+            "type": "text",
+            "default_value": "New Plant",
+            "show_in_rest": 1
+          }
+        ],
+        "show_in_rest": 1
+      }
+    ],
+    "location": [
+      [
+        {
+          "param": "post_type",
+          "operator": "==",
+          "value": "page"
+        }
+      ]
+    ],
+    "menu_order": 0,
+    "position": "acf_after_title",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": [],
+    "active": 1,
+    "description": "Felder für die Expertensuche-Seite (Filter, Karten, Map, Buchungsmodal, Sidebar) gemäß Designreferenz."
+  }
+]

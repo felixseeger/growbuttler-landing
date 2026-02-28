@@ -1,0 +1,190 @@
+[
+  {
+    "key": "group_growbuttler_dashboard",
+    "title": "GrowButtler: Dashboard",
+    "fields": [
+      {
+        "key": "field_dashboard_hero",
+        "label": "Hero",
+        "name": "hero",
+        "type": "group",
+        "layout": "block",
+        "sub_fields": [
+          {
+            "key": "field_dashboard_hero_title",
+            "label": "Titel",
+            "name": "title",
+            "type": "text",
+            "default_value": "Good morning, Alex.",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_dashboard_hero_subtitle",
+            "label": "Untertitel",
+            "name": "subtitle",
+            "type": "textarea",
+            "rows": 2,
+            "new_lines": "br",
+            "default_value": "Your garden is thriving today.",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_dashboard_hero_primary_cta",
+            "label": "Primary CTA Label",
+            "name": "primary_cta_label",
+            "type": "text",
+            "default_value": "Seed New Life",
+            "show_in_rest": 1
+          }
+        ],
+        "show_in_rest": 1
+      },
+      {
+        "key": "field_dashboard_consultation",
+        "label": "Consultation Widget",
+        "name": "consultation",
+        "type": "group",
+        "layout": "block",
+        "sub_fields": [
+          {
+            "key": "field_dashboard_consultation_title",
+            "label": "Titel",
+            "name": "title",
+            "type": "text",
+            "default_value": "Upcoming Consultation",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_dashboard_consultation_expert_name",
+            "label": "Expertenname",
+            "name": "expert_name",
+            "type": "text",
+            "default_value": "Hanna K.",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_dashboard_consultation_date_label",
+            "label": "Datum/Label",
+            "name": "date_label",
+            "type": "text",
+            "default_value": "Tomorrow, 14:00",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_dashboard_consultation_cta_primary",
+            "label": "CTA Primary",
+            "name": "cta_primary_label",
+            "type": "text",
+            "default_value": "Reschedule",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_dashboard_consultation_cta_secondary",
+            "label": "CTA Secondary",
+            "name": "cta_secondary_label",
+            "type": "text",
+            "default_value": "Enter Waiting Room",
+            "show_in_rest": 1
+          }
+        ],
+        "show_in_rest": 1
+      },
+      {
+        "key": "field_dashboard_environment",
+        "label": "Umgebungs-Widgets",
+        "name": "environment_widgets",
+        "type": "repeater",
+        "layout": "block",
+        "button_label": "Widget hinzufügen",
+        "sub_fields": [
+          {
+            "key": "field_dashboard_environment_label",
+            "label": "Label",
+            "name": "label",
+            "type": "text",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_dashboard_environment_metric",
+            "label": "Wert",
+            "name": "metric",
+            "type": "text",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_dashboard_environment_unit",
+            "label": "Einheit",
+            "name": "unit",
+            "type": "text",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_dashboard_environment_status",
+            "label": "Status-Label",
+            "name": "status",
+            "type": "text",
+            "show_in_rest": 1
+          }
+        ],
+        "show_in_rest": 1
+      },
+      {
+        "key": "field_dashboard_plants",
+        "label": "My Plants Grid",
+        "name": "plants",
+        "type": "repeater",
+        "layout": "block",
+        "button_label": "Pflanze hinzufügen",
+        "sub_fields": [
+          {
+            "key": "field_dashboard_plant_name",
+            "label": "Name",
+            "name": "name",
+            "type": "text",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_dashboard_plant_stage",
+            "label": "Stage Label",
+            "name": "stage_label",
+            "type": "text",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_dashboard_plant_location",
+            "label": "Location",
+            "name": "location",
+            "type": "text",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_dashboard_plant_day_label",
+            "label": "Day Label",
+            "name": "day_label",
+            "type": "text",
+            "show_in_rest": 1
+          }
+        ],
+        "show_in_rest": 1
+      }
+    ],
+    "location": [
+      [
+        {
+          "param": "page",
+          "operator": "==",
+          "value": "dashboard"
+        }
+      ]
+    ],
+    "menu_order": 0,
+    "position": "acf_after_title",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": [],
+    "active": 1,
+    "description": "Dashboard-Inhalte für eingeloggte Nutzer (My Garden Dashboard)."
+  }
+]
+

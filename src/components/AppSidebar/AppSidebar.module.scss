@@ -1,0 +1,186 @@
+.sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  display: none;
+  flex-direction: column;
+  border-right: 1px solid rgba(141, 147, 135, 0.2);
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(8px);
+  z-index: 40;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+
+  @media (min-width: 1024px) {
+    display: flex;
+  }
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 1.5rem;
+  justify-content: space-between;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.logoIcon {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Material Symbols Outlined';
+  font-size: 1.5rem;
+}
+
+.brandText {
+  display: flex;
+  flex-direction: column;
+}
+
+.brandTitle {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  line-height: 1.2;
+  color: var(--color-text-main);
+}
+
+.brandSub {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-compliance);
+  margin-top: 0.25rem;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-xl);
+  color: rgba(44, 51, 40, 0.7);
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+
+  &:hover {
+    background: var(--color-surface);
+    color: var(--color-primary);
+  }
+}
+
+.navLinkActive {
+  background: rgba(235, 229, 218, 0.5);
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.navIcon {
+  font-family: 'Material Symbols Outlined';
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(141, 147, 135, 0.15);
+}
+
+.harvestCard {
+  background: rgba(235, 229, 218, 0.3);
+  padding: 1rem;
+  border-radius: var(--radius-2xl);
+  border: 1px solid rgba(141, 147, 135, 0.1);
+}
+
+.harvestRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.harvestLabel {
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  color: var(--color-muted);
+}
+
+.harvestDays {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+.harvestBar {
+  width: 100%;
+  height: 6px;
+  background: white;
+  border-radius: 9999px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.harvestBarFill {
+  height: 100%;
+  background: var(--color-primary);
+  border-radius: 9999px;
+}
+
+.harvestPlant {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--color-text-main);
+}
+
+.ctaNew {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: var(--radius-2xl);
+  height: 3rem;
+  background: var(--color-primary);
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.025em;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+  box-shadow: 0 4px 14px rgba(58, 90, 64, 0.2);
+
+  &:hover {
+    background: #2e4833;
+    transform: translateY(-1px);
+  }
+}
+
+.ctaIcon {
+  font-family: 'Material Symbols Outlined';
+  font-size: 1.25rem;
+}

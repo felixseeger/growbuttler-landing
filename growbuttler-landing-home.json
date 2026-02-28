@@ -1,0 +1,1060 @@
+[
+  {
+    "key": "group_growbuttler_landing_home",
+    "title": "GrowButtler Landing: Startseite",
+    "fields": [
+      {
+        "key": "field_hero",
+        "label": "Hero",
+        "name": "hero",
+        "type": "group",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "layout": "block",
+        "sub_fields": [
+          {
+            "key": "field_hero_badge_text",
+            "label": "Badge Text",
+            "name": "badge_text",
+            "type": "text",
+            "instructions": "Kleines Label über der Headline (z.B. Städte-Hinweis).",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+              "width": "50",
+              "class": "",
+              "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": "",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_hero_headline",
+            "label": "Headline (Teil 1)",
+            "name": "headline",
+            "type": "text",
+            "instructions": "Erster Teil der Headline vor dem hervorgehobenen Wort.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+              "width": "50",
+              "class": "",
+              "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": "",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_hero_headline_highlight",
+            "label": "Headline Highlight",
+            "name": "headline_highlight",
+            "type": "text",
+            "instructions": "Hervorgehobener Teil der Headline (wird unterstrichen).",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+              "width": "50",
+              "class": "",
+              "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": "",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_hero_subheadline",
+            "label": "Subheadline",
+            "name": "subheadline",
+            "type": "textarea",
+            "instructions": "Kurzbeschreibung unter der Headline.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+              "width": "",
+              "class": "",
+              "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "maxlength": "",
+            "rows": 3,
+            "new_lines": "br",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_hero_search_placeholder",
+            "label": "Suchfeld Platzhalter",
+            "name": "search_placeholder",
+            "type": "text",
+            "instructions": "Platzhalter für das Standort-Suchfeld.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+              "width": "50",
+              "class": "",
+              "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": "",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_hero_cta_search_label",
+            "label": "CTA Button Text (Suche)",
+            "name": "cta_search_label",
+            "type": "text",
+            "instructions": "Text des Such-CTA Buttons (z.B. „Meistergärtner finden“).",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+              "width": "50",
+              "class": "",
+              "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": "",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_hero_social_proof_text",
+            "label": "Social Proof Text",
+            "name": "social_proof_text",
+            "type": "text",
+            "instructions": "Text rechts neben den Avataren (z.B. „Join 2,000+ growers in Germany“).",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+              "width": "70",
+              "class": "",
+              "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": "",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_hero_social_proof_count",
+            "label": "Social Proof Count",
+            "name": "social_proof_count",
+            "type": "text",
+            "instructions": "Badge im letzten Avatar-Kreis (z.B. „+2k“).",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+              "width": "30",
+              "class": "",
+              "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": "",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_hero_avatar_urls",
+            "label": "Avatar Bilder",
+            "name": "avatar_urls",
+            "type": "repeater",
+            "instructions": "Optionale Avatar-Bilder (URLs) für Social Proof.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+              "width": "",
+              "class": "",
+              "id": ""
+            },
+            "collapsed": "",
+            "min": 0,
+            "max": 0,
+            "layout": "table",
+            "button_label": "Avatar hinzufügen",
+            "sub_fields": [
+              {
+                "key": "field_hero_avatar_url",
+                "label": "Avatar URL",
+                "name": "url",
+                "type": "text",
+                "instructions": "Direkte Bild-URL (wird als <img> verwendet).",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                  "width": "",
+                  "class": "",
+                  "id": ""
+                },
+                "default_value": "",
+                "placeholder": "https://…",
+                "prepend": "",
+                "append": "",
+                "maxlength": "",
+                "show_in_rest": 1
+              }
+            ],
+            "show_in_rest": 1
+          }
+        ],
+        "show_in_rest": 1
+      },
+      {
+        "key": "field_features_section",
+        "label": "Feature Sektion",
+        "name": "features_section",
+        "type": "group",
+        "instructions": "Überschrift und drei Feature-Karten.",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "layout": "block",
+        "sub_fields": [
+          {
+            "key": "field_features_section_title",
+            "label": "Überschrift",
+            "name": "section_title",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+              "width": "50",
+              "class": "",
+              "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": "",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_features_section_subtitle",
+            "label": "Subtext",
+            "name": "section_subtitle",
+            "type": "textarea",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+              "width": "50",
+              "class": "",
+              "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "maxlength": "",
+            "rows": 3,
+            "new_lines": "br",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_features_section_features",
+            "label": "Features",
+            "name": "features",
+            "type": "repeater",
+            "instructions": "Drei Feature-Karten (können auch mehr sein).",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+              "width": "",
+              "class": "",
+              "id": ""
+            },
+            "collapsed": "",
+            "min": 0,
+            "max": 0,
+            "layout": "block",
+            "button_label": "Feature hinzufügen",
+            "sub_fields": [
+              {
+                "key": "field_features_feature_icon",
+                "label": "Icon Name",
+                "name": "icon",
+                "type": "text",
+                "instructions": "Material Symbols Icon Name (z.B. verified_user, video_camera_front, sensors).",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                  "width": "30",
+                  "class": "",
+                  "id": ""
+                },
+                "default_value": "",
+                "placeholder": "",
+                "prepend": "",
+                "append": "",
+                "maxlength": "",
+                "show_in_rest": 1
+              },
+              {
+                "key": "field_features_feature_title",
+                "label": "Titel",
+                "name": "title",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                  "width": "35",
+                  "class": "",
+                  "id": ""
+                },
+                "default_value": "",
+                "placeholder": "",
+                "prepend": "",
+                "append": "",
+                "maxlength": "",
+                "show_in_rest": 1
+              },
+              {
+                "key": "field_features_feature_description",
+                "label": "Beschreibung",
+                "name": "description",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                  "width": "35",
+                  "class": "",
+                  "id": ""
+                },
+                "default_value": "",
+                "placeholder": "",
+                "maxlength": "",
+                "rows": 3,
+                "new_lines": "br",
+                "show_in_rest": 1
+              }
+            ],
+            "show_in_rest": 1
+          }
+        ],
+        "show_in_rest": 1
+      },
+      {
+        "key": "field_parallax_section",
+        "label": "Zitat Sektion (Parallax)",
+        "name": "parallax_section",
+        "type": "group",
+        "instructions": "Zitat mit Hintergrundbild und CTA.",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "layout": "block",
+        "sub_fields": [
+          {
+            "key": "field_parallax_label",
+            "label": "Label (kleiner Text oben)",
+            "name": "label",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+              "width": "40",
+              "class": "",
+              "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": "",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_parallax_quote",
+            "label": "Zitat",
+            "name": "quote",
+            "type": "textarea",
+            "instructions": "Vollständiges Zitat inkl. Autor.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+              "width": "60",
+              "class": "",
+              "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "maxlength": "",
+            "rows": 3,
+            "new_lines": "br",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_parallax_cta_label",
+            "label": "CTA Text",
+            "name": "cta_label",
+            "type": "text",
+            "instructions": "z.B. „Beginnen Sie Ihre Reise >“",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+              "width": "40",
+              "class": "",
+              "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": "",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_parallax_background_image",
+            "label": "Hintergrundbild",
+            "name": "background_image",
+            "type": "image",
+            "instructions": "Hintergrundbild für die Parallax-Sektion.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+              "width": "60",
+              "class": "",
+              "id": ""
+            },
+            "return_format": "array",
+            "preview_size": "large",
+            "library": "all",
+            "min_width": 0,
+            "min_height": 0,
+            "min_size": 0,
+            "max_width": 0,
+            "max_height": 0,
+            "max_size": 0,
+            "mime_types": "",
+            "show_in_rest": 1
+          }
+        ],
+        "show_in_rest": 1
+      },
+      {
+        "key": "field_pricing_section",
+        "label": "Pricing Sektion",
+        "name": "pricing_section",
+        "type": "group",
+        "instructions": "Preisbox mit Leistungsmerkmalen und PayPal Plan-ID.",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "layout": "block",
+        "sub_fields": [
+          {
+            "key": "field_pricing_title",
+            "label": "Überschrift",
+            "name": "title",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+              "width": "50",
+              "class": "",
+              "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": "",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_pricing_description",
+            "label": "Beschreibung",
+            "name": "description",
+            "type": "textarea",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+              "width": "50",
+              "class": "",
+              "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "maxlength": "",
+            "rows": 3,
+            "new_lines": "br",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_pricing_benefits",
+            "label": "Leistungen",
+            "name": "benefits",
+            "type": "repeater",
+            "instructions": "Stichpunkte (z.B. Unlimited Journal-Einträge, Community-Forum-Zugang …).",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+              "width": "",
+              "class": "",
+              "id": ""
+            },
+            "collapsed": "",
+            "min": 0,
+            "max": 0,
+            "layout": "table",
+            "button_label": "Leistung hinzufügen",
+            "sub_fields": [
+              {
+                "key": "field_pricing_benefit_label",
+                "label": "Text",
+                "name": "item",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                  "width": "",
+                  "class": "",
+                  "id": ""
+                },
+                "default_value": "",
+                "placeholder": "",
+                "prepend": "",
+                "append": "",
+                "maxlength": "",
+                "show_in_rest": 1
+              }
+            ],
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_pricing_price_amount",
+            "label": "Preis (Betrag)",
+            "name": "price_amount",
+            "type": "text",
+            "instructions": "z.B. „€9“",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+              "width": "30",
+              "class": "",
+              "id": ""
+            },
+            "default_value": "",
+            "placeholder": "€9",
+            "prepend": "",
+            "append": "",
+            "maxlength": "",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_pricing_price_period",
+            "label": "Preis Zeitraum",
+            "name": "price_period",
+            "type": "text",
+            "instructions": "z.B. „/Monat“",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+              "width": "20",
+              "class": "",
+              "id": ""
+            },
+            "default_value": "",
+            "placeholder": "/Monat",
+            "prepend": "",
+            "append": "",
+            "maxlength": "",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_pricing_cta_label",
+            "label": "CTA Text",
+            "name": "cta_label",
+            "type": "text",
+            "instructions": "z.B. „Jetzt Zugang erhalten“",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+              "width": "50",
+              "class": "",
+              "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": "",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_pricing_disclaimer",
+            "label": "Hinweis / Disclaimer",
+            "name": "disclaimer",
+            "type": "text",
+            "instructions": "z.B. „Jederzeit kündbar.“",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+              "width": "50",
+              "class": "",
+              "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": "",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_pricing_paypal_plan_id",
+            "label": "PayPal Plan-ID",
+            "name": "paypal_plan_id",
+            "type": "text",
+            "instructions": "PayPal Subscription Plan-ID für das Pricing (wird vom Frontend verwendet).",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+              "width": "50",
+              "class": "",
+              "id": ""
+            },
+            "default_value": "",
+            "placeholder": "P-XXXXXXXXXXXX",
+            "prepend": "",
+            "append": "",
+            "maxlength": "",
+            "show_in_rest": 1
+          }
+        ],
+        "show_in_rest": 1
+      },
+      {
+        "key": "field_footer",
+        "label": "Footer",
+        "name": "footer",
+        "type": "group",
+        "instructions": "Footer-Texte und Links.",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "layout": "block",
+        "sub_fields": [
+          {
+            "key": "field_footer_tagline",
+            "label": "Tagline",
+            "name": "tagline",
+            "type": "textarea",
+            "instructions": "Kurzer Claim unter dem Logo im Footer.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+              "width": "",
+              "class": "",
+              "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "maxlength": "",
+            "rows": 2,
+            "new_lines": "br",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_footer_platform_links",
+            "label": "Platform Links",
+            "name": "platform_links",
+            "type": "repeater",
+            "instructions": "Linkliste unter „Platform“ (z.B. Find Experts, Journal, Pricing).",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+              "width": "33",
+              "class": "",
+              "id": ""
+            },
+            "collapsed": "",
+            "min": 0,
+            "max": 0,
+            "layout": "table",
+            "button_label": "Link hinzufügen",
+            "sub_fields": [
+              {
+                "key": "field_footer_platform_link_label",
+                "label": "Label",
+                "name": "label",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                  "width": "50",
+                  "class": "",
+                  "id": ""
+                },
+                "default_value": "",
+                "placeholder": "",
+                "prepend": "",
+                "append": "",
+                "maxlength": "",
+                "show_in_rest": 1
+              },
+              {
+                "key": "field_footer_platform_link_url",
+                "label": "URL",
+                "name": "url",
+                "type": "url",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                  "width": "50",
+                  "class": "",
+                  "id": ""
+                },
+                "default_value": "",
+                "placeholder": "https://…",
+                "show_in_rest": 1
+              }
+            ],
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_footer_community_links",
+            "label": "Community Links",
+            "name": "community_links",
+            "type": "repeater",
+            "instructions": "Linkliste unter „Community“ (z.B. Forum, Events, Blog).",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+              "width": "33",
+              "class": "",
+              "id": ""
+            },
+            "collapsed": "",
+            "min": 0,
+            "max": 0,
+            "layout": "table",
+            "button_label": "Link hinzufügen",
+            "sub_fields": [
+              {
+                "key": "field_footer_community_link_label",
+                "label": "Label",
+                "name": "label",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                  "width": "50",
+                  "class": "",
+                  "id": ""
+                },
+                "default_value": "",
+                "placeholder": "",
+                "prepend": "",
+                "append": "",
+                "maxlength": "",
+                "show_in_rest": 1
+              },
+              {
+                "key": "field_footer_community_link_url",
+                "label": "URL",
+                "name": "url",
+                "type": "url",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                  "width": "50",
+                  "class": "",
+                  "id": ""
+                },
+                "default_value": "",
+                "placeholder": "https://…",
+                "show_in_rest": 1
+              }
+            ],
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_footer_legal_links",
+            "label": "Legal Links",
+            "name": "legal_links",
+            "type": "repeater",
+            "instructions": "Linkliste unter „Legal“ (z.B. Imprint, Privacy, Terms).",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+              "width": "33",
+              "class": "",
+              "id": ""
+            },
+            "collapsed": "",
+            "min": 0,
+            "max": 0,
+            "layout": "table",
+            "button_label": "Link hinzufügen",
+            "sub_fields": [
+              {
+                "key": "field_footer_legal_link_label",
+                "label": "Label",
+                "name": "label",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                  "width": "50",
+                  "class": "",
+                  "id": ""
+                },
+                "default_value": "",
+                "placeholder": "",
+                "prepend": "",
+                "append": "",
+                "maxlength": "",
+                "show_in_rest": 1
+              },
+              {
+                "key": "field_footer_legal_link_url",
+                "label": "URL",
+                "name": "url",
+                "type": "url",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                  "width": "50",
+                  "class": "",
+                  "id": ""
+                },
+                "default_value": "",
+                "placeholder": "https://…",
+                "show_in_rest": 1
+              }
+            ],
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_footer_copyright_text",
+            "label": "Copyright Text",
+            "name": "copyright_text",
+            "type": "text",
+            "instructions": "Kleiner Text in der Footer-Bottom-Bar.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+              "width": "",
+              "class": "",
+              "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": "",
+            "show_in_rest": 1
+          }
+        ],
+        "show_in_rest": 1
+      },
+      {
+        "key": "field_nav",
+        "label": "Navigation",
+        "name": "nav",
+        "type": "group",
+        "instructions": "Navigationstexte für den Header.",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "layout": "block",
+        "sub_fields": [
+          {
+            "key": "field_nav_logo_label",
+            "label": "Logo Text",
+            "name": "logo_label",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+              "width": "40",
+              "class": "",
+              "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": "",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_nav_links",
+            "label": "Navigation Links",
+            "name": "links",
+            "type": "repeater",
+            "instructions": "Hauptnavigation (z.B. Journal, Expert Directory, Community).",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+              "width": "60",
+              "class": "",
+              "id": ""
+            },
+            "collapsed": "",
+            "min": 0,
+            "max": 0,
+            "layout": "table",
+            "button_label": "Link hinzufügen",
+            "sub_fields": [
+              {
+                "key": "field_nav_link_label",
+                "label": "Label",
+                "name": "label",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                  "width": "50",
+                  "class": "",
+                  "id": ""
+                },
+                "default_value": "",
+                "placeholder": "",
+                "prepend": "",
+                "append": "",
+                "maxlength": "",
+                "show_in_rest": 1
+              },
+              {
+                "key": "field_nav_link_url",
+                "label": "URL",
+                "name": "url",
+                "type": "url",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                  "width": "50",
+                  "class": "",
+                  "id": ""
+                },
+                "default_value": "",
+                "placeholder": "https://…",
+                "show_in_rest": 1
+              }
+            ],
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_nav_login_label",
+            "label": "Login Label",
+            "name": "login_label",
+            "type": "text",
+            "instructions": "Text für Login-Link (z.B. „Log In“ oder „Anmelden“).",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+              "width": "30",
+              "class": "",
+              "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": "",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_nav_cta_label",
+            "label": "CTA Label",
+            "name": "cta_label",
+            "type": "text",
+            "instructions": "Text für den CTA-Button im Header (z.B. „Jetzt Loslegen“).",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+              "width": "30",
+              "class": "",
+              "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": "",
+            "show_in_rest": 1
+          }
+        ],
+        "show_in_rest": 1
+      }
+    ],
+    "location": [
+      [
+        {
+          "param": "page_type",
+          "operator": "==",
+          "value": "front_page"
+        }
+      ]
+    ],
+    "menu_order": 0,
+    "position": "acf_after_title",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": [],
+    "active": 1,
+    "description": "Inhalte für die GrowButtler Landingpage (Startseite)."
+  }
+]

@@ -1,0 +1,108 @@
+[
+  {
+    "key": "group_growbuttler_journal",
+    "title": "GrowButtler: Journal LP",
+    "fields": [
+      {
+        "key": "field_journal_page_header",
+        "label": "Seitenkopf",
+        "name": "page_header",
+        "type": "group",
+        "layout": "block",
+        "sub_fields": [
+          {
+            "key": "field_journal_page_header_title",
+            "label": "Titel",
+            "name": "title",
+            "type": "text",
+            "default_value": "Growth Journal",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_journal_page_header_subtitle",
+            "label": "Untertitel",
+            "name": "subtitle",
+            "type": "textarea",
+            "rows": 3,
+            "new_lines": "br",
+            "default_value": "Track your cultivation progress, document observations, and learn from your growing experience.",
+            "show_in_rest": 1
+          }
+        ],
+        "show_in_rest": 1
+      },
+      {
+        "key": "field_journal_coming_soon",
+        "label": "Coming Soon Block",
+        "name": "coming_soon",
+        "type": "group",
+        "layout": "block",
+        "sub_fields": [
+          {
+            "key": "field_journal_coming_soon_title",
+            "label": "Titel",
+            "name": "title",
+            "type": "text",
+            "default_value": "Coming Soon",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_journal_coming_soon_intro",
+            "label": "Einleitungstext",
+            "name": "intro",
+            "type": "textarea",
+            "rows": 3,
+            "new_lines": "br",
+            "default_value": "The Growth Journal feature is currently under development. You'll soon be able to:",
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_journal_coming_soon_features",
+            "label": "Feature-Liste",
+            "name": "features",
+            "type": "repeater",
+            "layout": "table",
+            "button_label": "Feature hinzufügen",
+            "sub_fields": [
+              {
+                "key": "field_journal_coming_soon_feature_item",
+                "label": "Text",
+                "name": "item",
+                "type": "text",
+                "show_in_rest": 1
+              }
+            ],
+            "show_in_rest": 1
+          },
+          {
+            "key": "field_journal_coming_soon_cta_label",
+            "label": "CTA Label",
+            "name": "cta_label",
+            "type": "text",
+            "default_value": "Notify Me When Available",
+            "show_in_rest": 1
+          }
+        ],
+        "show_in_rest": 1
+      }
+    ],
+    "location": [
+      [
+        {
+          "param": "page",
+          "operator": "==",
+          "value": "journal"
+        }
+      ]
+    ],
+    "menu_order": 0,
+    "position": "acf_after_title",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": [],
+    "active": 1,
+    "description": "Landingpage-Inhalte für die Journal-Seite."
+  }
+]
+

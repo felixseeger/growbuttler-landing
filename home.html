@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GrowButler - Master Cultivation with Local Experts</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Young+Serif&amp;family=Satoshi:wght@400;500;700&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3A5A40",
+                        "background": "#FDFBF7",
+                        "surface": "#EBE5DA",
+                        "text-main": "#2C3328",
+                        "muted": "#8D9387",
+                        "accent": "#D97757",
+                        "compliance": "#5F8D4E",
+                    },
+                    fontFamily: {
+                        "serif": ['Young Serif', 'serif'],
+                        "sans": ['Satoshi', 'sans-serif'],
+                        "mono": ['Space Mono', 'monospace'],
+                    },
+                    borderRadius: {
+                        "xl": "12px",
+                        "2xl": "16px",
+                    },
+                    boxShadow: {
+                        "soft": "0 20px 40px -10px rgba(58, 90, 64, 0.15)",
+                        "card": "0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)",
+                    },
+                    backgroundImage: {
+                        'paper-texture': "url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22 opacity=%220.05%22/%3E%3C/svg%3E')",
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar for a cleaner look */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FDFBF7;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D1D5DB;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #9CA3AF;
+        }
+        
+        .font-feature-settings {
+            font-feature-settings: "ss01", "ss03";
+        }
+
+        /* Smooth scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body class="bg-background text-text-main font-sans antialiased relative min-h-screen flex flex-col overflow-x-hidden selection:bg-primary/20 selection:text-primary">
+<!-- Paper Texture Overlay -->
+<div class="fixed inset-0 pointer-events-none z-50 mix-blend-multiply opacity-40 bg-paper-texture"></div>
+<!-- Navigation -->
+<nav class="fixed top-0 left-0 right-0 z-40 w-full transition-all duration-300 ease-in-out bg-background/95 backdrop-blur-sm shadow-sm border-b border-surface">
+<div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+<div class="flex items-center gap-2 group cursor-pointer">
+<span class="material-symbols-outlined text-primary text-3xl group-hover:rotate-12 transition-transform duration-300">spa</span>
+<span class="font-serif text-2xl text-text-main font-bold tracking-tight">GrowButler</span>
+</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-text-main hover:text-primary font-medium text-sm tracking-wide transition-colors" href="#">Journal</a>
+<a class="text-text-main hover:text-primary font-medium text-sm tracking-wide transition-colors" href="#">Expert Directory</a>
+<a class="text-text-main hover:text-primary font-medium text-sm tracking-wide transition-colors" href="#">Community</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="hidden sm:flex text-text-main hover:text-primary font-bold text-sm tracking-wide transition-colors">Log In</button>
+<button class="bg-primary hover:bg-primary/90 text-white px-6 py-2.5 rounded-xl font-bold text-sm tracking-wide transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                    Get Started
+                </button>
+</div>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="flex-grow pt-24 pb-12">
+<!-- Hero Section -->
+<section class="max-w-7xl mx-auto px-6 pt-12 pb-20 md:pt-20 md:pb-32 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center relative">
+<!-- Left Content -->
+<div class="lg:col-span-7 flex flex-col gap-8 z-10">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface border border-muted/20 w-fit">
+<span class="w-2 h-2 rounded-full bg-compliance animate-pulse"></span>
+<span class="text-xs font-bold uppercase tracking-wider text-muted font-sans">Now live in Berlin &amp; Munich</span>
+</div>
+<h1 class="font-serif text-5xl md:text-6xl lg:text-[72px] leading-[1.1] text-text-main">
+                    Master Cultivation with <span class="italic text-primary relative inline-block">
+                        Local Experts
+                        <svg class="absolute w-full h-3 -bottom-1 left-0 text-accent/20 -z-10" preserveaspectratio="none" viewbox="0 0 100 10">
+<path d="M0 5 Q 50 10 100 5" fill="none" stroke="currentColor" stroke-width="8"></path>
+</svg>
+</span>
+</h1>
+<p class="text-lg md:text-xl text-text-main/80 max-w-xl font-light leading-relaxed">
+                    Connect with certified master growers in your area for guidance, live diagnostics, and a shared journey to harvest.
+                </p>
+<!-- Search Component -->
+<div class="mt-4 p-2 bg-white rounded-2xl shadow-soft border border-surface max-w-2xl w-full flex flex-col sm:flex-row gap-2">
+<div class="flex-1 flex items-center px-4 h-14 bg-background rounded-xl">
+<span class="material-symbols-outlined text-primary mr-3">location_on</span>
+<input class="w-full bg-transparent border-none focus:ring-0 text-text-main placeholder-muted font-medium text-base h-full" placeholder="Find a master grower in Berlin, Munich..." type="text"/>
+</div>
+<button class="h-14 bg-primary hover:bg-primary/90 text-white rounded-xl px-8 font-bold text-base tracking-wide shadow-md transition-all flex items-center justify-center gap-2 sm:w-auto w-full group">
+<span>Search Experts</span>
+<span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+</div>
+<div class="flex items-center gap-4 mt-2">
+<div class="flex -space-x-3">
+<img alt="User Avatar" class="w-10 h-10 rounded-full border-2 border-background object-cover" data-alt="Portrait of a smiling male gardener" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA0apY2R9dJbGe4lx7GpUO1T35qc2Qird49nI0kXR_3_muDRDUkPOoo8xwKrtOt431CRIcNll7BpvjAL6yiJwb3seiy4pRSpzphOMKzUSzBB5ggMdxrEt5CEn6ntuMnLRUaUKuhBSm0pfxHyFeFaj5UcAIQwAkZGqH4LDoW8su57Q3I1bZPIZgIUM49xzHUwOSCblw1vJhzmQRZwenyjUMrMitgRO6dT_v0wW7JaIEZcIv1Xm8epU5UGeHmgCuJcIGXYMMd559cN8o0"/>
+<img alt="User Avatar" class="w-10 h-10 rounded-full border-2 border-background object-cover" data-alt="Portrait of a smiling female botanist" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC4AqdVItZ6rpPQn_kNcBnM2fJYNQGzRf_dFwEP31cJT2RMnCciEi4UI-O2zWed3SNT2ZdRIEFvngKN5ssByhP8NOZNd9fry8jO7I3w4rzmCr2F81nyjCRLXjuNo0b5AV8rlqan8lx6d-rem0_GGkbXG5QL_RugCQhO1AHoQ5Ey8jE1pLJE6BxdDu_u9BqMjvjwQu5oLqIx8nfWoBtBg5f-jvPIoub5nENPKGYQk4r8jh7utG7MSg1kocydEGJqBadz6oAqqomS49tu"/>
+<img alt="User Avatar" class="w-10 h-10 rounded-full border-2 border-background object-cover" data-alt="Portrait of a male consultant" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC04KY3bLn0KZwsVbNRfwkXYxVvYimrh1Fe0nFI2jzsjeFDAxeHfkCNSxvxax786LJxremic0hgHnUfNUpY5LIaKmWzeiA9cHbqof88CY26dPpIxSIPQul-eHjUq4g44fvzFLU2FGymOWaAqO8EHkCkO93XLE04EE41drtJMSzM0PkEA6210ITuSOuP_EfLJMOlHzJPb_C0lmLtxgxa-bfptJPdKAfPAoG-N97-5YYX9Dth6AmX6gC_NMJqpyrVeaF1aZobrXAB4uO4"/>
+<div class="w-10 h-10 rounded-full border-2 border-background bg-surface flex items-center justify-center text-xs font-bold text-primary">+2k</div>
+</div>
+<p class="text-sm font-medium text-muted">Join 2,000+ growers in Germany</p>
+</div>
+</div>
+<!-- Right Content - Floating Mockup -->
+<div class="lg:col-span-5 relative h-full min-h-[400px] flex items-center justify-center lg:justify-end perspective-1000">
+<!-- Decorative Elements -->
+<div class="absolute top-10 right-10 w-64 h-64 bg-primary/10 rounded-full blur-3xl -z-10"></div>
+<div class="absolute bottom-10 left-10 w-48 h-48 bg-accent/10 rounded-full blur-3xl -z-10"></div>
+<!-- Floating Card -->
+<div class="relative bg-white/80 backdrop-blur-md border border-white/50 p-6 rounded-2xl shadow-soft max-w-sm w-full transform rotate-y-6 rotate-x-6 hover:rotate-0 transition-all duration-700 ease-out group">
+<div class="absolute -top-3 -right-3 bg-accent text-white text-xs font-bold px-3 py-1 rounded-full shadow-md z-10 transform rotate-12">Top Rated</div>
+<div class="flex items-start gap-4 mb-6">
+<div class="relative">
+<img alt="Expert Profile" class="w-16 h-16 rounded-xl object-cover shadow-sm" data-alt="Close up portrait of expert grower Hanna K." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjDOp3OztxrLKX0AGwz7v2ZfdKZIyVIuxZteldzD_LV4NaU9Gp-ueAsk40qlHVqrTbuxex82LCP52fWvXy_3RXLozYmt8aP8rUDsO2wGBAyVSML-hODiu2uyaHYziaME5i7MUdrwgaAha6qF0SwlpUR4IEK3CZ3Je62y8WqRcUC5Yns6AWqb3vgvCqt1M5qJ0oyJQmh0EkTcwTA6BgQwut-N4OFOjA3KgpxF7bz37hr3Xh9ucIEUjK3y8awU1exaeuQeX5FtyxsVNz"/>
+<div class="absolute -bottom-1 -right-1 bg-white p-0.5 rounded-full">
+<span class="material-symbols-outlined text-compliance text-lg bg-compliance/10 rounded-full p-0.5">verified</span>
+</div>
+</div>
+<div>
+<h3 class="font-serif text-xl font-bold text-text-main">Hanna K.</h3>
+<p class="text-sm text-muted font-medium mb-1">Living Soil Specialist</p>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-yellow-400 text-sm fill-current">star</span>
+<span class="text-sm font-bold text-text-main">5.0</span>
+<span class="text-xs text-muted">(124 consults)</span>
+</div>
+</div>
+</div>
+<div class="flex gap-2 mb-6 flex-wrap">
+<span class="px-3 py-1 bg-surface rounded-full text-xs font-bold text-text-main/80">Organic</span>
+<span class="px-3 py-1 bg-surface rounded-full text-xs font-bold text-text-main/80">Indoor</span>
+<span class="px-3 py-1 bg-surface rounded-full text-xs font-bold text-text-main/80">Berlin</span>
+</div>
+<div class="space-y-3">
+<div class="flex items-center justify-between p-3 bg-background rounded-lg border border-surface group-hover:border-primary/20 transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-sm">videocam</span>
+</div>
+<div>
+<p class="text-sm font-bold text-text-main">Video Consult</p>
+<p class="text-xs text-muted">15 min diagnostic</p>
+</div>
+</div>
+<span class="text-sm font-bold text-primary">€15</span>
+</div>
+<button class="w-full py-3 bg-text-main text-white rounded-lg font-bold text-sm hover:bg-text-main/90 transition-colors">Book Consultation</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Feature Trio -->
+<section class="max-w-7xl mx-auto px-6 py-20">
+<div class="text-center mb-16">
+<h2 class="font-serif text-3xl md:text-4xl text-text-main mb-4">Cultivation, Refined.</h2>
+<p class="text-muted text-lg max-w-2xl mx-auto">We marry community expertise with the soul of gardening, providing the tools you need to succeed.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Card 1 -->
+<div class="group bg-surface p-8 rounded-2xl transition-all duration-300 hover:-translate-y-2 hover:shadow-soft border border-transparent hover:border-primary/10 cursor-default">
+<div class="w-14 h-14 bg-white rounded-xl flex items-center justify-center text-primary mb-6 shadow-sm group-hover:rotate-12 transition-transform duration-300">
+<span class="material-symbols-outlined text-3xl">verified_user</span>
+</div>
+<h3 class="font-serif text-2xl font-bold text-text-main mb-3">Vetted Masters</h3>
+<p class="text-text-main/70 leading-relaxed">
+                        Connect with certified local growers who understand your specific regional climate, water quality, and legal constraints.
+                    </p>
+</div>
+<!-- Card 2 -->
+<div class="group bg-surface p-8 rounded-2xl transition-all duration-300 hover:-translate-y-2 hover:shadow-soft border border-transparent hover:border-primary/10 cursor-default">
+<div class="w-14 h-14 bg-white rounded-xl flex items-center justify-center text-primary mb-6 shadow-sm group-hover:-rotate-12 transition-transform duration-300">
+<span class="material-symbols-outlined text-3xl">video_camera_front</span>
+</div>
+<h3 class="font-serif text-2xl font-bold text-text-main mb-3">Video Diagnostics</h3>
+<p class="text-text-main/70 leading-relaxed">
+                        Schedule live troubleshooting calls to diagnose issues immediately with visual confirmation from an expert eye.
+                    </p>
+</div>
+<!-- Card 3 -->
+<div class="group bg-surface p-8 rounded-2xl transition-all duration-300 hover:-translate-y-2 hover:shadow-soft border border-transparent hover:border-primary/10 cursor-default">
+<div class="w-14 h-14 bg-white rounded-xl flex items-center justify-center text-primary mb-6 shadow-sm group-hover:rotate-12 transition-transform duration-300">
+<span class="material-symbols-outlined text-3xl">sensors</span>
+</div>
+<h3 class="font-serif text-2xl font-bold text-text-main mb-3">IoT Integration</h3>
+<p class="text-text-main/70 leading-relaxed">
+                        Grant experts temporary, secure access to your sensor data for precise environmental adjustments and historical analysis.
+                    </p>
+</div>
+</div>
+</section>
+<!-- Parallax Visual Breaker -->
+<section class="w-full py-32 bg-fixed bg-cover bg-center relative my-20" data-alt="Parallax background of a clean, modern indoor plant setup with natural light" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDfYWyHrieWL_kTq08ucvn-uqHOzk5BiyQukyyRbs3Rsn9pvfi_2CtwWEhgdD5-HwA7DkXPGvm3QCEOAuZmlRh09YN4NduczcPIKgvg99qA2M9bax043UIvrgYXywnQSRLvObc06dLkN88YIhYSTw341HDIANBb5tu20yOD3HXG8FO16ziSNTjRiM2gANVKbHlHLrBro-4s6_JfQK-OJwvvGqTQKIqD177sY9EfJWg04UgSRuQ29cXbaMLoUHzPl2E3CN191f30uZTr');">
+<div class="absolute inset-0 bg-primary/40 backdrop-blur-[2px]"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<div class="relative max-w-7xl mx-auto px-6 h-full flex flex-col justify-center items-center text-center text-white">
+<span class="uppercase tracking-[0.2em] text-sm font-bold mb-4 opacity-90">The Modern Botanist</span>
+<h2 class="font-serif text-4xl md:text-5xl lg:text-6xl mb-8 leading-tight max-w-3xl">
+                    "Gardening is the purest of human pleasures."
+                </h2>
+<button class="bg-white text-text-main hover:bg-surface px-8 py-3 rounded-xl font-bold tracking-wide transition-all transform hover:scale-105 shadow-lg">
+                    Start Your Journey
+                </button>
+</div>
+</section>
+<!-- Pricing Section -->
+<section class="max-w-7xl mx-auto px-6 py-20">
+<div class="max-w-4xl mx-auto bg-white rounded-3xl shadow-soft overflow-hidden border border-surface flex flex-col md:flex-row">
+<div class="p-10 md:p-14 md:w-2/3 flex flex-col justify-center">
+<h2 class="font-serif text-3xl md:text-4xl text-text-main mb-4">Green Thumb Access</h2>
+<p class="text-muted text-lg mb-8">Unlock the full potential of your home garden with our premium membership.</p>
+<ul class="space-y-4 mb-8">
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-compliance">check_circle</span>
+<span class="text-text-main font-medium">Unlimited Journal Entries</span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-compliance">check_circle</span>
+<span class="text-text-main font-medium">Expert Directory Access</span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-compliance">check_circle</span>
+<span class="text-text-main font-medium">Sensor Data History (30 Days)</span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-compliance">check_circle</span>
+<span class="text-text-main font-medium">Community Forum Access</span>
+</li>
+</ul>
+</div>
+<div class="bg-surface/50 p-10 md:w-1/3 flex flex-col justify-center items-center text-center border-l border-surface/50">
+<span class="text-muted uppercase tracking-widest text-xs font-bold mb-2">Monthly</span>
+<div class="flex items-baseline gap-1 mb-6">
+<span class="font-serif text-5xl text-text-main">€9</span>
+<span class="text-muted font-medium">/mo</span>
+</div>
+<button class="w-full bg-accent hover:bg-accent/90 text-white px-6 py-3 rounded-xl font-bold tracking-wide transition-all shadow-md transform hover:-translate-y-1">
+                        Get Access
+                    </button>
+<p class="mt-4 text-xs text-muted">Cancel anytime.</p>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-white border-t border-surface pt-16 pb-8">
+<div class="max-w-7xl mx-auto px-6">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+<div class="col-span-1 md:col-span-1">
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-primary text-2xl">spa</span>
+<span class="font-serif text-xl text-text-main font-bold">GrowButler</span>
+</div>
+<p class="text-muted text-sm leading-relaxed">
+                            Empowering the modern urbanite to cultivate with confidence and style.
+                        </p>
+</div>
+<div>
+<h4 class="font-sans font-bold text-text-main mb-6 uppercase text-xs tracking-wider">Platform</h4>
+<ul class="space-y-4 text-sm text-muted">
+<li><a class="hover:text-primary transition-colors" href="#">Find Experts</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Journal</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Pricing</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-sans font-bold text-text-main mb-6 uppercase text-xs tracking-wider">Community</h4>
+<ul class="space-y-4 text-sm text-muted">
+<li><a class="hover:text-primary transition-colors" href="#">Forum</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Events</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Blog</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-sans font-bold text-text-main mb-6 uppercase text-xs tracking-wider">Legal</h4>
+<ul class="space-y-4 text-sm text-muted">
+<li><a class="hover:text-primary transition-colors" href="#">Imprint</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Privacy</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Terms</a></li>
+</ul>
+</div>
+</div>
+<div class="border-t border-surface pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="text-xs text-muted font-medium">© 2024 GrowButler GmbH. Made with care in Berlin.</p>
+<div class="flex gap-4">
+<a class="text-muted hover:text-primary transition-colors" href="#"><span class="sr-only">Instagram</span><svg aria-hidden="true" class="h-5 w-5" fill="currentColor" viewbox="0 0 24 24"><path clip-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.468 2.373c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" fill-rule="evenodd"></path></svg></a>
+</div>
+</div>
+</div>
+</footer>
+</main>
+<script>
+        // Simple script to handle navbar scroll effect
+        const nav = document.querySelector('nav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 10) {
+                nav.classList.add('bg-background/95', 'shadow-sm', 'border-surface');
+                nav.classList.remove('bg-transparent', 'border-transparent');
+            } else {
+                nav.classList.remove('bg-background/95', 'shadow-sm', 'border-surface');
+                nav.classList.add('bg-transparent', 'border-transparent');
+            }
+        });
+    </script>
+</body></html>

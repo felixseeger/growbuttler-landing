@@ -1,0 +1,155 @@
+.section {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 5rem 1.5rem;
+}
+
+.card {
+  max-width: 56rem;
+  margin: 0 auto;
+  background: white;
+  border-radius: 1.5rem;
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+  border: 1px solid var(--color-surface);
+  display: flex;
+  flex-direction: column;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+  }
+}
+
+.left {
+  padding: 2.5rem 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  @media (min-width: 768px) {
+    padding: 3.5rem;
+    width: 66.666%;
+  }
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: 1.875rem;
+  color: var(--color-text-main);
+  margin: 0 0 1rem 0;
+  font-weight: 700;
+
+  @media (min-width: 768px) {
+    font-size: 2.25rem;
+  }
+}
+
+.desc {
+  color: var(--color-muted);
+  font-size: 1.125rem;
+  margin: 0 0 2rem 0;
+  line-height: 1.6;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 500;
+  color: var(--color-text-main);
+}
+
+.check {
+  font-family: 'Material Symbols Outlined';
+  font-variation-settings: 'FILL' 0, 'wght' 400;
+  font-size: 1.25rem;
+  color: var(--color-compliance);
+  flex-shrink: 0;
+}
+
+.right {
+  background: rgba(235, 229, 218, 0.5);
+  padding: 2.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border-top: 1px solid rgba(235, 229, 218, 0.5);
+
+  @media (min-width: 768px) {
+    width: 33.333%;
+    border-top: none;
+    border-left: 1px solid rgba(235, 229, 218, 0.5);
+  }
+}
+
+.period {
+  color: var(--color-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.priceWrap {
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.price {
+  font-family: var(--font-serif);
+  font-size: 3rem;
+  color: var(--color-text-main);
+}
+
+.priceMeta {
+  color: var(--color-muted);
+  font-weight: 500;
+}
+
+.paypalWrap {
+  width: 100%;
+  max-width: 300px;
+  min-height: 45px;
+}
+
+.cta {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  background: var(--color-accent);
+  color: white;
+  border-radius: var(--radius-xl);
+  font-weight: 700;
+  letter-spacing: 0.025em;
+  text-decoration: none;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  transition: background 0.2s, transform 0.2s;
+
+  &:hover {
+    background: rgba(217, 119, 87, 0.9);
+    transform: translateY(-2px);
+  }
+}
+
+.disclaimer {
+  margin-top: 1rem;
+  font-size: 0.75rem;
+  color: var(--color-muted);
+}

@@ -1,0 +1,33 @@
+import { NextResponse } from 'next/server'
+import { getAuthenticatedUser } from '@/lib/auth'
+
+export const dynamic = 'force-dynamic'
+
+export async function GET(request: Request) {
+  try {
+    const user = await getAuthenticatedUser()
+
+    if (!user) {
+      return NextResponse.json(
+        { error: 'Not authenticated' },
+        { status: 401 }
+      )
+    }
+
+    return NextResponse.json({
+      success: true,
+      user: {
+        id: user.userId,
+        email: user.email,
+        name: user.name,
+        roles: user.roles,
+      },
+    })
+  } catch (error: any) {
+    console.error('Auth check error:', error)
+    return NextResponse.json(
+      { error: 'Failed to check authentication' },
+      { status: 500 }
+    )
+  }
+}
