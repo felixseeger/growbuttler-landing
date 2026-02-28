@@ -5,14 +5,17 @@ import { createToken } from '@/lib/auth'
 
 export async function POST(request: Request) {
   try {
-    const { name, email, password } = await request.json()
+    const { firstName, lastName, email, password } = await request.json()
 
-    if (!email || !password || !name) {
+    if (!email || !password || !firstName || !lastName) {
       return NextResponse.json(
         { error: 'Missing required fields' },
         { status: 400 }
       )
     }
+
+    // Combine first and last name for WordPress
+    const fullName = `${firstName} ${lastName}`.trim()
 
     const backendUrl = process.env.BACKEND_URL
     const username = process.env.WORDPRESS_USERNAME
@@ -33,7 +36,9 @@ export async function POST(request: Request) {
     // WordPress requires a username. We'll use the email as the username.
     const wpUser = {
       username: email,
-      name: name,
+      name: fullName,
+      first_name: firstName,
+      last_name: lastName,
       email: email,
       password: password,
       roles: ['subscriber'], // Default role for new signups
@@ -69,6 +74,8 @@ export async function POST(request: Request) {
       userId: data.id,
       email: data.email,
       name: data.name,
+      firstName: data.first_name || firstName,
+      lastName: data.last_name || lastName,
       roles: data.roles || ['subscriber'],
     })
 
@@ -87,7 +94,7 @@ export async function POST(request: Request) {
       subject: 'Welcome to GrowButtler!',
       templateType: 'welcome',
       data: {
-        name: data.name,
+        name: firstName, // Use first name for personal greeting
       },
     }).catch((err) => {
       console.error('Welcome email failed (non-blocking):', err)
@@ -99,6 +106,8 @@ export async function POST(request: Request) {
         id: data.id,
         email: data.email,
         name: data.name,
+        firstName: data.first_name || firstName,
+        lastName: data.last_name || lastName,
       },
     })
   } catch (error: any) {

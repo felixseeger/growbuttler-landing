@@ -30,6 +30,8 @@ export async function POST(request: Request) {
       userId: wpUser.id,
       email,
       name: wpUser.name,
+      firstName: wpUser.firstName,
+      lastName: wpUser.lastName,
       roles: wpUser.roles,
     })
 
@@ -49,6 +51,8 @@ export async function POST(request: Request) {
         id: wpUser.id,
         email,
         name: wpUser.name,
+        firstName: wpUser.firstName,
+        lastName: wpUser.lastName,
         roles: wpUser.roles,
       },
     })

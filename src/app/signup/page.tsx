@@ -6,14 +6,17 @@ import styles from './Signup.module.scss'
 
 export default function SignupPage() {
   const [formData, setFormData] = useState({
-    name: '',
+    firstName: '',
+    lastName: '',
     email: '',
+    confirmEmail: '',
     password: '',
     confirmPassword: '',
     agreeTerms: false,
   })
   const [isLoading, setIsLoading] = useState(false)
   const [passwordsMatch, setPasswordsMatch] = useState(true)
+  const [emailsMatch, setEmailsMatch] = useState(true)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target
@@ -23,6 +26,14 @@ export default function SignupPage() {
       ...prev,
       [name]: newValue,
     }))
+
+    // Check email match on confirm email change
+    if (name === 'confirmEmail') {
+      setEmailsMatch(value === formData.email)
+    }
+    if (name === 'email' && formData.confirmEmail) {
+      setEmailsMatch(formData.confirmEmail === value)
+    }
 
     // Check password match on confirm password change
     if (name === 'confirmPassword') {
@@ -35,7 +46,12 @@ export default function SignupPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
+
+    if (!emailsMatch) {
+      alert('Email addresses do not match')
+      return
+    }
+
     if (!passwordsMatch) {
       alert('Passwords do not match')
       return
@@ -52,7 +68,8 @@ export default function SignupPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name: formData.name,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
           email: formData.email,
           password: formData.password,
         }),
@@ -90,13 +107,26 @@ export default function SignupPage() {
 
           <form onSubmit={handleSubmit} className={styles.form}>
             <div className={styles.formGroup}>
-              <label htmlFor="name">Full Name</label>
+              <label htmlFor="firstName">First Name</label>
               <input
-                id="name"
+                id="firstName"
                 type="text"
-                name="name"
-                placeholder="Your full name"
-                value={formData.name}
+                name="firstName"
+                placeholder="Your first name"
+                value={formData.firstName}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className={styles.formGroup}>
+              <label htmlFor="lastName">Last Name</label>
+              <input
+                id="lastName"
+                type="text"
+                name="lastName"
+                placeholder="Your last name"
+                value={formData.lastName}
                 onChange={handleChange}
                 required
               />
@@ -113,6 +143,23 @@ export default function SignupPage() {
                 onChange={handleChange}
                 required
               />
+            </div>
+
+            <div className={styles.formGroup}>
+              <label htmlFor="confirmEmail">Confirm Email</label>
+              <input
+                id="confirmEmail"
+                type="email"
+                name="confirmEmail"
+                placeholder="you@example.com"
+                value={formData.confirmEmail}
+                onChange={handleChange}
+                required
+                className={!emailsMatch ? styles.error : ''}
+              />
+              {!emailsMatch && formData.confirmEmail && (
+                <p className={styles.errorMessage}>Email addresses do not match</p>
+              )}
             </div>
 
             <div className={styles.formGroup}>
@@ -164,10 +211,10 @@ export default function SignupPage() {
               </label>
             </div>
 
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               className={styles.submitBtn}
-              disabled={isLoading || !passwordsMatch || !formData.agreeTerms}
+              disabled={isLoading || !passwordsMatch || !emailsMatch || !formData.agreeTerms}
             >
               {isLoading ? (
                 <>

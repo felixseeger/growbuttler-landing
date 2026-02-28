@@ -7,6 +7,8 @@ export interface TokenPayload {
   userId: number
   email: string
   name: string
+  firstName?: string
+  lastName?: string
   roles: string[]
   iat?: number
   exp?: number
@@ -63,7 +65,7 @@ export async function getAuthenticatedUser(): Promise<TokenPayload | null> {
 export async function verifyWordPressCredentials(
   email: string,
   password: string
-): Promise<{ id: number; name: string; roles: string[] } | null> {
+): Promise<{ id: number; name: string; firstName?: string; lastName?: string; roles: string[] } | null> {
   try {
     const backendUrl = process.env.BACKEND_URL
 
@@ -100,10 +102,35 @@ export async function verifyWordPressCredentials(
 
     // Decode JWT to get user info (payload contains: id, email, username, etc.)
     const jwtPayload = JSON.parse(atob(data.data.jwt.split('.')[1]))
+    const userId = parseInt(jwtPayload.id)
+
+    // Fetch additional user details from WordPress REST API
+    let firstName: string | undefined
+    let lastName: string | undefined
+
+    try {
+      const userResponse = await fetch(`${backendUrl}/wp-json/wp/v2/users/${userId}`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        cache: 'no-store',
+      })
+
+      if (userResponse.ok) {
+        const userData = await userResponse.json()
+        firstName = userData.first_name || undefined
+        lastName = userData.last_name || undefined
+      }
+    } catch (err) {
+      console.error('Failed to fetch user details:', err)
+      // Continue without firstName/lastName
+    }
 
     return {
-      id: parseInt(jwtPayload.id),
+      id: userId,
       name: jwtPayload.username || email,
+      firstName,
+      lastName,
       roles: ['subscriber'], // Default role, can be enhanced if needed
     }
   } catch (error) {

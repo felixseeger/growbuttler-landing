@@ -14,7 +14,8 @@ export default function DashboardGreeting() {
       .then((res) => res.json())
       .then((data) => {
         if (data.user) {
-          setUserName(data.user.name || data.user.email || 'Kultivator')
+          // Use firstName if available, otherwise fall back to full name or email
+          setUserName(data.user.firstName || data.user.name || data.user.email || 'Kultivator')
         }
       })
       .catch((err) => {
