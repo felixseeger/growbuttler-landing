@@ -4,10 +4,11 @@ const config: CapacitorConfig = {
   appId: 'com.growbuttler.app',
   appName: 'GrowButtler',
   webDir: 'out',
-  server: {
-    url: 'https://growbuttler.felixseeger.de',
-    cleartext: true
-  },
+  // Use static build - assets are packaged with the app
+  // server: {
+  //   url: 'https://growbuttler-landing.vercel.app',
+  //   cleartext: true
+  // },
   ios: {
     contentInset: 'automatic',
     scheme: 'GrowButtler',
@@ -24,6 +25,10 @@ const config: CapacitorConfig = {
       launchShowDuration: 0,
       backgroundColor: '#F5F1E8',
       showSpinner: false
+    },
+    StatusBar: {
+      style: 'DARK',
+      backgroundColor: '#F5F1E8'
     }
   }
 };
