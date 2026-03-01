@@ -1,6 +1,4 @@
-@import "tailwindcss";
-
-/* GrowButtler design tokens */
+// GrowButtler design tokens (match home.html Tailwind theme)
 :root {
   --color-primary: #3a5a40;
   --color-background: #fdfbf7;
@@ -37,43 +35,12 @@ body {
   color: var(--color-text-main);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* Capacitor iOS fixes */
-  overflow-y: auto !important;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior-y: contain;
-  position: relative;
-  height: auto !important;
+  overflow-x: hidden;
 }
 
-/* iOS safe area insets */
-@supports (padding: env(safe-area-inset-top)) {
-  body {
-    padding-top: env(safe-area-inset-top, 0);
-    padding-bottom: env(safe-area-inset-bottom, 0);
-    padding-left: env(safe-area-inset-left, 0);
-    padding-right: env(safe-area-inset-right, 0);
-  }
-}
-
-/* Fix for 100vh on iOS when address bar shows/hides */
-@supports (-webkit-touch-callout: none) {
-  body {
-    min-height: -webkit-fill-available;
-    height: auto !important;
-  }
-}
-
-/* Ensure main content area can scroll */
-main, .flex-grow, .overflow-auto {
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  min-height: 0;
-}
-
-/* Specific fixes for plant grid */
-.plantGrid {
-  overflow-y: visible;
-  min-height: 0;
+::selection {
+  background: rgba(58, 90, 64, 0.2);
+  color: var(--color-primary);
 }
 
 ::-webkit-scrollbar {
@@ -99,4 +66,35 @@ main, .flex-grow, .overflow-auto {
   mix-blend-mode: multiply;
   opacity: 0.4;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+}
+
+/* ---- Capacitor iOS Scroll Fix ---- */
+html, body {
+  height: 100%;
+  min-height: 100%;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+  position: relative;
+}
+
+body {
+  padding-top: env(safe-area-inset-top, 0);
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  padding-left: env(safe-area-inset-left, 0);
+  padding-right: env(safe-area-inset-right, 0);
+}
+
+main, .flex-grow, .overflow-auto {
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* iOS 100vh fix */
+@supports (-webkit-touch-callout: none) {
+  body {
+    min-height: -webkit-fill-available;
+  }
 }
