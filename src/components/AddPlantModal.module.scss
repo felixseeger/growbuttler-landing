@@ -156,3 +156,66 @@
     transform: translateY(1px);
   }
 }
+
+.fileInput {
+  display: block;
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #d0d0d0;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+
+  &:focus {
+    outline: none;
+    border-color: #2d5016;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.imagePreview {
+  position: relative;
+  margin-top: 0.75rem;
+  display: inline-block;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 2px solid #2d5016;
+
+  img {
+    display: block;
+    max-width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+  }
+}
+
+.removeImage {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 24px;
+  height: 24px;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+
+  &:hover:not(:disabled) {
+    background: rgba(0, 0, 0, 0.8);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}

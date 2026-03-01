@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import styles from './AddPlantModal.module.scss'
 
 interface AddPlantModalProps {
@@ -21,8 +21,24 @@ export default function AddPlantModal({
   const [startDate, setStartDate] = useState(
     new Date().toISOString().split('T')[0]
   )
+  const [imageFile, setImageFile] = useState<File | null>(null)
+  const [imagePreview, setImagePreview] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [isUploadingImage, setIsUploadingImage] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null
+    if (file) {
+      setImageFile(file)
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        setImagePreview(e.target?.result as string)
+      }
+      reader.readAsDataURL(file)
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -30,6 +46,30 @@ export default function AddPlantModal({
     setIsLoading(true)
 
     try {
+      let featuredMediaId: number | undefined
+
+      // Upload image first if selected
+      if (imageFile) {
+        setIsUploadingImage(true)
+        const formData = new FormData()
+        formData.append('file', imageFile)
+
+        const uploadResponse = await fetch('/api/upload-image', {
+          method: 'POST',
+          body: formData,
+        })
+
+        const uploadData = await uploadResponse.json()
+
+        if (!uploadResponse.ok) {
+          throw new Error(uploadData.error || 'Failed to upload image')
+        }
+
+        featuredMediaId = uploadData.id
+        setIsUploadingImage(false)
+      }
+
+      // Create plant entry
       const response = await fetch('/api/plants/add', {
         method: 'POST',
         headers: {
@@ -42,6 +82,7 @@ export default function AddPlantModal({
           stage,
           location,
           startDate,
+          featuredMediaId,
         }),
       })
 
@@ -57,6 +98,11 @@ export default function AddPlantModal({
       setStage('seedling')
       setLocation('')
       setStartDate(new Date().toISOString().split('T')[0])
+      setImageFile(null)
+      setImagePreview(null)
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ''
+      }
 
       onSuccess()
       onClose()
@@ -64,6 +110,7 @@ export default function AddPlantModal({
       setError(err instanceof Error ? err.message : 'Failed to add plant')
     } finally {
       setIsLoading(false)
+      setIsUploadingImage(false)
     }
   }
 
@@ -93,6 +140,7 @@ export default function AddPlantModal({
               onChange={(e) => setName(e.target.value)}
               placeholder="e.g., Northern Lights #1"
               required
+              disabled={isLoading}
             />
           </div>
 
@@ -104,6 +152,7 @@ export default function AddPlantModal({
               value={strain}
               onChange={(e) => setStrain(e.target.value)}
               placeholder="e.g., Northern Lights"
+              disabled={isLoading}
             />
           </div>
 
@@ -116,6 +165,7 @@ export default function AddPlantModal({
               value={stage}
               onChange={(e) => setStage(e.target.value)}
               required
+              disabled={isLoading}
             >
               <option value="seedling">Seedling</option>
               <option value="vegetative">Vegetative</option>
@@ -132,6 +182,7 @@ export default function AddPlantModal({
               value={location}
               onChange={(e) => setLocation(e.target.value)}
               placeholder="e.g., Indoor • Tent A"
+              disabled={isLoading}
             />
           </div>
 
@@ -142,7 +193,41 @@ export default function AddPlantModal({
               type="date"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
+              disabled={isLoading}
             />
+          </div>
+
+          <div className={styles.field}>
+            <label htmlFor="image">Plant Image</label>
+            <input
+              id="image"
+              type="file"
+              ref={fileInputRef}
+              onChange={handleImageChange}
+              accept="image/*"
+              disabled={isLoading || isUploadingImage}
+              className={styles.fileInput}
+            />
+            {imagePreview && (
+              <div className={styles.imagePreview}>
+                <img src={imagePreview} alt="Plant preview" />
+                <button
+                  type="button"
+                  className={styles.removeImage}
+                  onClick={() => {
+                    setImageFile(null)
+                    setImagePreview(null)
+                    if (fileInputRef.current) fileInputRef.current.value = ''
+                  }}
+                  disabled={isLoading}
+                >
+                  ×
+                </button>
+              </div>
+            )}
+            <small style={{ color: '#666', fontSize: '0.75rem' }}>
+              Optional: Add a photo of your plant
+            </small>
           </div>
 
           <div className={styles.actions}>
@@ -157,9 +242,9 @@ export default function AddPlantModal({
             <button
               type="submit"
               className={styles.submitButton}
-              disabled={isLoading}
+              disabled={isLoading || isUploadingImage}
             >
-              {isLoading ? 'Adding...' : 'Add Plant'}
+              {isUploadingImage ? 'Uploading...' : isLoading ? 'Adding...' : 'Add Plant'}
             </button>
           </div>
         </form>

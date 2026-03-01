@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { name, strain, stage, location, startDate } = body
+    const { name, strain, stage, location, startDate, featuredMediaId } = body
 
     if (!name || !stage) {
       return NextResponse.json(
@@ -30,38 +30,33 @@ export async function POST(request: NextRequest) {
 
     const backendUrl = process.env.BACKEND_URL
     if (!backendUrl) {
-      return NextResponse.json(
-        { error: 'Backend not configured' },
-        { status: 500 }
-      )
+      return NextResponse.json({ error: 'Backend not configured' }, { status: 500 })
     }
 
     const journalEntry = {
       title: `${name} - Day ${dayNumber}`,
       status: 'publish',
-      author: user.userId,
       acf: {
         plant_id: plantId,
         plant_name: name,
-        entry_date: new Date().toISOString().replace('T', ' ').substring(0, 19),
         day_number: dayNumber,
         week_number: weekNumber,
-        growth_stage: stage.toLowerCase(),
-        entry_title: 'Initial Entry',
-        entry_content: `Plant: ${name}\n${strain ? `Strain: ${strain}\n` : ''}Stage: ${stage}\n${location ? `Location: ${location}\n` : ''}Started on: ${startDate}`,
-        entry_type: 'observation',
+        stage: stage.toLowerCase(),
+        type: 'observation',
         author_type: 'user',
       },
+    }
+
+    // Set featured image if provided
+    if (featuredMediaId) {
+      journalEntry.featured_media = parseInt(featuredMediaId)
     }
 
     const wpUsername = process.env.WORDPRESS_USERNAME
     const wpPassword = process.env.APPLICATION_PASSWORD?.replace(/\s/g, '')
 
     if (!wpUsername || !wpPassword) {
-      return NextResponse.json(
-        { error: 'WordPress credentials not configured' },
-        { status: 500 }
-      )
+      return NextResponse.json({ error: 'WordPress credentials not configured' }, { status: 500 })
     }
 
     const authHeader = 'Basic ' + Buffer.from(`${wpUsername}:${wpPassword}`).toString('base64')
@@ -81,10 +76,7 @@ export async function POST(request: NextRequest) {
     if (!response.ok) {
       const error = await response.text()
       console.error('WordPress API error:', error)
-      return NextResponse.json(
-        { error: 'Failed to create plant entry' },
-        { status: 500 }
-      )
+      return NextResponse.json({ error: 'Failed to create plant entry' }, { status: 500 })
     }
 
     const data = await response.json()
@@ -100,14 +92,12 @@ export async function POST(request: NextRequest) {
         dayNumber,
         weekNumber,
         startDate: start.toISOString(),
+        imageId: featuredMediaId ? parseInt(featuredMediaId) : null,
       },
       journalEntryId: data.id,
     })
   } catch (error) {
     console.error('Add plant error:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
