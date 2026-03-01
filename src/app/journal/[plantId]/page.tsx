@@ -117,11 +117,13 @@ async function PlantJournalContent({ plantId }: { plantId: string }) {
   )
 }
 
-export default async function PlantJournalPage({ params }: { params: { plantId: string } }) {
+export default async function PlantJournalPage({ params }: { params: Promise<{ plantId: string }> }) {
+  const { plantId } = await params
+
   return (
     <SubpageLayout>
       <Suspense fallback={<div style={{ padding: '4rem', textAlign: 'center' }}>Loading...</div>}>
-        <PlantJournalContent plantId={params.plantId} />
+        <PlantJournalContent plantId={plantId} />
       </Suspense>
     </SubpageLayout>
   )

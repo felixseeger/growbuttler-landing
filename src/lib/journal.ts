@@ -85,8 +85,34 @@ export async function getPlantById(plantId: string) {
 }
 
 export async function getPlants(): Promise<Plant[]> {
-  const response = await fetch('/api/plants', { next: { revalidate: 60 } })
-  if (!response.ok) return []
-  const data = await response.json()
-  return (data.plants || []) as Plant[]
+  try {
+    const user = await getAuthUser()
+    if (!user) return []
+
+    const backendUrl = process.env.BACKEND_URL
+    if (!backendUrl) return []
+
+    const response = await fetch(
+      `${backendUrl}/wp-json/wp/v2/plants?author=${user.userId}&per_page=100`,
+      { next: { revalidate: 60 } }
+    )
+
+    if (!response.ok) return []
+
+    const plants = await response.json()
+    return plants.map((plant: any) => ({
+      id: String(plant.id),
+      name: plant.acf?.plant_name || plant.title?.rendered || 'Unnamed Plant',
+      strain: plant.acf?.strain_name,
+      location: plant.acf?.location,
+      stage: plant.acf?.growth_stage || 'vegetative',
+      dayNumber: plant.acf?.day_number || 1,
+      weekNumber: plant.acf?.week_number || 1,
+      imageUrl: plant.acf?.plant_image?.url || null,
+      lastUpdated: plant.modified,
+    }))
+  } catch (error) {
+    console.error('Error fetching plants:', error)
+    return []
+  }
 }
