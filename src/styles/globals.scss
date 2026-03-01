@@ -69,44 +69,11 @@ body {
 }
 
 /* ---- Capacitor iOS Scroll Fix ---- */
-html {
-  height: 100%;
-  overflow: hidden;
-  position: fixed;
-  width: 100%;
-}
+/* Handled by IOSScrollFix component for better control */
 
 body {
-  height: 100%;
-  overflow-y: scroll !important;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior-y: none;
-  position: relative;
-  width: 100%;
   padding-top: env(safe-area-inset-top, 0);
   padding-bottom: env(safe-area-inset-bottom, 0);
   padding-left: env(safe-area-inset-left, 0);
   padding-right: env(safe-area-inset-right, 0);
-}
-
-/* Force touch scrolling on all scrollable containers */
-* {
-  -webkit-overflow-scrolling: touch;
-}
-
-main, .overflow-auto, [style*="overflow"] {
-  -webkit-overflow-scrolling: touch;
-  overflow-y: auto;
-}
-
-/* iOS 100vh fix */
-@supports (-webkit-touch-callout: none) {
-  html, body {
-    height: -webkit-fill-available;
-  }
-}
-
-/* Ensure input fields don't break scroll */
-input, textarea, select {
-  touch-action: manipulation;
 }

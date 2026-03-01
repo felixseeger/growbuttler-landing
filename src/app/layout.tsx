@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import '@/styles/globals.scss'
 import { organizationSchema, localBusinessSchema, serviceSchema, aggregateRatingSchema } from '@/lib/schema'
+import IOSScrollFix from '@/components/IOSScrollFix'
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://growbuttler.com'
 
@@ -89,6 +90,7 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-title" content="GrowButtler" />
       </head>
       <body className="flex flex-col min-h-screen">
+        <IOSScrollFix />
         <div className="paper-texture" aria-hidden />
         {children}
       </body>
