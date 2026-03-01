@@ -1,20 +1,77 @@
-import { Suspense } from 'react'
+'use client'
+
+import { useState, useEffect, Suspense } from 'react'
+import { useSearchParams } from 'next/navigation'
 import SubpageLayout from '@/components/SubpageLayout/SubpageLayout'
-import { getJournalEntriesForPlant, getPlantById } from '@/lib/journal'
 import Link from 'next/link'
 import Image from 'next/image'
 import styles from '../JournalPage.module.scss'
 
-async function PlantJournalContent({ plantId }: { plantId: string }) {
-  const [plant, entries] = await Promise.all([
-    getPlantById(plantId),
-    getJournalEntriesForPlant(plantId),
-  ])
+function PlantJournalContent() {
+  const searchParams = useSearchParams()
+  const plantId = searchParams.get('plantId')
+  
+  const [plant, setPlant] = useState<any>(null)
+  const [entries, setEntries] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
-  if (!plant) {
+  useEffect(() => {
+    async function fetchData() {
+      if (!plantId) {
+        setError('No plant ID provided')
+        setLoading(false)
+        return
+      }
+      
+      try {
+        setLoading(true)
+        
+        const [plantsRes, entriesRes] = await Promise.all([
+          fetch('/api/plants', { credentials: 'include' }),
+          fetch(`/api/journal-entries?plantId=${plantId}`, { credentials: 'include' })
+        ])
+
+        // Handle authentication errors
+        if (plantsRes.status === 401 || entriesRes.status === 401) {
+          window.location.href = '/login'
+          return
+        }
+
+        if (!plantsRes.ok || !entriesRes.ok) {
+          throw new Error('Failed to fetch data')
+        }
+
+        const plantsData = await plantsRes.json()
+        const entriesData = await entriesRes.json()
+
+        const foundPlant = (plantsData.plants || []).find((p: any) => String(p.id) === String(plantId))
+        
+        if (!foundPlant) {
+          setError('Plant not found')
+        } else {
+          setPlant(foundPlant)
+          setEntries(entriesData.entries || [])
+        }
+      } catch (err: any) {
+        console.error('Error fetching journal data:', err)
+        setError(err.message || 'Failed to load journal data')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchData()
+  }, [plantId])
+
+  if (loading) {
+    return <div style={{ padding: '4rem', textAlign: 'center' }}>Loading...</div>
+  }
+
+  if (error || !plant) {
     return (
       <div style={{ padding: '4rem', textAlign: 'center' }}>
-        <h2>Plant not found</h2>
+        <h2>{error || 'Plant not found'}</h2>
         <Link href="/dashboard">Back to dashboard</Link>
       </div>
     )
@@ -117,16 +174,10 @@ async function PlantJournalContent({ plantId }: { plantId: string }) {
   )
 }
 
-export default async function PlantJournalPage({ params }: { params: Promise<{ plantId: string }> }) {
-  const { plantId } = await params
-
+export default function PlantJournalPage() {
   return (
-    <SubpageLayout>
-      <Suspense fallback={<div style={{ padding: '4rem', textAlign: 'center' }}>Loading...</div>}>
-        <PlantJournalContent plantId={plantId} />
-      </Suspense>
-    </SubpageLayout>
+    <Suspense fallback={<div style={{ padding: '4rem', textAlign: 'center' }}>Loading...</div>}>
+      <PlantJournalContent />
+    </Suspense>
   )
 }
-
-export const dynamic = 'force-dynamic'

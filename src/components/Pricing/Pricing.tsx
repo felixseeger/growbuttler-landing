@@ -4,10 +4,18 @@ import { useMemo } from 'react'
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js'
 import styles from './Pricing.module.scss'
 
+/** Normalize ACF repeater format [{ item: "..." }] or string[] to string[] */
+function normalizeBenefits(raw: unknown): string[] {
+  if (!Array.isArray(raw) || raw.length === 0) return []
+  return raw
+    .map((b) => (typeof b === 'string' ? b : (b && typeof b === 'object' && 'item' in b ? String((b as { item?: unknown }).item ?? '') : '')))
+    .filter((s) => s.trim() !== '')
+}
+
 interface PricingProps {
   title?: string
   description?: string
-  benefits?: string[] | null
+  benefits?: string[] | Array<{ item?: string }> | null
   priceAmount?: string
   pricePeriod?: string
   ctaLabel?: string
@@ -32,7 +40,8 @@ export default function Pricing({
   disclaimer = 'Jederzeit kündbar.',
   paypalPlanId,
 }: PricingProps) {
-  const safeBenefits = Array.isArray(benefits) && benefits.length > 0 ? benefits : defaultBenefits
+  const normalized = normalizeBenefits(benefits)
+  const safeBenefits = normalized.length > 0 ? normalized : defaultBenefits
   const paypalClientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID
   const hasPayPal = Boolean(paypalClientId && paypalClientId.length > 10)
   const initialOptions = useMemo(

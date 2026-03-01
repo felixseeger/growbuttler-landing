@@ -67,8 +67,14 @@ export default function AddPlantModal({
 
         const uploadResponse = await fetch('/api/upload-image', {
           method: 'POST',
+          credentials: 'include',
           body: formData,
         })
+
+        if (uploadResponse.status === 401) {
+          window.location.href = '/login'
+          return
+        }
 
         const uploadData = await uploadResponse.json()
         if (!uploadResponse.ok) throw new Error(uploadData.error || 'Failed to upload image')

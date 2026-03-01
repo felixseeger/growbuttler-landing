@@ -154,8 +154,14 @@ function NewJournalEntryContent() {
 
         const uploadRes = await fetch('/api/upload-image', {
           method: 'POST',
+          credentials: 'include',
           body: formData
         })
+
+        if (uploadRes.status === 401) {
+          window.location.href = '/login'
+          return
+        }
 
         const uploadData = await uploadRes.json()
         if (!uploadRes.ok) throw new Error(uploadData.error || 'Image upload failed')
