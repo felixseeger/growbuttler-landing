@@ -7,30 +7,25 @@ export async function POST(request: NextRequest) {
     if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
     const body = await request.json()
-    const { entryDate, narrative, temperature, humidity, nutrientMix, phLevel, featuredMediaId, plantId } = body
+    const { entryDate, narrative, temperature, humidity, nutrientMix, phLevel, featuredMediaId, additionalImageIds, plantId } = body
 
-    if (!entryDate && !narrative) {
-      return NextResponse.json({ error: 'At least date or narrative required' }, { status: 400 })
-    }
-
-    if (!plantId) {
-      return NextResponse.json({ error: 'Plant ID is required' }, { status: 400 })
-    }
+    if (!entryDate && !narrative) return NextResponse.json({ error: 'At least date or narrative required' }, { status: 400 })
+    if (!plantId) return NextResponse.json({ error: 'Plant ID is required' }, { status: 400 })
 
     const backendUrl = process.env.BACKEND_URL
     if (!backendUrl) return NextResponse.json({ error: 'Backend not configured' }, { status: 500 })
 
-    // Fetch plant details to include in entry
-    const plantsRes = await fetch('/api/plants', { credentials: 'include' })
+    // Fetch plant name for title
     let plantName = 'Unknown Plant'
-    let plantStage = ''
-    if (plantsRes.ok) {
-      const { plants } = await plantsRes.json()
-      const plant = plants.find((p: any) => p.id === plantId)
-      if (plant) {
-        plantName = plant.name
-        plantStage = plant.stage
+    try {
+      const plantsRes = await fetch('/api/plants', { credentials: 'include' })
+      if (plantsRes.ok) {
+        const { plants } = await plantsRes.json()
+        const plant = plants.find((p: any) => p.id === plantId)
+        if (plant) plantName = plant.name
       }
+    } catch (e) {
+      console.warn('Could not fetch plant name:', e)
     }
 
     const acf = {
@@ -43,10 +38,11 @@ export async function POST(request: NextRequest) {
       humidity_percent: humidity,
       nutrient_mix: nutrientMix,
       ph_level: phLevel ? parseFloat(phLevel) : null,
+      additional_images: additionalImageIds || [], // Store additional image IDs
     }
 
     const journalEntry: any = {
-      title: `${plantName} - Entry - ${entryDate || 'Today'}`,
+      title: `${plantName} - ${entryDate || 'Entry'}`,
       status: 'publish',
       author: user.userId,
       content: narrative || '',
@@ -69,13 +65,20 @@ export async function POST(request: NextRequest) {
 
     if (!response.ok) {
       const errorText = await response.text()
-      console.error('WordPress API error:', errorText)
-      return NextResponse.json({ error: 'Failed to save journal entry' }, { status: 500 })
+      console.error('WordPress API error:', response.status, errorText)
+      return NextResponse.json({ 
+        error: 'Failed to save journal entry',
+        details: errorText,
+        status: response.status 
+      }, { status: 500 })
     }
 
     return NextResponse.json({ success: true, entryId: (await response.json()).id })
-  } catch (error) {
+  } catch (error: any) {
     console.error('Add journal entry error:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return NextResponse.json({ 
+      error: 'Internal server error',
+      details: error.message,
+    }, { status: 500 })
   }
 }
