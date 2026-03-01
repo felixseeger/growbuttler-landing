@@ -42,9 +42,13 @@ export async function POST(request: NextRequest) {
     )
 
     if (!mediaResponse.ok) {
-      const error = await mediaResponse.text()
-      console.error('Media upload failed:', error)
-      return NextResponse.json({ error: 'Failed to upload image to WordPress' }, { status: 500 })
+      const errorText = await mediaResponse.text()
+      console.error('Media upload failed:', mediaResponse.status, errorText)
+      return NextResponse.json({ 
+        error: 'Failed to upload image to WordPress',
+        details: errorText,
+        status: mediaResponse.status
+      }, { status: 500 })
     }
 
     const mediaData = await mediaResponse.json()
