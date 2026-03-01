@@ -5,7 +5,7 @@ const config: CapacitorConfig = {
   appName: 'GrowButtler',
   webDir: 'out',
   server: {
-    url: 'https://growbuttler-landing.vercel.app',
+    url: 'https://growbuttler.felixseeger.de',
     cleartext: true
   },
   ios: {
