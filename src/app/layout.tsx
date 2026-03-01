@@ -1,13 +1,18 @@
 import type { Metadata } from 'next'
 import '@/styles/globals.scss'
 import { organizationSchema, localBusinessSchema, serviceSchema, aggregateRatingSchema } from '@/lib/schema'
-import IOSScrollFix from '@/components/IOSScrollFix'
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://growbuttler.com'
 
 export const metadata: Metadata = {
   title: 'GrowButtler - Master Cultivation with Local Experts',
   description: 'Connect with certified master growers in your area for guidance, live diagnostics, and a shared journey to harvest.',
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
+  },
   alternates: {
     canonical: `${baseUrl}/`,
     languages: {
@@ -90,7 +95,6 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-title" content="GrowButtler" />
       </head>
       <body className="flex flex-col min-h-screen">
-        <IOSScrollFix />
         <div className="paper-texture" aria-hidden />
         {children}
       </body>
