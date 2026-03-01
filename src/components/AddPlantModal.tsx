@@ -55,7 +55,8 @@ export default function AddPlantModal({
     setIsLoading(true)
 
     try {
-      let featuredMediaId: number | undefined
+      let featuredMediaId: string | undefined
+      let featuredImageUrl: string | undefined
 
       if (imageFile) {
         if (isPastDate()) {
@@ -79,6 +80,7 @@ export default function AddPlantModal({
         const uploadData = await uploadResponse.json()
         if (!uploadResponse.ok) throw new Error(uploadData.error || 'Failed to upload image')
         featuredMediaId = uploadData.id
+        featuredImageUrl = uploadData.url
         setIsUploadingImage(false)
       }
 
@@ -93,6 +95,7 @@ export default function AddPlantModal({
           location,
           startDate,
           featuredMediaId,
+          featuredImageUrl,
         }),
       })
 

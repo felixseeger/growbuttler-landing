@@ -144,7 +144,8 @@ function NewJournalEntryContent() {
     setIsLoading(true)
     try {
       // Upload all images
-      const uploadedImageIds: number[] = []
+      const uploadedImageIds: string[] = []
+      const uploadedImageUrls: string[] = []
 
       for (const image of images) {
         if (isPastDate()) throw new Error('Cannot upload images for past dates')
@@ -167,10 +168,12 @@ function NewJournalEntryContent() {
         if (!uploadRes.ok) throw new Error(uploadData.error || 'Image upload failed')
 
         uploadedImageIds.push(uploadData.id)
+        uploadedImageUrls.push(uploadData.url)
       }
 
       // Use first image as featured media
       const featuredMediaId = uploadedImageIds[0]
+      const featuredImageUrl = uploadedImageUrls[0]
 
       const response = await fetch('/api/journal-entry/add', {
         method: 'POST',
@@ -184,7 +187,9 @@ function NewJournalEntryContent() {
           nutrientMix,
           phLevel,
           featuredMediaId,
+          featuredImageUrl,
           additionalImageIds: uploadedImageIds.slice(1), // Additional images
+          additionalImageUrls: uploadedImageUrls.slice(1),
           plantId,
         }),
       })

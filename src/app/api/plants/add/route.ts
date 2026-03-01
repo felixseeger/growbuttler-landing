@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { name, strain, stage, location, startDate, featuredMediaId } = body
+    const { name, strain, stage, location, startDate, featuredMediaId, featuredImageUrl } = body
 
     if (!name || !stage) {
       return NextResponse.json({ error: 'Name and stage are required' }, { status: 400 })
@@ -39,6 +39,7 @@ export async function POST(request: NextRequest) {
         stage: stage.toLowerCase(),
         type: 'observation',
         author_type: 'user',
+        featured_image_url: featuredImageUrl || '',
       },
     }
 

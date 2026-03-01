@@ -1,7 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { getAuthenticatedUser } from '@/lib/auth'
+import { writeFile, mkdir } from 'fs/promises'
+import path from 'path'
+import { v4 as uuidv4 } from 'uuid'
 
 export async function POST(request: NextRequest) {
   try {
+    // Authenticate user
+    const user = await getAuthenticatedUser()
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
     const formData = await request.formData()
     const file = formData.get('file') as File | null
 
@@ -13,50 +23,41 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'File must be an image' }, { status: 400 })
     }
 
-    const wpUsername = process.env.WORDPRESS_USERNAME
-    const wpPassword = process.env.APPLICATION_PASSWORD?.replace(/\s/g, '')
+    // Generate unique filename
+    const fileExtension = file.name.split('.').pop() || 'jpg'
+    const uniqueFilename = `${uuidv4()}.${fileExtension}`
 
-    if (!wpUsername || !wpPassword) {
-      return NextResponse.json({ error: 'WordPress credentials not configured' }, { status: 500 })
-    }
+    // Save to public/uploads directory
+    const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'journal-images')
+    await mkdir(uploadDir, { recursive: true })
 
-    const backendUrl = process.env.BACKEND_URL
-    if (!backendUrl) {
-      return NextResponse.json({ error: 'Backend not configured' }, { status: 500 })
-    }
-
+    const filePath = path.join(uploadDir, uniqueFilename)
     const bytes = await file.arrayBuffer()
     const buffer = Buffer.from(bytes)
 
-    const mediaResponse = await fetch(
-      `${backendUrl}/wp-json/wp/v2/media`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': file.type,
-          'Content-Disposition': `attachment; filename="${file.name}"`,
-          'Authorization': 'Basic ' + Buffer.from(`${wpUsername}:${wpPassword}`).toString('base64'),
-        },
-        body: buffer,
-      }
-    )
+    await writeFile(filePath, buffer)
 
-    if (!mediaResponse.ok) {
-      const errorText = await mediaResponse.text()
-      console.error('Media upload failed:', mediaResponse.status, errorText)
-      return NextResponse.json({ 
-        error: 'Failed to upload image to WordPress',
-        details: errorText,
-        status: mediaResponse.status
-      }, { status: 500 })
+    // Generate URL for the uploaded image
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3006'
+    const imageUrl = `${baseUrl}/uploads/journal-images/${uniqueFilename}`
+
+    // Store metadata in a simple JSON file (temporary solution)
+    const metadataPath = path.join(uploadDir, `${uniqueFilename}.json`)
+    const metadata = {
+      id: uniqueFilename,
+      originalName: file.name,
+      size: file.size,
+      type: file.type,
+      uploadedBy: user.userId,
+      uploadedAt: new Date().toISOString(),
+      url: imageUrl,
     }
-
-    const mediaData = await mediaResponse.json()
+    await writeFile(metadataPath, JSON.stringify(metadata, null, 2))
 
     return NextResponse.json({
       success: true,
-      id: mediaData.id,
-      url: mediaData.source_url,
+      id: uniqueFilename,
+      url: imageUrl,
       mediaType: 'image',
     })
   } catch (error) {

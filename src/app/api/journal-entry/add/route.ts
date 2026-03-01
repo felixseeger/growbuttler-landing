@@ -7,7 +7,7 @@ export async function POST(request: NextRequest) {
     if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
     const body = await request.json()
-    const { entryDate, narrative, temperature, humidity, nutrientMix, phLevel, featuredMediaId, additionalImageIds, plantId } = body
+    const { entryDate, narrative, temperature, humidity, nutrientMix, phLevel, featuredMediaId, additionalImageIds, featuredImageUrl, additionalImageUrls, plantId } = body
 
     if (!entryDate && !narrative) return NextResponse.json({ error: 'At least date or narrative required' }, { status: 400 })
     if (!plantId) return NextResponse.json({ error: 'Plant ID is required' }, { status: 400 })
@@ -38,7 +38,9 @@ export async function POST(request: NextRequest) {
       humidity_percent: humidity,
       nutrient_mix: nutrientMix,
       ph_level: phLevel ? parseFloat(phLevel) : null,
-      additional_images: additionalImageIds || [], // Store additional image IDs
+      additional_images: additionalImageIds || [], // Store additional image IDs (if using WordPress media)
+      featured_image_url: featuredImageUrl || '', // Store direct URL for locally uploaded images
+      additional_image_urls: additionalImageUrls || [], // Store direct URLs for additional images
     }
 
     const journalEntry: any = {
