@@ -3,7 +3,6 @@ import { getAuthenticatedUser } from '@/lib/auth'
 
 export async function GET(request: NextRequest) {
   try {
-    // Check if user is authenticated
     const user = await getAuthenticatedUser()
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -11,19 +10,14 @@ export async function GET(request: NextRequest) {
 
     const backendUrl = process.env.BACKEND_URL
     if (!backendUrl) {
-      return NextResponse.json(
-        { error: 'Backend not configured' },
-        { status: 500 }
-      )
+      return NextResponse.json({ error: 'Backend not configured' }, { status: 500 })
     }
 
-    // Fetch journal entries from WordPress for this user
+    // Fetch journal entries with embedded featured media
     const response = await fetch(
-      `${backendUrl}/wp-json/wp/v2/journal_entries?author=${user.userId}&per_page=100&orderby=date&order=desc`,
+      `${backendUrl}/wp-json/wp/v2/journal_entries?author=${user.userId}&per_page=100&orderby=date&order=desc&_embed=wp:featuredmedia`,
       {
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
       }
     )
 
@@ -34,7 +28,6 @@ export async function GET(request: NextRequest) {
 
     const entries = await response.json()
 
-    // Group journal entries by plant_id to get unique plants
     const plantsMap = new Map()
 
     entries.forEach((entry: any) => {
@@ -42,30 +35,28 @@ export async function GET(request: NextRequest) {
       const plantId = acf.plant_id
 
       if (plantId && !plantsMap.has(plantId)) {
-        // Get the most recent entry for this plant
+        // Get featured image URL from _embed if available
+        let imageUrl = null
+        if (entry._embedded?.wp:featuredmedia?.[0]?.source_url) {
+          imageUrl = entry._embedded.wp:featuredmedia[0].source_url
+        }
+
         plantsMap.set(plantId, {
           id: plantId,
           name: acf.plant_name || 'Unknown Plant',
-          strain: '', // Can be added to ACF fields later
+          strain: '',
           stage: acf.stage || 'vegetative',
           dayNumber: acf.day_number || 1,
           weekNumber: acf.week_number || 1,
-          imageUrl: entry.featured_media
-            ? `${backendUrl}/wp-json/wp/v2/media/${entry.featured_media}`
-            : null,
+          imageUrl,
           lastUpdated: entry.modified,
         })
       }
     })
 
-    const plants = Array.from(plantsMap.values())
-
-    return NextResponse.json({ plants })
+    return NextResponse.json({ plants: Array.from(plantsMap.values()) })
   } catch (error) {
     console.error('Fetch plants error:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

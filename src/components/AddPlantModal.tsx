@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import styles from './AddPlantModal.module.scss'
 
 interface AddPlantModalProps {
@@ -28,7 +28,22 @@ export default function AddPlantModal({
   const [error, setError] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
+  // Check if startDate is in the past (image upload not allowed)
+  const isPastDate = () => {
+    const selected = new Date(startDate)
+    const today = new Date()
+    selected.setHours(0, 0, 0, 0)
+    today.setHours(0, 0, 0, 0)
+    return selected < today
+  }
+
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (isPastDate()) {
+      setError('Cannot upload images for past dates. Please select today\'s date.')
+      if (fileInputRef.current) fileInputRef.current.value = ''
+      return
+    }
+
     const file = e.target.files?.[0] || null
     if (file) {
       setImageFile(file)
@@ -50,6 +65,10 @@ export default function AddPlantModal({
 
       // Upload image first if selected
       if (imageFile) {
+        if (isPastDate()) {
+          throw new Error('Cannot upload images for past dates')
+        }
+
         setIsUploadingImage(true)
         const formData = new FormData()
         formData.append('file', imageFile)
@@ -113,6 +132,15 @@ export default function AddPlantModal({
       setIsUploadingImage(false)
     }
   }
+
+  // Reset preview when closing
+  useEffect(() => {
+    if (!isOpen) {
+      setImageFile(null)
+      setImagePreview(null)
+      setError(null)
+    }
+  }, [isOpen])
 
   if (!isOpen) return null
 
@@ -195,6 +223,11 @@ export default function AddPlantModal({
               onChange={(e) => setStartDate(e.target.value)}
               disabled={isLoading}
             />
+            {isPastDate() && (
+              <small style={{ color: '#d32f2f', fontSize: '0.75rem', marginTop: '0.25rem', display: 'block' }}>
+                ⚠️ Image upload disabled for past dates
+              </small>
+            )}
           </div>
 
           <div className={styles.field}>
@@ -205,7 +238,7 @@ export default function AddPlantModal({
               ref={fileInputRef}
               onChange={handleImageChange}
               accept="image/*"
-              disabled={isLoading || isUploadingImage}
+              disabled={isLoading || isUploadingImage || isPastDate()}
               className={styles.fileInput}
             />
             {imagePreview && (
@@ -226,7 +259,7 @@ export default function AddPlantModal({
               </div>
             )}
             <small style={{ color: '#666', fontSize: '0.75rem' }}>
-              Optional: Add a photo of your plant
+              Optional: Add a photo of your plant. Images cannot be uploaded for past dates.
             </small>
           </div>
 
