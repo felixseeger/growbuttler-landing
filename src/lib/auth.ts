@@ -1,7 +1,9 @@
-import jwt from 'jsonwebtoken'
+import { SignJWT, jwtVerify } from 'jose'
 import { cookies } from 'next/headers'
 
-const JWT_SECRET = process.env.JWT_SECRET || 'growbuttler_super_secret_jwt_key_2026_change_in_prod'
+const JWT_SECRET = new TextEncoder().encode(
+  process.env.JWT_SECRET || 'growbuttler_super_secret_jwt_key_2026_change_in_prod'
+)
 
 export interface TokenPayload {
   userId: number
@@ -17,18 +19,22 @@ export interface TokenPayload {
 /**
  * Create a JWT token for authenticated user
  */
-export function createToken(payload: Omit<TokenPayload, 'iat' | 'exp'>): string {
-  return jwt.sign(payload, JWT_SECRET, {
-    expiresIn: '7d', // Token valid for 7 days
-  })
+export async function createToken(payload: Omit<TokenPayload, 'iat' | 'exp'>): Promise<string> {
+  return await new SignJWT({ ...payload })
+    .setProtectedHeader({ alg: 'HS256' })
+    .setIssuedAt()
+    .setExpirationTime('7d')
+    .sign(JWT_SECRET)
 }
 
 /**
  * Verify and decode a JWT token
  */
-export function verifyToken(token: string): TokenPayload | null {
+export async function verifyToken(token: string): Promise<TokenPayload | null> {
   try {
-    const decoded = jwt.verify(token, JWT_SECRET) as TokenPayload
+    const { payload } = await jwtVerify(token, JWT_SECRET, { algorithms: ['HS256'] })
+    // Map payload to our expected shape
+    const decoded = payload as unknown as TokenPayload
     return decoded
   } catch (error) {
     console.error('Token verification failed:', error)
@@ -68,20 +74,16 @@ export async function verifyWordPressCredentials(
 ): Promise<{ id: number; name: string; firstName?: string; lastName?: string; roles: string[] } | null> {
   try {
     const backendUrl = process.env.BACKEND_URL
-
     if (!backendUrl) {
       console.error('BACKEND_URL environment variable is not set')
       return null
     }
 
-    // Call Simple JWT Login endpoint instead of Basic Auth
     const response = await fetch(
       `${backendUrl}/wp-json/simple-jwt-login/v1/auth`,
       {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
         cache: 'no-store',
       }
@@ -93,26 +95,20 @@ export async function verifyWordPressCredentials(
     }
 
     const data = await response.json()
-
-    // Simple JWT Login response format: { success: true, data: { jwt: "..." } }
     if (!data.success || !data.data?.jwt) {
       console.error('Invalid response from Simple JWT Login')
       return null
     }
 
-    // Decode JWT to get user info (payload contains: id, email, username, etc.)
     const jwtPayload = JSON.parse(atob(data.data.jwt.split('.')[1]))
     const userId = parseInt(jwtPayload.id)
 
-    // Fetch additional user details from WordPress REST API
     let firstName: string | undefined
     let lastName: string | undefined
 
     try {
       const userResponse = await fetch(`${backendUrl}/wp-json/wp/v2/users/${userId}`, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         cache: 'no-store',
       })
 
@@ -123,7 +119,6 @@ export async function verifyWordPressCredentials(
       }
     } catch (err) {
       console.error('Failed to fetch user details:', err)
-      // Continue without firstName/lastName
     }
 
     return {
@@ -131,7 +126,7 @@ export async function verifyWordPressCredentials(
       name: jwtPayload.username || email,
       firstName,
       lastName,
-      roles: ['subscriber'], // Default role, can be enhanced if needed
+      roles: ['subscriber'],
     }
   } catch (error) {
     console.error('Error verifying WordPress credentials:', error)

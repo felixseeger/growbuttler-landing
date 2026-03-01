@@ -145,3 +145,5 @@ export default async function JournalPage() {
     </SubpageLayout>
   )
 }
+
+export const dynamic = 'force-dynamic'

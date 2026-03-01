@@ -1,10 +1,10 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { Suspense, useState, useRef, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import styles from './NewJournalEntry.module.scss'
 
-export default function NewJournalEntryPage() {
+function NewJournalEntryContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const plantId = searchParams.get('plantId')
@@ -186,3 +186,13 @@ export default function NewJournalEntryPage() {
     </div>
   )
 }
+
+export default function NewJournalEntryPage() {
+  return (
+    <Suspense fallback={<div className={styles.container} style={{ padding: '2rem', textAlign: 'center' }}>Loading…</div>}>
+      <NewJournalEntryContent />
+    </Suspense>
+  )
+}
+
+export const dynamic = 'force-dynamic'

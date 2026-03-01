@@ -1,7 +1,23 @@
-import { getAuthenticatedUser } from './auth'
+import { getAuthenticatedUser, TokenPayload } from './auth'
+
+interface Plant {
+  id: string
+  name: string
+  strain?: string
+  location?: string
+  stage: string
+  dayNumber: number
+  weekNumber: number
+  imageUrl?: string | null
+  lastUpdated?: string
+}
+
+async function getAuthUser() {
+  return await getAuthenticatedUser()
+}
 
 export async function getJournalEntries() {
-  const user = await getAuthenticatedUser()
+  const user = await getAuthUser()
   if (!user) return null
 
   const backendUrl = process.env.BACKEND_URL
@@ -16,10 +32,18 @@ export async function getJournalEntries() {
 
   const entries = await res.json()
 
-  return entries.map((entry: any) => {
-    const acf = entry.acf || {}
-    let imageUrl = null
-    const featuredMedia = (entry._embedded as any)?.['wp:featuredmedia']
+  type JournalEntry = {
+    id: number
+    date: string
+    title: { rendered: string }
+    content: { rendered: string }
+    _embedded?: Record<string, any>
+    acf: Record<string, any>
+  }
+
+  return (entries as JournalEntry[]).map((entry) => {
+    let imageUrl: string | null = null
+    const featuredMedia = entry._embedded?.['wp:featuredmedia']
     if (featuredMedia?.[0]?.source_url) {
       imageUrl = featuredMedia[0].source_url
     }
@@ -27,20 +51,20 @@ export async function getJournalEntries() {
     return {
       id: entry.id,
       date: entry.date,
-      title: entry.title?.rendered || '',
-      content: entry.content?.rendered || '',
+      title: entry.title.rendered,
+      content: entry.content.rendered,
       imageUrl,
       acf: {
-        plant_id: acf.plant_id,
-        plant_name: acf.plant_name,
-        day_number: acf.day_number,
-        week_number: acf.week_number,
-        stage: acf.stage,
-        entry_type: acf.entry_type,
-        temperature_fahrenheit: acf.temperature_fahrenheit,
-        humidity_percent: acf.humidity_percent,
-        nutrient_mix: acf.nutrient_mix,
-        ph_level: acf.ph_level,
+        plant_id: entry.acf.plant_id,
+        plant_name: entry.acf.plant_name,
+        day_number: entry.acf.day_number,
+        week_number: entry.acf.week_number,
+        stage: entry.acf.stage,
+        entry_type: entry.acf.entry_type,
+        temperature_fahrenheit: entry.acf.temperature_fahrenheit,
+        humidity_percent: entry.acf.humidity_percent,
+        nutrient_mix: entry.acf.nutrient_mix,
+        ph_level: entry.acf.ph_level,
       },
     }
   })
@@ -50,23 +74,19 @@ export async function getJournalEntriesForPlant(plantId: string) {
   const allEntries = await getJournalEntries()
   if (!allEntries) return []
 
-  // Filter by plant_id, sort by date descending
   return allEntries
     .filter((entry) => entry.acf?.plant_id === plantId)
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 }
 
 export async function getPlantById(plantId: string) {
-  // For now, read from plants API which returns plants map
-  // In future, could cache plants per user
   const plants = await getPlants()
   return plants.find((p) => p.id === plantId) || null
 }
 
-export async function getPlants() {
-  // Use the existing plants API client-side
-  const response = await fetch('/api/plants')
+export async function getPlants(): Promise<Plant[]> {
+  const response = await fetch('/api/plants', { next: { revalidate: 60 } })
   if (!response.ok) return []
   const data = await response.json()
-  return data.plants || []
+  return (data.plants || []) as Plant[]
 }

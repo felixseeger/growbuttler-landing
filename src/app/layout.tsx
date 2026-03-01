@@ -5,7 +5,7 @@ import { organizationSchema, localBusinessSchema, serviceSchema, aggregateRating
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://growbuttler.com'
 
 export const metadata: Metadata = {
-  title: 'GrowButtler - Master Cultivation with Local Experts,
+  title: 'GrowButtler - Master Cultivation with Local Experts',
   description: 'Connect with certified master growers in your area for guidance, live diagnostics, and a shared journey to harvest.',
   viewport: { width: 'device-width', initialScale: 1, maximumScale: 1, userScalable: false },
   alternates: { canonical: `${baseUrl}/`, languages: { 'en-US': `${baseUrl}/en`, 'de-DE': `${baseUrl}/de` } },
@@ -40,7 +40,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="alternate" hrefLang="de-DE" href={`${baseUrl}/de`} />
         <link rel="alternate" hrefLang="x-default" href={`${baseUrl}/`} />
         
-        {/* PWA & Mobile App */}
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#2D5016" />
         <meta name="apple-mobile-web-app-capable" content="yes" />

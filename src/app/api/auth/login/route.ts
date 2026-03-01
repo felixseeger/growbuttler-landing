@@ -9,24 +9,15 @@ export async function POST(request: Request) {
     const { email, password } = await request.json()
 
     if (!email || !password) {
-      return NextResponse.json(
-        { error: 'Email and password are required' },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: 'Email and password are required' }, { status: 400 })
     }
 
-    // Verify credentials against WordPress
     const wpUser = await verifyWordPressCredentials(email, password)
-
     if (!wpUser) {
-      return NextResponse.json(
-        { error: 'Invalid email or password' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: 'Invalid email or password' }, { status: 401 })
     }
 
-    // Create JWT token
-    const token = createToken({
+    const token = await createToken({
       userId: wpUser.id,
       email,
       name: wpUser.name,
@@ -35,13 +26,12 @@ export async function POST(request: Request) {
       roles: wpUser.roles,
     })
 
-    // Set httpOnly cookie with token
     const cookieStore = await cookies()
     cookieStore.set('growbuttler_auth', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      maxAge: 7 * 24 * 60 * 60, // 7 days
+      maxAge: 7 * 24 * 60 * 60,
       path: '/',
     })
 
@@ -58,9 +48,6 @@ export async function POST(request: Request) {
     })
   } catch (error: any) {
     console.error('Login error:', error)
-    return NextResponse.json(
-      { error: 'Login failed. Please try again.' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Login failed. Please try again.' }, { status: 500 })
   }
 }
