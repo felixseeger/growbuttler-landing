@@ -13,12 +13,9 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Backend not configured' }, { status: 500 })
     }
 
-    // Fetch journal entries with embedded featured media
     const response = await fetch(
       `${backendUrl}/wp-json/wp/v2/journal_entries?author=${user.userId}&per_page=100&orderby=date&order=desc&_embed=wp:featuredmedia`,
-      {
-        headers: { 'Content-Type': 'application/json' },
-      }
+      { headers: { 'Content-Type': 'application/json' } }
     )
 
     if (!response.ok) {
@@ -27,7 +24,6 @@ export async function GET(request: NextRequest) {
     }
 
     const entries = await response.json()
-
     const plantsMap = new Map()
 
     entries.forEach((entry: any) => {
@@ -35,10 +31,10 @@ export async function GET(request: NextRequest) {
       const plantId = acf.plant_id
 
       if (plantId && !plantsMap.has(plantId)) {
-        // Get featured image URL from _embed if available
         let imageUrl = null
-        if (entry._embedded?.wp:featuredmedia?.[0]?.source_url) {
-          imageUrl = entry._embedded.wp:featuredmedia[0].source_url
+        const featuredMedia = (entry._embedded as any)?.['wp:featuredmedia']
+        if (featuredMedia?.[0]?.source_url) {
+          imageUrl = featuredMedia[0].source_url
         }
 
         plantsMap.set(plantId, {

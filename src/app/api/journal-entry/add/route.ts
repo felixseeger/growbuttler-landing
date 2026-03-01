@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
       ph_level: phLevel ? parseFloat(phLevel) : null,
     }
 
-    const journalEntry = {
+    const journalEntry: any = {
       title: `Entry - ${entryDate || 'Today'}`,
       status: 'publish',
       author: user.userId,

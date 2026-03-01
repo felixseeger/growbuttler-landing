@@ -12,17 +12,12 @@ export async function POST(request: NextRequest) {
     const { name, strain, stage, location, startDate, featuredMediaId } = body
 
     if (!name || !stage) {
-      return NextResponse.json(
-        { error: 'Name and stage are required' },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: 'Name and stage are required' }, { status: 400 })
     }
 
     const start = startDate ? new Date(startDate) : new Date()
     const today = new Date()
-    const daysDiff = Math.floor(
-      (today.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)
-    )
+    const daysDiff = Math.floor((today.getTime() - start.getTime()) / (1000 * 60 * 60 * 24))
     const dayNumber = Math.max(1, daysDiff + 1)
     const weekNumber = Math.max(1, Math.ceil(dayNumber / 7))
 
@@ -33,7 +28,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Backend not configured' }, { status: 500 })
     }
 
-    const journalEntry = {
+    const journalEntry: any = {
       title: `${name} - Day ${dayNumber}`,
       status: 'publish',
       acf: {
@@ -47,7 +42,6 @@ export async function POST(request: NextRequest) {
       },
     }
 
-    // Set featured image if provided
     if (featuredMediaId) {
       journalEntry.featured_media = parseInt(featuredMediaId)
     }
