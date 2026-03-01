@@ -7,7 +7,6 @@ export async function getJournalEntries() {
   const backendUrl = process.env.BACKEND_URL
   if (!backendUrl) return null
 
-  // Fetch all journal entries for the user with embedded media
   const res = await fetch(
     `${backendUrl}/wp-json/wp/v2/journal_entries?author=${user.userId}&per_page=100&orderby=date&order=desc&_embed=wp:featuredmedia`,
     { next: { revalidate: 60 } }
@@ -17,7 +16,6 @@ export async function getJournalEntries() {
 
   const entries = await res.json()
 
-  // Transform entries
   return entries.map((entry: any) => {
     const acf = entry.acf || {}
     let imageUrl = null
@@ -33,6 +31,7 @@ export async function getJournalEntries() {
       content: entry.content?.rendered || '',
       imageUrl,
       acf: {
+        plant_id: acf.plant_id,
         plant_name: acf.plant_name,
         day_number: acf.day_number,
         week_number: acf.week_number,
@@ -45,4 +44,29 @@ export async function getJournalEntries() {
       },
     }
   })
+}
+
+export async function getJournalEntriesForPlant(plantId: string) {
+  const allEntries = await getJournalEntries()
+  if (!allEntries) return []
+
+  // Filter by plant_id, sort by date descending
+  return allEntries
+    .filter((entry) => entry.acf?.plant_id === plantId)
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+}
+
+export async function getPlantById(plantId: string) {
+  // For now, read from plants API which returns plants map
+  // In future, could cache plants per user
+  const plants = await getPlants()
+  return plants.find((p) => p.id === plantId) || null
+}
+
+export async function getPlants() {
+  // Use the existing plants API client-side
+  const response = await fetch('/api/plants')
+  if (!response.ok) return []
+  const data = await response.json()
+  return data.plants || []
 }
