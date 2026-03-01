@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import SubpageLayout from '@/components/SubpageLayout/SubpageLayout'
 import { getJournalEntries } from '@/lib/journal'
 import Image from 'next/image'
@@ -14,22 +15,18 @@ export const revalidate = 60
 export default async function JournalPage() {
   const entries = await getJournalEntries()
 
-  // Get the first entry for sidebar (most recent plant)
   const latestEntry = entries?.[0]
   const plantName = latestEntry?.acf?.plant_name || 'Your Plant'
   const plantImage = latestEntry?.imageUrl || null
   const stage = latestEntry?.acf?.stage || 'vegetative'
   const dayNumber = latestEntry?.acf?.day_number || 1
 
-  // Filter out entries that are just plant creation logs (only show observations?)
-  // For now show all
   const timelineEntries = entries || []
 
   return (
     <SubpageLayout>
       <div className={styles.container}>
         <div className={styles.inner}>
-          {/* Sidebar */}
           <aside className={styles.sidebar}>
             <div className={styles.sidebarSticky}>
               <div className={styles.plantHeader}>
@@ -40,13 +37,7 @@ export default async function JournalPage() {
 
               {plantImage && (
                 <div className={styles.imageCard}>
-                  <Image 
-                    src={plantImage}
-                    alt={plantName}
-                    width={400}
-                    height={300}
-                    className={styles.plantImg}
-                  />
+                  <Image src={plantImage} alt={plantName} width={400} height={300} className={styles.plantImg} />
                   <div className={styles.imgLabel}>
                     <span className="material-symbols-outlined">photo_camera</span>
                     Latest
@@ -65,9 +56,7 @@ export default async function JournalPage() {
                     <p className={styles.expertName}>Hanna K.</p>
                     <p className={styles.expertRole}>Master Grower • Berlin</p>
                   </div>
-                  <button className={styles.chatBtn}>
-                    <span className="material-symbols-outlined">chat</span>
-                  </button>
+                  <button className={styles.chatBtn}><span className="material-symbols-outlined">chat</span></button>
                 </div>
                 <p className={styles.expertNote}>"Next check-in scheduled. Keep an eye on pH levels this week."</p>
               </div>
@@ -75,44 +64,30 @@ export default async function JournalPage() {
               <div className={styles.vitals}>
                 <h3>Vitals</h3>
                 <div className={styles.vitalsList}>
-                  <div className={styles.vitalRow}>
-                    <span className={styles.vitalLabel}><span className="material-symbols-outlined">genetics</span> Genetics</span>
-                    <span className={styles.vitalValue}>Indica (80/20)</span>
-                  </div>
-                  <div className={styles.vitalRow}>
-                    <span className={styles.vitalLabel}><span className="material-symbols-outlined">storefront</span> Breeder</span>
-                    <span className={styles.vitalValue}>Sensi Seeds</span>
-                  </div>
-                  <div className={styles.vitalRow}>
-                    <span className={styles.vitalLabel}><span className="material-symbols-outlined">calendar_month</span> Harvest Est.</span>
-                    <span className={styles.vitalValue}>Oct 15 - Oct 20</span>
-                  </div>
+                  <div className={styles.vitalRow}><span className={styles.vitalLabel}><span className="material-symbols-outlined">genetics</span> Genetics</span><span className={styles.vitalValue}>Indica (80/20)</span></div>
+                  <div className={styles.vitalRow}><span className={styles.vitalLabel}><span className="material-symbols-outlined">storefront</span> Breeder</span><span className={styles.vitalValue}>Sensi Seeds</span></div>
+                  <div className={styles.vitalRow}><span className={styles.vitalLabel}><span className="material-symbols-outlined">calendar_month</span> Harvest Est.</span><span className={styles.vitalValue}>Oct 15 - Oct 20</span></div>
                 </div>
               </div>
             </div>
           </aside>
 
-          {/* Main Feed */}
           <main className={styles.feed}>
             <div className={styles.feedHeader}>
               <h2>Grow Journal</h2>
               <div className={styles.filter}>
                 <span>FILTER:</span>
-                <select>
-                  <option>All Entries</option>
-                </select>
+                <select><option>All Entries</option></select>
               </div>
             </div>
 
             <div className={styles.inputArea}>
-              <div className={styles.inputIcon}>
-                <span className="material-symbols-outlined">edit_note</span>
-              </div>
+              <div className={styles.inputIcon}><span className="material-symbols-outlined">edit_note</span></div>
               <div className={styles.inputWrap}>
                 <input type="text" placeholder="How is your plant doing today?" />
                 <div className={styles.inputActions}>
-                  <button><span className="material-symbols-outlined">add_a_photo</span> Add Photo</button>
-                  <button><span className="material-symbols-outlined">science</span> Log pH/EC</button>
+                  <Link href="/journal/new-entry"><button className={styles.actionBtn}><span className="material-symbols-outlined">add_a_photo</span> Add Photo</button></Link>
+                  <Link href="/journal/new-entry"><button className={styles.actionBtn}><span className="material-symbols-outlined">science</span> Log pH/EC</button></Link>
                 </div>
               </div>
             </div>
