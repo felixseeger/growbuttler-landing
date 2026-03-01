@@ -1,15 +1,15 @@
 'use client'
 
-import { useState, useEffect, Suspense } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useState, useEffect } from 'react'
+import { useParams } from 'next/navigation'
 import SubpageLayout from '@/components/SubpageLayout/SubpageLayout'
 import Link from 'next/link'
 import Image from 'next/image'
 import styles from '../JournalPage.module.scss'
 
 function PlantJournalContent() {
-  const searchParams = useSearchParams()
-  const plantId = searchParams.get('plantId')
+  const params = useParams()
+  const plantId = params.plantId as string
   
   const [plant, setPlant] = useState<any>(null)
   const [entries, setEntries] = useState<any[]>([])
@@ -175,9 +175,5 @@ function PlantJournalContent() {
 }
 
 export default function PlantJournalPage() {
-  return (
-    <Suspense fallback={<div style={{ padding: '4rem', textAlign: 'center' }}>Loading...</div>}>
-      <PlantJournalContent />
-    </Suspense>
-  )
+  return <PlantJournalContent />
 }
