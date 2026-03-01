@@ -1,24 +1,30 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import SubpageLayout from '@/components/SubpageLayout/SubpageLayout'
-import { getJournalContent, getJournalPageData } from '@/lib/wordpress'
-import styles from './JournalPage.module.scss'
+import { getJournalEntries } from '@/lib/journal'
 import Image from 'next/image'
+import styles from './JournalPage.module.scss'
 
 export const metadata: Metadata = {
-  title: 'Journal - Northern Lights #5 - GrowButtler',
-  description: 'Detailed growth journal for Northern Lights #5 cultivation.',
+  title: 'Grow Journal - GrowButtler',
+  description: 'Your personal grow journal with expert insights.',
 }
 
 export const revalidate = 60
 
 export default async function JournalPage() {
-  const journalData = await getJournalPageData('journal')
-  const journalContent = getJournalContent(journalData)
-  
-  // Use data from ACF or fallbacks from design
-  const header = (journalContent.page_header || {}) as Record<string, string | undefined>
-  
+  const entries = await getJournalEntries()
+
+  // Get the first entry for sidebar (most recent plant)
+  const latestEntry = entries?.[0]
+  const plantName = latestEntry?.acf?.plant_name || 'Your Plant'
+  const plantImage = latestEntry?.imageUrl || null
+  const stage = latestEntry?.acf?.stage || 'vegetative'
+  const dayNumber = latestEntry?.acf?.day_number || 1
+
+  // Filter out entries that are just plant creation logs (only show observations?)
+  // For now show all
+  const timelineEntries = entries || []
+
   return (
     <SubpageLayout>
       <div className={styles.container}>
@@ -27,24 +33,26 @@ export default async function JournalPage() {
           <aside className={styles.sidebar}>
             <div className={styles.sidebarSticky}>
               <div className={styles.plantHeader}>
-                <span className={styles.badge}>Vegetative Stage</span>
-                <h1 className={styles.plantName}>{header.title || 'Northern Lights #5'}</h1>
-                <p className={styles.daysSince}>Day 34 since germination</p>
+                <span className={styles.badge}>{stage.charAt(0).toUpperCase() + stage.slice(1)}</span>
+                <h1 className={styles.plantName}>{plantName}</h1>
+                <p className={styles.daysSince}>Day {dayNumber} since germination</p>
               </div>
 
-              <div className={styles.imageCard}>
-                <Image 
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuAeXIiRIAtLerrH6N2X6jVXxXdr-mNJqU_lyAVZCxceYvlRFXrA2h83STDKKvmcuhNoLSKxaKUxrI2u2nvMrhMpaMM8_WWNJNf5KQpOcKuQw1pH1ZjHLUcKS5NrtmyRCTWUrG8mEnFdaWa9amskM3_R8o-i3ew18kG8x3A1Pi5y-evWSOcArZGXKxjGXwMm6stuQdXpggSQQdC7wYD5qjTCCUbZJpUqbR8Jq1Yk84Rrjn2LaICl5rPhrxWvqTRFhZvKKdMkii-3MwrH"
-                  alt="Healthy plant"
-                  width={400}
-                  height={300}
-                  className={styles.plantImg}
-                />
-                <div className={styles.imgLabel}>
-                  <span className="material-symbols-outlined">photo_camera</span>
-                  Latest
+              {plantImage && (
+                <div className={styles.imageCard}>
+                  <Image 
+                    src={plantImage}
+                    alt={plantName}
+                    width={400}
+                    height={300}
+                    className={styles.plantImg}
+                  />
+                  <div className={styles.imgLabel}>
+                    <span className="material-symbols-outlined">photo_camera</span>
+                    Latest
+                  </div>
                 </div>
-              </div>
+              )}
 
               <div className={styles.expertCard}>
                 <h3 className={styles.expertTitle}>Assigned Expert</h3>
@@ -61,7 +69,7 @@ export default async function JournalPage() {
                     <span className="material-symbols-outlined">chat</span>
                   </button>
                 </div>
-                <p className={styles.expertNote}>"Next check-in scheduled for Oct 12th. Keep an eye on pH levels this week."</p>
+                <p className={styles.expertNote}>"Next check-in scheduled. Keep an eye on pH levels this week."</p>
               </div>
 
               <div className={styles.vitals}>
@@ -110,60 +118,52 @@ export default async function JournalPage() {
             </div>
 
             <div className={styles.timeline}>
-              <div className={styles.entry}>
-                <div className={styles.dotWrap}><div className={styles.dot} /></div>
-                <div className={styles.entryContent}>
-                  <div className={styles.entryMeta}><strong>Today</strong> 10:42 AM</div>
-                  <div className={styles.bubble}>
-                    <p>Top dressed with organic worm castings this morning. Soil moisture feels good. No signs of stress after yesterday&apos;s training.</p>
+              {timelineEntries.map((entry: any) => (
+                <div key={entry.id} className={styles.entry}>
+                  <div className={styles.dotWrap}>
+                    <div className={entry.acf?.entry_type === 'expert_insight' ? styles.expertDot : styles.dot} />
                   </div>
-                </div>
-              </div>
-
-              <div className={styles.entry}>
-                <div className={styles.dotWrap}><div className={`${styles.dot} ${styles.dotFilled}`} /></div>
-                <div className={styles.entryContent}>
-                  <div className={styles.entryMeta}><strong>Yesterday</strong> Day 33 • 4:15 PM</div>
-                  <div className={styles.bubble}>
-                    <div className={styles.dataGrid}>
-                      <div className={styles.dataPoint}>
-                        <span className="material-symbols-outlined" style={{ color: '#2563eb' }}>water_drop</span>
-                        <div><span>Water pH</span><strong>6.2</strong></div>
-                      </div>
-                      <div className={styles.dataPoint}>
-                        <span className="material-symbols-outlined" style={{ color: '#ea580c' }}>thermostat</span>
-                        <div><span>Temp</span><strong>24.5°C</strong></div>
-                      </div>
+                  <div className={styles.entryContent}>
+                    <div className={styles.entryMeta}>
+                      <strong>{new Date(entry.date).toLocaleDateString()}</strong>
+                      {entry.acf?.day_number && ` • Day ${entry.acf.day_number}`}
                     </div>
-                    <p>Performed some low stress training (LST) to open up the canopy. The main stem is getting thick!</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className={styles.entry}>
-                <div className={styles.dotWrap}>
-                  <div className={styles.expertDot}>
-                    <span className="material-symbols-outlined">verified_user</span>
-                  </div>
-                </div>
-                <div className={styles.entryContent}>
-                  <div className={styles.entryMeta}><strong>Oct 10</strong> <span className={styles.expertBadge}>Expert Insight</span></div>
-                  <div className={`${styles.bubble} ${styles.expertBubble}`}>
-                    <div className={styles.expertMsgHeader}>
-                      <div className={styles.miniAvatar} style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuB_PHMGvdS5lZRHNBYePQ8onEVHgg8vW6FAwy5JK4nRAfU0OEmpyeZt5Kf55nyksC09zXKenNVbV8wZw832IR6c8kEf4djbwqH2DYAtUtxxchE9XoZZ5gUCx0oLmPTLyjHJXx_XCxLS_npuMzj3mmErjbg0Z815JF3oRyLLwsTycY5D_iFBLUmFt0jEzhSXlv6eKRUimFVLoSksyfqqGYV05UIzEdl_2GvfOpn38XG1ZpEIGenJF5IOOl0LtaVhfoL2ACidVWw5HvLj')" }} />
-                      <h4>Observation from Hanna</h4>
-                    </div>
-                    <p>Looking at the photos from Day 30, I noticed the lower fan leaves are slightly yellowing between the veins. This suggests an early magnesium deficiency.</p>
-                    <div className={styles.recommendation}>
-                      <strong>Recommended Action</strong>
-                      <p>Increase CalMag dosage by 2ml/L for next two feeds.</p>
+                    <div className={styles.bubble}>
+                      {entry.imageUrl && (
+                        <div className={styles.entryImage}>
+                          <Image src={entry.imageUrl} alt="Journal entry" width={200} height={150} />
+                        </div>
+                      )}
+                      <p dangerouslySetInnerHTML={{ __html: entry.content }} />
+                      {entry.acf?.temperature_fahrenheit && (
+                        <div className={styles.dataGrid}>
+                          <div className={styles.dataPoint}>
+                            <span className="material-symbols-outlined" style={{ color: '#2563eb' }}>water_drop</span>
+                            <div><span>pH</span><strong>{entry.acf.ph_level || 'N/A'}</strong></div>
+                          </div>
+                          <div className={styles.dataPoint}>
+                            <span className="material-symbols-outlined" style={{ color: '#ea580c' }}>thermostat</span>
+                            <div><span>Temp</span><strong>{entry.acf.temperature_fahrenheit}°F</strong></div>
+                          </div>
+                          {entry.acf?.humidity_percent && (
+                            <div className={styles.dataPoint}>
+                              <span className="material-symbols-outlined" style={{ color: '#10b981' }}>water_drop</span>
+                              <div><span>Humidity</span><strong>{entry.acf.humidity_percent}%</strong></div>
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
-              </div>
+              ))}
             </div>
 
-            <button className={styles.loadMore}>View earlier history</button>
+            {timelineEntries.length === 0 && (
+              <p style={{ textAlign: 'center', color: '#666', padding: '2rem' }}>
+                No journal entries yet. Add a plant to get started!
+              </p>
+            )}
           </main>
         </div>
       </div>

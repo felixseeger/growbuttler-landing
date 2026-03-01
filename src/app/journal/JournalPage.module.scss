@@ -579,3 +579,18 @@
     border-color: #9ca3af;
   }
 }
+
+/* Entry image in timeline */
+.entryImage {
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  overflow: hidden;
+  max-width: 100%;
+
+  img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 8px;
+  }
+}
