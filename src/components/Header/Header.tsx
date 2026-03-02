@@ -21,9 +21,9 @@ interface HeaderProps {
 }
 
 const defaultLinks: NavLink[] = [
-  { label: 'Journal', url: '#' },
-  { label: 'Expert Directory', url: '#' },
-  { label: 'Community', url: '#' },
+  { label: 'Journal', url: '/journal' },
+  { label: 'Expert Directory', url: '/experts' },
+  { label: 'Community', url: '/community' },
 ]
 
 const normalizeCtaLabel = (label: string): string => {
