@@ -131,10 +131,6 @@ function PlantJournalContent() {
             <div className={styles.inputIcon}><span className="material-symbols-outlined">edit_note</span></div>
             <div className={styles.inputWrap}>
               <input type="text" placeholder="How is your plant doing today?" />
-              <div className={styles.inputActions}>
-                <Link href={`/journal/new-entry?plantId=${plantId}`}><button className={styles.actionBtn}><span className="material-symbols-outlined">add_a_photo</span> Add Photo</button></Link>
-                <Link href={`/journal/new-entry?plantId=${plantId}`}><button className={styles.actionBtn}><span className="material-symbols-outlined">science</span> Log pH/EC</button></Link>
-              </div>
             </div>
           </div>
 
