@@ -58,7 +58,7 @@
   position: fixed;
   top: 0;
   left: -260px;
-  transition: left 0.3s ease-in-out;
+  transition: left 0.3s ease-in-out, width 0.3s ease-in-out;
 
   @media (min-width: 1024px) {
     position: sticky;
@@ -70,24 +70,73 @@
   left: 0;
 }
 
+.sidebarCollapsed {
+  width: 80px;
+
+  @media (max-width: 1023px) {
+    left: -80px;
+
+    &.sidebarOpen {
+      left: 0;
+    }
+  }
+}
+
 .inner {
   display: flex;
   flex-direction: column;
   height: 100%;
   padding: 1.5rem;
   justify-content: space-between;
+  overflow: hidden;
+}
+
+.brandRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  gap: 0.5rem;
 }
 
 .brand {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin-bottom: 2rem;
   text-decoration: none;
   color: var(--color-text-main);
+  min-width: 0;
+  flex: 1;
 
   &:hover .logoIcon {
     transform: rotate(12deg);
+  }
+}
+
+.collapseBtn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  background: transparent;
+  color: var(--color-text-main);
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background 0.2s;
+  flex-shrink: 0;
+
+  &:hover {
+    background: rgba(141, 147, 135, 0.1);
+  }
+
+  span {
+    font-size: 1.25rem;
+  }
+
+  @media (min-width: 1024px) {
+    display: flex;
   }
 }
 
@@ -139,10 +188,16 @@
   font-weight: 500;
   text-decoration: none;
   transition: background 0.2s, color 0.2s;
+  white-space: nowrap;
 
   &:hover {
     background: var(--color-surface);
     color: var(--color-primary);
+  }
+
+  .sidebarCollapsed & {
+    justify-content: center;
+    padding: 0.75rem;
   }
 }
 
@@ -230,10 +285,18 @@
   cursor: pointer;
   transition: background 0.2s, transform 0.2s;
   box-shadow: 0 4px 14px rgba(58, 90, 64, 0.2);
+  text-decoration: none;
 
   &:hover {
     background: #2e4833;
     transform: translateY(-1px);
+  }
+
+  .sidebarCollapsed & {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    padding: 0;
   }
 }
 

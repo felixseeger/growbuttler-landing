@@ -16,8 +16,10 @@ const navItems = [
 export default function AppSidebar() {
   const pathname = usePathname()
   const [isOpen, setIsOpen] = useState(false)
+  const [isCollapsed, setIsCollapsed] = useState(false)
 
   const closeSidebar = () => setIsOpen(false)
+  const toggleCollapse = () => setIsCollapsed(!isCollapsed)
 
   return (
     <>
@@ -41,17 +43,30 @@ export default function AppSidebar() {
       )}
 
       {/* Sidebar */}
-      <aside className={`${styles.sidebar} ${isOpen ? styles.sidebarOpen : ''}`}>
+      <aside className={`${styles.sidebar} ${isOpen ? styles.sidebarOpen : ''} ${isCollapsed ? styles.sidebarCollapsed : ''}`}>
       <div className={styles.inner}>
         <div>
-          <Link href="/" className={styles.brand}>
-            <div className={styles.logoIcon}>
-              <span className="material-symbols-outlined" aria-hidden>spa</span>
-            </div>
-            <div className={styles.brandText}>
-              <span className={styles.brandTitle}>GrowButler</span>
-            </div>
-          </Link>
+          <div className={styles.brandRow}>
+            <Link href="/" className={styles.brand}>
+              <div className={styles.logoIcon}>
+                <span className="material-symbols-outlined" aria-hidden>spa</span>
+              </div>
+              {!isCollapsed && (
+                <div className={styles.brandText}>
+                  <span className={styles.brandTitle}>GrowButler</span>
+                </div>
+              )}
+            </Link>
+            <button
+              className={styles.collapseBtn}
+              onClick={toggleCollapse}
+              aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+            >
+              <span className="material-symbols-outlined">
+                {isCollapsed ? 'chevron_right' : 'chevron_left'}
+              </span>
+            </button>
+          </div>
           <nav className={styles.nav}>
             {navItems.map((item) => {
               const isActive = pathname === item.href || (item.href !== '/dashboard' && pathname?.startsWith(item.href))
@@ -61,28 +76,31 @@ export default function AppSidebar() {
                   href={item.href}
                   className={`${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}
                   onClick={closeSidebar}
+                  title={item.label}
                 >
                   <span className={styles.navIcon} aria-hidden>{item.icon}</span>
-                  <span>{item.label}</span>
+                  {!isCollapsed && <span>{item.label}</span>}
                 </Link>
               )
             })}
           </nav>
         </div>
         <div className={styles.bottom}>
-          <div className={styles.harvestCard}>
-            <div className={styles.harvestRow}>
-              <span className={styles.harvestLabel}>NEXT HARVEST</span>
-              <span className={styles.harvestDays}>14 DAYS</span>
+          {!isCollapsed && (
+            <div className={styles.harvestCard}>
+              <div className={styles.harvestRow}>
+                <span className={styles.harvestLabel}>NEXT HARVEST</span>
+                <span className={styles.harvestDays}>14 DAYS</span>
+              </div>
+              <div className={styles.harvestBar}>
+                <div className={styles.harvestBarFill} style={{ width: '75%' }} />
+              </div>
+              <p className={styles.harvestPlant}>Northern Lights #5</p>
             </div>
-            <div className={styles.harvestBar}>
-              <div className={styles.harvestBarFill} style={{ width: '75%' }} />
-            </div>
-            <p className={styles.harvestPlant}>Northern Lights #5</p>
-          </div>
-          <Link href="/dashboard" className={styles.ctaNew} onClick={closeSidebar}>
+          )}
+          <Link href="/dashboard" className={styles.ctaNew} onClick={closeSidebar} title="New Plant">
             <span className={styles.ctaIcon} aria-hidden>add</span>
-            <span>New Plant</span>
+            {!isCollapsed && <span>New Plant</span>}
           </Link>
         </div>
       </div>
