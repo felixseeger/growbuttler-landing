@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import styles from './AppSidebar.module.scss'
@@ -14,9 +15,33 @@ const navItems = [
 
 export default function AppSidebar() {
   const pathname = usePathname()
+  const [isOpen, setIsOpen] = useState(false)
+
+  const closeSidebar = () => setIsOpen(false)
 
   return (
-    <aside className={styles.sidebar}>
+    <>
+      {/* Mobile hamburger button */}
+      <button
+        className={styles.mobileMenuBtn}
+        onClick={() => setIsOpen(!isOpen)}
+        aria-label="Toggle menu"
+      >
+        <span className="material-symbols-outlined">
+          {isOpen ? 'close' : 'menu'}
+        </span>
+      </button>
+
+      {/* Backdrop overlay for mobile */}
+      {isOpen && (
+        <div
+          className={styles.backdrop}
+          onClick={closeSidebar}
+        />
+      )}
+
+      {/* Sidebar */}
+      <aside className={`${styles.sidebar} ${isOpen ? styles.sidebarOpen : ''}`}>
       <div className={styles.inner}>
         <div>
           <Link href="/" className={styles.brand}>
@@ -35,6 +60,7 @@ export default function AppSidebar() {
                   key={item.href}
                   href={item.href}
                   className={`${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}
+                  onClick={closeSidebar}
                 >
                   <span className={styles.navIcon} aria-hidden>{item.icon}</span>
                   <span>{item.label}</span>
@@ -54,12 +80,13 @@ export default function AppSidebar() {
             </div>
             <p className={styles.harvestPlant}>Northern Lights #5</p>
           </div>
-          <Link href="/dashboard" className={styles.ctaNew}>
+          <Link href="/dashboard" className={styles.ctaNew} onClick={closeSidebar}>
             <span className={styles.ctaIcon} aria-hidden>add</span>
             <span>New Plant</span>
           </Link>
         </div>
       </div>
     </aside>
+    </>
   )
 }
