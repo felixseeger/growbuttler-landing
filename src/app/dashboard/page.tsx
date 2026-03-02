@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import SubpageLayout from '@/components/SubpageLayout/SubpageLayout'
 import DashboardGreeting from '@/components/DashboardGreeting'
 import DashboardClient from './DashboardClient'
+import DashboardSeedButton from './DashboardSeedButton'
 import styles from './DashboardPage.module.scss'
 import Image from 'next/image'
 
@@ -22,10 +23,7 @@ export default function DashboardPage() {
             </div>
             <p className={styles.status}>Your garden is thriving today.</p>
           </div>
-          <button className={styles.seedBtn}>
-            <span className="material-symbols-outlined">add</span>
-            Seed New Life
-          </button>
+          <DashboardSeedButton />
         </section>
 
         {/* Consultation Widget */}

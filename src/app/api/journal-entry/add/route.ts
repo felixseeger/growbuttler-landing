@@ -15,14 +15,15 @@ export async function POST(request: NextRequest) {
     const backendUrl = process.env.BACKEND_URL
     if (!backendUrl) return NextResponse.json({ error: 'Backend not configured' }, { status: 500 })
 
-    // Fetch plant name for title
+    // Fetch plant name for title from WordPress directly
     let plantName = 'Unknown Plant'
     try {
-      const plantsRes = await fetch('/api/plants', { credentials: 'include' })
-      if (plantsRes.ok) {
-        const { plants } = await plantsRes.json()
-        const plant = plants.find((p: any) => p.id === plantId)
-        if (plant) plantName = plant.name
+      const plantRes = await fetch(`${backendUrl}/wp-json/wp/v2/plants/${plantId}`, {
+        headers: { 'Content-Type': 'application/json' }
+      })
+      if (plantRes.ok) {
+        const plant = await plantRes.json()
+        plantName = plant.title?.rendered || plant.name || 'Unknown Plant'
       }
     } catch (e) {
       console.warn('Could not fetch plant name:', e)

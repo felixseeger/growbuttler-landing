@@ -17,11 +17,25 @@ interface Plant {
   lastUpdated?: string
 }
 
-export default function DashboardClient() {
+interface DashboardClientProps {
+  onSeedNewLife?: () => void
+}
+
+export default function DashboardClient({ onSeedNewLife }: DashboardClientProps = {}) {
   const router = useRouter()
   const [isAddPlantOpen, setIsAddPlantOpen] = useState(false)
   const [plants, setPlants] = useState<Plant[]>([])
   const [isLoading, setIsLoading] = useState(true)
+
+  // Expose the plant modal trigger
+  useEffect(() => {
+    if (onSeedNewLife) {
+      (window as any).__openAddPlantModal = () => setIsAddPlantOpen(true)
+    }
+    return () => {
+      delete (window as any).__openAddPlantModal
+    }
+  }, [onSeedNewLife])
 
   const fetchPlants = async () => {
     try {
@@ -114,7 +128,10 @@ export default function DashboardClient() {
                         <span>Week {plant.weekNumber}</span>
                       </div>
                       <div className={styles.cardFooter}>
-                        <button>Log Journal</button>
+                        <button onClick={(e) => {
+                          e.preventDefault()
+                          router.push(`/journal/new-entry?plantId=${plant.id}`)
+                        }}>Log Journal</button>
                       </div>
                     </div>
                   </article>

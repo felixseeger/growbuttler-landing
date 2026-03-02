@@ -36,7 +36,7 @@ $spacing-xl: 3rem;
 
 .dashboard-main {
   flex: 1;
-  padding: $spacing-lg;
+  padding: 4rem $spacing-lg $spacing-lg;
   max-width: 1400px;
   margin: 0 auto;
   width: 100%;
@@ -737,7 +737,7 @@ select {
 // Responsive
 @media (max-width: 768px) {
   .dashboard-main {
-    padding: $spacing-md;
+    padding: 4rem $spacing-md $spacing-md;
   }
 
   .page-header {

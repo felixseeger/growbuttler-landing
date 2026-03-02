@@ -18,6 +18,10 @@ function PlantJournalContent() {
   const [error, setError] = useState<string | null>(null)
   const [quickNote, setQuickNote] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [selectedImage, setSelectedImage] = useState<File | null>(null)
+  const [imagePreview, setImagePreview] = useState<string | null>(null)
+  const [editingEntryId, setEditingEntryId] = useState<string | null>(null)
+  const [editContent, setEditContent] = useState('')
 
   useEffect(() => {
     async function fetchData() {
@@ -67,19 +71,142 @@ function PlantJournalContent() {
     fetchData()
   }, [plantId])
 
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      setSelectedImage(file)
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string)
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
+  const handleRemoveImage = () => {
+    setSelectedImage(null)
+    setImagePreview(null)
+  }
+
+  const handleEditEntry = (entry: any) => {
+    setEditingEntryId(entry.id)
+    // Extract text content without HTML tags
+    const tempDiv = document.createElement('div')
+    tempDiv.innerHTML = entry.content
+    setEditContent(tempDiv.textContent || tempDiv.innerText || '')
+  }
+
+  const handleCancelEdit = () => {
+    setEditingEntryId(null)
+    setEditContent('')
+  }
+
+  const handleSaveEdit = async (entryId: string) => {
+    if (!editContent.trim()) return
+
+    try {
+      const response = await fetch(`/api/journal-entry/${entryId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ narrative: editContent }),
+      })
+
+      if (response.status === 401) {
+        window.location.href = '/login'
+        return
+      }
+
+      if (!response.ok) throw new Error('Failed to update entry')
+
+      // Refresh entries
+      const entriesRes = await fetch(`/api/journal-entries?plantId=${plantId}`, { credentials: 'include' })
+      if (entriesRes.ok) {
+        const entriesData = await entriesRes.json()
+        setEntries(entriesData.entries || [])
+      }
+
+      setEditingEntryId(null)
+      setEditContent('')
+    } catch (err) {
+      console.error('Failed to update entry:', err)
+      alert('Failed to update entry')
+    }
+  }
+
+  const handleDeleteEntry = async (entryId: string) => {
+    if (!confirm('Are you sure you want to delete this entry?')) return
+
+    try {
+      const response = await fetch(`/api/journal-entry/${entryId}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      })
+
+      if (response.status === 401) {
+        window.location.href = '/login'
+        return
+      }
+
+      if (!response.ok) throw new Error('Failed to delete entry')
+
+      // Refresh entries
+      const entriesRes = await fetch(`/api/journal-entries?plantId=${plantId}`, { credentials: 'include' })
+      if (entriesRes.ok) {
+        const entriesData = await entriesRes.json()
+        setEntries(entriesData.entries || [])
+      }
+    } catch (err) {
+      console.error('Failed to delete entry:', err)
+      alert('Failed to delete entry')
+    }
+  }
+
   const handleQuickEntry = async () => {
-    if (!quickNote.trim() || !plant) return
+    if ((!quickNote.trim() && !selectedImage) || !plant) return
 
     setIsSubmitting(true)
     try {
+      let imageUrl = ''
+
+      // Upload image if selected
+      if (selectedImage) {
+        const formData = new FormData()
+        formData.append('file', selectedImage)
+
+        const uploadRes = await fetch('/api/upload-image', {
+          method: 'POST',
+          credentials: 'include',
+          body: formData,
+        })
+
+        if (uploadRes.status === 401) {
+          window.location.href = '/login'
+          return
+        }
+
+        if (!uploadRes.ok) {
+          throw new Error('Failed to upload image')
+        }
+
+        const uploadData = await uploadRes.json()
+        imageUrl = uploadData.url
+      }
+
+      // Prepare content with image
+      let content = quickNote.trim()
+      if (imageUrl) {
+        content = `<img src="${imageUrl}" alt="Journal entry image" style="max-width: 100%; border-radius: 8px; margin-bottom: 1rem;" />\n${content}`
+      }
+
       const response = await fetch('/api/journal-entry/quick', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         body: JSON.stringify({
           plantId,
-          content: quickNote,
-          postId: entries[0]?.id || null, // Comment on the first journal entry or plant entry
+          content: content || '📷 Image update',
+          postId: entries[0]?.id || null,
         }),
       })
 
@@ -93,6 +220,9 @@ function PlantJournalContent() {
 
       // Clear input and refresh entries
       setQuickNote('')
+      setSelectedImage(null)
+      setImagePreview(null)
+
       // Reload the page data to show the new comment
       const entriesRes = await fetch(`/api/journal-entries?plantId=${plantId}`, { credentials: 'include' })
       if (entriesRes.ok) {
@@ -181,16 +311,60 @@ function PlantJournalContent() {
                 placeholder="How is your plant doing today?"
                 value={quickNote}
                 onChange={(e) => setQuickNote(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleQuickEntry()}
+                onKeyPress={(e) => e.key === 'Enter' && !selectedImage && handleQuickEntry()}
                 disabled={isSubmitting}
               />
-              <button
-                className={styles.submitBtn}
-                onClick={handleQuickEntry}
-                disabled={isSubmitting || !quickNote.trim()}
-              >
-                {isSubmitting ? 'Adding...' : 'Eintrag hinzufügen'}
-              </button>
+              {imagePreview && (
+                <div style={{ position: 'relative', marginTop: '0.5rem', display: 'inline-block' }}>
+                  <Image
+                    src={imagePreview}
+                    alt="Preview"
+                    width={150}
+                    height={150}
+                    style={{ borderRadius: '8px', objectFit: 'cover' }}
+                  />
+                  <button
+                    onClick={handleRemoveImage}
+                    style={{
+                      position: 'absolute',
+                      top: '0.25rem',
+                      right: '0.25rem',
+                      background: 'rgba(0,0,0,0.6)',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: '50%',
+                      width: '1.5rem',
+                      height: '1.5rem',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}
+                  >
+                    ✕
+                  </button>
+                </div>
+              )}
+              <div className={styles.inputActions}>
+                <label style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.375rem', padding: '0.25rem 0.5rem', borderRadius: '0.25rem', transition: 'background 0.2s' }}>
+                  <span className="material-symbols-outlined" style={{ fontSize: '1rem' }}>image</span>
+                  <span>Add Photo</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageSelect}
+                    disabled={isSubmitting}
+                    style={{ display: 'none' }}
+                  />
+                </label>
+                <button
+                  className={styles.submitBtn}
+                  onClick={handleQuickEntry}
+                  disabled={isSubmitting || (!quickNote.trim() && !selectedImage)}
+                >
+                  {isSubmitting ? 'Adding...' : 'Eintrag hinzufügen'}
+                </button>
+              </div>
             </div>
           </div>
 
@@ -204,10 +378,85 @@ function PlantJournalContent() {
                   <div className={styles.entryMeta}>
                     <strong>{new Date(entry.date).toLocaleDateString()}</strong>
                     {entry.acf?.day_number && ` • Day ${entry.acf.day_number}`}
+                    {entry.acf?.entry_type !== 'expert_insight' && (
+                      <div style={{ marginLeft: 'auto', display: 'flex', gap: '0.5rem' }}>
+                        <button
+                          onClick={() => handleEditEntry(entry)}
+                          style={{
+                            background: 'transparent',
+                            border: 'none',
+                            color: 'var(--color-muted)',
+                            cursor: 'pointer',
+                            padding: '0.25rem',
+                            display: 'flex',
+                            alignItems: 'center'
+                          }}
+                          title="Edit entry"
+                        >
+                          <span className="material-symbols-outlined" style={{ fontSize: '1rem' }}>edit</span>
+                        </button>
+                        <button
+                          onClick={() => handleDeleteEntry(entry.id)}
+                          style={{
+                            background: 'transparent',
+                            border: 'none',
+                            color: 'var(--color-muted)',
+                            cursor: 'pointer',
+                            padding: '0.25rem',
+                            display: 'flex',
+                            alignItems: 'center'
+                          }}
+                          title="Delete entry"
+                        >
+                          <span className="material-symbols-outlined" style={{ fontSize: '1rem' }}>delete</span>
+                        </button>
+                      </div>
+                    )}
                   </div>
                   <div className={styles.bubble}>
                     {entry.imageUrl && <div className={styles.entryImage}><Image src={entry.imageUrl} alt="Journal entry" width={200} height={150} /></div>}
-                    <p dangerouslySetInnerHTML={{ __html: entry.content }} />
+                    {editingEntryId === entry.id ? (
+                      <div>
+                        <textarea
+                          value={editContent}
+                          onChange={(e) => setEditContent(e.target.value)}
+                          style={{
+                            width: '100%',
+                            minHeight: '100px',
+                            padding: '0.5rem',
+                            border: '1px solid #ddd',
+                            borderRadius: '4px',
+                            fontFamily: 'inherit',
+                            fontSize: 'inherit',
+                            marginBottom: '0.5rem'
+                          }}
+                        />
+                        <div style={{ display: 'flex', gap: '0.5rem' }}>
+                          <button
+                            onClick={() => handleSaveEdit(entry.id)}
+                            className={styles.submitBtn}
+                            style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}
+                          >
+                            Save
+                          </button>
+                          <button
+                            onClick={handleCancelEdit}
+                            style={{
+                              fontSize: '0.875rem',
+                              padding: '0.5rem 1rem',
+                              background: '#f3f4f6',
+                              border: 'none',
+                              borderRadius: '0.5rem',
+                              cursor: 'pointer'
+                            }}
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <p dangerouslySetInnerHTML={{ __html: entry.content }} />
+                    )}
                     {entry.acf?.temperature_fahrenheit && (
                       <div className={styles.dataGrid}>
                         <div className={styles.dataPoint}><span className="material-symbols-outlined" style={{ color: '#2563eb' }}>water_drop</span><div><span>pH</span><strong>{entry.acf.ph_level || 'N/A'}</strong></div></div>

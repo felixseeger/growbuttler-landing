@@ -14,14 +14,16 @@
 .content {
   flex: 1;
   padding: 1.5rem;
-  padding-top: 2rem;
+  padding-top: 4rem;
 
   @media (min-width: 768px) {
     padding: 2rem;
+    padding-top: 4rem;
   }
 
   @media (min-width: 1024px) {
     padding: 2rem 2.5rem;
+    padding-top: 4rem;
   }
 }
 
