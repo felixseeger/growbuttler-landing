@@ -92,8 +92,8 @@ export async function POST(request: NextRequest) {
       body: JSON.stringify({
         post: targetPostId,
         content: content.trim(),
-        author_name: user.username || 'User',
-        author_email: user.email || 'user@example.com',
+        author_name: user.name || 'User',
+        author_email: user.email,
       }),
     })
 
