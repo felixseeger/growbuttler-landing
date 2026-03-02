@@ -1,17 +1,19 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import AppSidebar from '@/components/AppSidebar/AppSidebar'
 import Footer from '@/components/Footer/Footer'
+import EditPlantModal from '@/components/EditPlantModal'
 import Link from 'next/link'
 import Image from 'next/image'
 import styles from '../JournalPage.module.scss'
 
 function PlantJournalContent() {
   const params = useParams()
+  const router = useRouter()
   const plantId = params.plantId as string
-  
+
   const [plant, setPlant] = useState<any>(null)
   const [entries, setEntries] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
@@ -22,6 +24,8 @@ function PlantJournalContent() {
   const [imagePreview, setImagePreview] = useState<string | null>(null)
   const [editingEntryId, setEditingEntryId] = useState<string | null>(null)
   const [editContent, setEditContent] = useState('')
+  const [isEditPlantOpen, setIsEditPlantOpen] = useState(false)
+  const [showPlantMenu, setShowPlantMenu] = useState(false)
 
   useEffect(() => {
     async function fetchData() {
@@ -70,6 +74,54 @@ function PlantJournalContent() {
 
     fetchData()
   }, [plantId])
+
+  const refetchData = async () => {
+    try {
+      const [plantsRes, entriesRes] = await Promise.all([
+        fetch('/api/plants', { credentials: 'include' }),
+        fetch(`/api/journal-entries?plantId=${plantId}`, { credentials: 'include' })
+      ])
+
+      if (plantsRes.ok && entriesRes.ok) {
+        const plantsData = await plantsRes.json()
+        const entriesData = await entriesRes.json()
+        const foundPlant = (plantsData.plants || []).find((p: any) => String(p.id) === String(plantId))
+
+        if (foundPlant) {
+          setPlant(foundPlant)
+          setEntries(entriesData.entries || [])
+        }
+      }
+    } catch (err) {
+      console.error('Error refetching data:', err)
+    }
+  }
+
+  const handleDeletePlant = async () => {
+    if (!confirm(`Are you sure you want to delete "${plant.name}"? This will delete all ${entries.length} journal entries for this plant. This action cannot be undone.`)) {
+      return
+    }
+
+    try {
+      const response = await fetch(`/api/plants/${plantId}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      })
+
+      if (response.status === 401) {
+        window.location.href = '/login'
+        return
+      }
+
+      if (!response.ok) throw new Error('Failed to delete plant')
+
+      // Redirect to dashboard after successful deletion
+      router.push('/dashboard')
+    } catch (err) {
+      console.error('Failed to delete plant:', err)
+      alert('Failed to delete plant')
+    }
+  }
 
   const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -259,7 +311,84 @@ function PlantJournalContent() {
             <aside className={styles.sidebar}>
           <div className={styles.sidebarSticky}>
             <div className={styles.plantHeader}>
-              <span className={styles.badge}>{plant.stage?.charAt(0).toUpperCase() + plant.stage?.slice(1) || 'Unknown'}</span>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
+                <span className={styles.badge}>{plant.stage?.charAt(0).toUpperCase() + plant.stage?.slice(1) || 'Unknown'}</span>
+                <div style={{ position: 'relative' }}>
+                  <button
+                    onClick={() => setShowPlantMenu(!showPlantMenu)}
+                    style={{
+                      background: 'transparent',
+                      border: 'none',
+                      color: 'var(--color-muted)',
+                      cursor: 'pointer',
+                      padding: '0.25rem',
+                      display: 'flex',
+                      alignItems: 'center'
+                    }}
+                    title="Plant settings"
+                  >
+                    <span className="material-symbols-outlined">more_vert</span>
+                  </button>
+                  {showPlantMenu && (
+                    <div style={{
+                      position: 'absolute',
+                      right: 0,
+                      top: '100%',
+                      background: 'white',
+                      border: '1px solid #ddd',
+                      borderRadius: '8px',
+                      boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                      zIndex: 10,
+                      minWidth: '150px',
+                      overflow: 'hidden'
+                    }}>
+                      <button
+                        onClick={() => {
+                          setShowPlantMenu(false)
+                          setIsEditPlantOpen(true)
+                        }}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.5rem',
+                          width: '100%',
+                          padding: '0.75rem 1rem',
+                          border: 'none',
+                          background: 'transparent',
+                          cursor: 'pointer',
+                          fontSize: '0.875rem',
+                          textAlign: 'left'
+                        }}
+                      >
+                        <span className="material-symbols-outlined" style={{ fontSize: '1rem' }}>edit</span>
+                        Edit Plant
+                      </button>
+                      <button
+                        onClick={() => {
+                          setShowPlantMenu(false)
+                          handleDeletePlant()
+                        }}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.5rem',
+                          width: '100%',
+                          padding: '0.75rem 1rem',
+                          border: 'none',
+                          background: 'transparent',
+                          cursor: 'pointer',
+                          fontSize: '0.875rem',
+                          textAlign: 'left',
+                          color: '#dc2626'
+                        }}
+                      >
+                        <span className="material-symbols-outlined" style={{ fontSize: '1rem' }}>delete</span>
+                        Delete Plant
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
               <h1 className={styles.plantName}>{plant.name}</h1>
               <p className={styles.daysSince}>Day {plant.dayNumber} since germination</p>
             </div>
@@ -478,6 +607,28 @@ function PlantJournalContent() {
         </div>
         <Footer />
       </main>
+
+      <EditPlantModal
+        isOpen={isEditPlantOpen}
+        onClose={() => setIsEditPlantOpen(false)}
+        onSuccess={refetchData}
+        plant={plant}
+      />
+
+      {/* Click outside to close menu */}
+      {showPlantMenu && (
+        <div
+          onClick={() => setShowPlantMenu(false)}
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 9
+          }}
+        />
+      )}
     </div>
   )
 }

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import SubpageLayout from '@/components/SubpageLayout/SubpageLayout'
 import DashboardGreeting from '@/components/DashboardGreeting'
+import DashboardStatus from '@/components/DashboardStatus'
 import DashboardClient from './DashboardClient'
 import DashboardSeedButton from './DashboardSeedButton'
 import styles from './DashboardPage.module.scss'
@@ -21,7 +22,9 @@ export default function DashboardPage() {
             <div className={styles.greeting}>
               <DashboardGreeting />
             </div>
-            <p className={styles.status}>Your garden is thriving today.</p>
+            <div className={styles.status}>
+              <DashboardStatus />
+            </div>
           </div>
           <DashboardSeedButton />
         </section>
