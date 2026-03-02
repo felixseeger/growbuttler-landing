@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import AppSidebar from '@/components/AppSidebar/AppSidebar'
-import Header from '@/components/Header/Header'
+import Footer from '@/components/Footer/Footer'
 import Link from 'next/link'
 import Image from 'next/image'
 import styles from '../JournalPage.module.scss'
@@ -82,18 +82,6 @@ function PlantJournalContent() {
     <div style={{ display: 'flex', minHeight: '100vh' }}>
       <AppSidebar />
       <main style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-        <Header
-          logoLabel="GrowButler"
-          logoIcon="potted_plant"
-          links={[
-            { label: 'Journal', url: '/journal' },
-            { label: 'Experts', url: '/experts' },
-            { label: 'Community', url: '/community' },
-          ]}
-          loginLabel="Log In"
-          ctaLabel="Get Started"
-          ctaUrl="/signup"
-        />
         <div className={styles.container}>
           <div className={styles.inner}>
             <aside className={styles.sidebar}>
@@ -183,6 +171,7 @@ function PlantJournalContent() {
         </main>
           </div>
         </div>
+        <Footer />
       </main>
     </div>
   )
