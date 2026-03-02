@@ -25,7 +25,6 @@ export default function AppSidebar() {
             </div>
             <div className={styles.brandText}>
               <span className={styles.brandTitle}>GrowButler</span>
-              <span className={styles.brandSub}>My Garden</span>
             </div>
           </Link>
           <nav className={styles.nav}>
