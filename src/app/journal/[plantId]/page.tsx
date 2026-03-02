@@ -135,6 +135,7 @@ function PlantJournalContent() {
             <div className={styles.inputIcon}><span className="material-symbols-outlined">edit_note</span></div>
             <div className={styles.inputWrap}>
               <input type="text" placeholder="How is your plant doing today?" />
+              <button className={styles.submitBtn}>Eintrag hinzufügen</button>
             </div>
           </div>
 
