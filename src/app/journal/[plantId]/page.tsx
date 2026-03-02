@@ -16,6 +16,8 @@ function PlantJournalContent() {
   const [entries, setEntries] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [quickNote, setQuickNote] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   useEffect(() => {
     async function fetchData() {
@@ -64,6 +66,46 @@ function PlantJournalContent() {
 
     fetchData()
   }, [plantId])
+
+  const handleQuickEntry = async () => {
+    if (!quickNote.trim() || !plant) return
+
+    setIsSubmitting(true)
+    try {
+      const response = await fetch('/api/journal-entry/quick', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          plantId,
+          content: quickNote,
+          postId: entries[0]?.id || null, // Comment on the first journal entry or plant entry
+        }),
+      })
+
+      if (response.status === 401) {
+        window.location.href = '/login'
+        return
+      }
+
+      const data = await response.json()
+      if (!response.ok) throw new Error(data.error || 'Failed to add entry')
+
+      // Clear input and refresh entries
+      setQuickNote('')
+      // Reload the page data to show the new comment
+      const entriesRes = await fetch(`/api/journal-entries?plantId=${plantId}`, { credentials: 'include' })
+      if (entriesRes.ok) {
+        const entriesData = await entriesRes.json()
+        setEntries(entriesData.entries || [])
+      }
+    } catch (err) {
+      console.error('Failed to add quick entry:', err)
+      alert(err instanceof Error ? err.message : 'Failed to add entry')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
 
   if (loading) {
     return <div style={{ padding: '4rem', textAlign: 'center' }}>Loading...</div>
@@ -134,8 +176,21 @@ function PlantJournalContent() {
           <div className={styles.inputArea}>
             <div className={styles.inputIcon}><span className="material-symbols-outlined">edit_note</span></div>
             <div className={styles.inputWrap}>
-              <input type="text" placeholder="How is your plant doing today?" />
-              <button className={styles.submitBtn}>Eintrag hinzufügen</button>
+              <input
+                type="text"
+                placeholder="How is your plant doing today?"
+                value={quickNote}
+                onChange={(e) => setQuickNote(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && handleQuickEntry()}
+                disabled={isSubmitting}
+              />
+              <button
+                className={styles.submitBtn}
+                onClick={handleQuickEntry}
+                disabled={isSubmitting || !quickNote.trim()}
+              >
+                {isSubmitting ? 'Adding...' : 'Eintrag hinzufügen'}
+              </button>
             </div>
           </div>
 
