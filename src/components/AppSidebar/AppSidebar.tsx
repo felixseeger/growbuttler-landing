@@ -19,15 +19,15 @@ export default function AppSidebar() {
     <aside className={styles.sidebar}>
       <div className={styles.inner}>
         <div>
-          <div className={styles.brand}>
+          <Link href="/" className={styles.brand}>
             <div className={styles.logoIcon}>
-              <span className="material-symbols-outlined" aria-hidden>potted_plant</span>
+              <span className="material-symbols-outlined" aria-hidden>spa</span>
             </div>
             <div className={styles.brandText}>
               <span className={styles.brandTitle}>GrowButler</span>
               <span className={styles.brandSub}>My Garden</span>
             </div>
-          </div>
+          </Link>
           <nav className={styles.nav}>
             {navItems.map((item) => {
               const isActive = pathname === item.href || (item.href !== '/dashboard' && pathname?.startsWith(item.href))

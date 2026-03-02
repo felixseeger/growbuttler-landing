@@ -45,10 +45,10 @@ export default function Footer({
       <div className={styles.inner}>
         <div className={styles.grid}>
           <div className={styles.brand}>
-            <div className={styles.logo}>
+            <Link href="/" className={styles.logo}>
               <span className={styles.logoIcon} aria-hidden>spa</span>
               <span className={styles.logoText}>GrowButler</span>
-            </div>
+            </Link>
             <p className={styles.tagline}>{tagline}</p>
           </div>
           <div>
