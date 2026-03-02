@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
-import SubpageLayout from '@/components/SubpageLayout/SubpageLayout'
+import AppSidebar from '@/components/AppSidebar/AppSidebar'
+import Header from '@/components/Header/Header'
 import Link from 'next/link'
 import Image from 'next/image'
 import styles from '../JournalPage.module.scss'
@@ -78,9 +79,24 @@ function PlantJournalContent() {
   }
 
   return (
-    <div className={styles.container}>
-      <div className={styles.inner}>
-        <aside className={styles.sidebar}>
+    <div style={{ display: 'flex', minHeight: '100vh' }}>
+      <AppSidebar />
+      <main style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <Header
+          logoLabel="GrowButler"
+          logoIcon="potted_plant"
+          links={[
+            { label: 'Journal', url: '/journal' },
+            { label: 'Experts', url: '/experts' },
+            { label: 'Community', url: '/community' },
+          ]}
+          loginLabel="Log In"
+          ctaLabel="Get Started"
+          ctaUrl="/signup"
+        />
+        <div className={styles.container}>
+          <div className={styles.inner}>
+            <aside className={styles.sidebar}>
           <div className={styles.sidebarSticky}>
             <div className={styles.plantHeader}>
               <span className={styles.badge}>{plant.stage?.charAt(0).toUpperCase() + plant.stage?.slice(1) || 'Unknown'}</span>
@@ -165,7 +181,9 @@ function PlantJournalContent() {
             <p style={{ textAlign: 'center', color: '#666', padding: '2rem' }}>No journal entries yet for this plant.</p>
           )}
         </main>
-      </div>
+          </div>
+        </div>
+      </main>
     </div>
   )
 }
