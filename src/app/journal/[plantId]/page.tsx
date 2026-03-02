@@ -26,6 +26,7 @@ function PlantJournalContent() {
   const [editContent, setEditContent] = useState('')
   const [isEditPlantOpen, setIsEditPlantOpen] = useState(false)
   const [showPlantMenu, setShowPlantMenu] = useState(false)
+  const [assignedExpert, setAssignedExpert] = useState<any>(null)
 
   useEffect(() => {
     async function fetchData() {
@@ -38,9 +39,10 @@ function PlantJournalContent() {
       try {
         setLoading(true)
         
-        const [plantsRes, entriesRes] = await Promise.all([
+        const [plantsRes, entriesRes, expertsRes] = await Promise.all([
           fetch('/api/plants', { credentials: 'include' }),
-          fetch(`/api/journal-entries?plantId=${plantId}`, { credentials: 'include' })
+          fetch(`/api/journal-entries?plantId=${plantId}`, { credentials: 'include' }),
+          fetch('/api/experts?featured=true', { credentials: 'include' })
         ])
 
         // Handle authentication errors
@@ -55,6 +57,8 @@ function PlantJournalContent() {
 
         const plantsData = await plantsRes.json()
         const entriesData = await entriesRes.json()
+        const expertsData = await expertsRes.json()
+        const featuredExpert = (expertsData.experts || [])[0]
 
         const foundPlant = (plantsData.plants || []).find((p: any) => String(p.id) === String(plantId))
         
@@ -63,6 +67,7 @@ function PlantJournalContent() {
         } else {
           setPlant(foundPlant)
           setEntries(entriesData.entries || [])
+          setAssignedExpert(featuredExpert || null)
         }
       } catch (err: any) {
         console.error('Error fetching journal data:', err)
@@ -402,18 +407,32 @@ function PlantJournalContent() {
 
             <div className={styles.expertCard}>
               <h3 className={styles.expertTitle}>Assigned Expert</h3>
-              <div className={styles.expertInfo}>
-                <div className={styles.expertAvatarWrap}>
-                  <div className={styles.expertAvatar} style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuCVs8a6jZQWVCF10rzDwFUrBgQsa9w0B2B7j95Ah0RKwARam4GJCqeS64G3qKDh_VDYBfdbiWeHybpdzp2l-c4OamOxZJB5FGaSoieoo9_RkdMmxVNf9qKDGdtlMIL29_7atWVhOyMmWwgZWWFPbLLFpF_UMe2jRh4ipew8ISUXTDX8tavc_-CMEF3IvCX4CFIaQvUHKf1K_oClITBIYkFQd-MNWlqLcHUVcOuY9Mgn6iIWwOSmGz4pQbt6sMUIqcZa9jhXzdPG6DEP')" }} />
-                  <span className={styles.expertStatus} />
+              {assignedExpert ? (
+                <div className={styles.expertInfo}>
+                  <div className={styles.expertAvatarWrap}>
+                    <div className={styles.expertAvatar} style={{ backgroundImage: assignedExpert.photoUrl ? `url('${assignedExpert.photoUrl}')` : "url('https://lh3.googleusercontent.com/aida-public/AB6AXuCVs8a6jZQWVCF10rzDwFUrBgQsa9w0B2B7j95Ah0RKwARam4GJCqeS64G3qKDh_VDYBfdbiWeHybpdzp2l-c4OamOxZJB5FGaSoieoo9_RkdMmxVNf9qKDGdtlMIL29_7atWVhOyMmWwgZWWFPbLLFpF_UMe2jRh4ipew8ISUXTDX8tavc_-CMEF3IvCX4CFIaQvUHKf1K_oClITBIYkFQd-MNWlqLcHUVcOuY9Mgn6iIWwOSmGz4pQbt6sMUIqcZa9jhXzdPG6DEP')" }} />
+                    <span className={styles.expertStatus} style={{ background: assignedExpert.isOnline ? '#22c55e' : '#9ca3af' }} />
+                  </div>
+                  <div className={styles.expertMeta}>
+                    <p className={styles.expertName}>{assignedExpert.name}</p>
+                    <p className={styles.expertRole}>{assignedExpert.title}</p>
+                  </div>
+                  <Link href={"/experts/" + assignedExpert.id} className={styles.chatBtn}><span className="material-symbols-outlined">chat</span></Link>
                 </div>
-                <div className={styles.expertMeta}>
-                  <p className={styles.expertName}>Hanna K.</p>
-                  <p className={styles.expertRole}>Master Grower • Berlin</p>
+              ) : (
+                <div className={styles.expertInfo}>
+                  <div className={styles.expertAvatarWrap}>
+                    <div className={styles.expertAvatar} style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuCVs8a6jZQWVCF10rzDwFUrBgQsa9w0B2B7j95Ah0RKwARam4GJCqeS64G3qKDh_VDYBfdbiWeHybpdzp2l-c4OamOxZJB5FGaSoieoo9_RkdMmxVNf9qKDGdtlMIL29_7atWVhOyMmWwgZWWFPbLLFpF_UMe2jRh4ipew8ISUXTDX8tavc_-CMEF3IvCX4CFIaQvUHKf1K_oClITBIYkFQd-MNWlqLcHUVcOuY9Mgn6iIWwOSmGz4pQbt6sMUIqcZa9jhXzdPG6DEP')" }} />
+                    <span className={styles.expertStatus} />
+                  </div>
+                  <div className={styles.expertMeta}>
+                    <p className={styles.expertName}>Hanna K.</p>
+                    <p className={styles.expertRole}>Master Grower • Berlin</p>
+                  </div>
+                  <button className={styles.chatBtn}><span className="material-symbols-outlined">chat</span></button>
                 </div>
-                <button className={styles.chatBtn}><span className="material-symbols-outlined">chat</span></button>
-              </div>
-              <p className={styles.expertNote}>"Next check-in scheduled. Keep an eye on pH levels this week."</p>
+              )}
+              <p className={styles.expertNote}>{assignedExpert?.availability || "Next check-in scheduled. Keep an eye on pH levels this week."}</p>
             </div>
 
             <div className={styles.vitals}>
