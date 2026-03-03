@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import styles from './Header.module.scss'
 import Branding from '@/components/Branding/Branding'
 
