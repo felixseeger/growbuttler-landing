@@ -33,14 +33,15 @@
   &:hover {
     color: #4CAF50;
   }
+}
 
-  svg {
-    transition: transform 0.2s;
-  }
+.navIcon {
+  transition: transform 0.2s;
+}
 
-  &:active svg {
-    transform: scale(0.9);
-  }
+.navItem:active .navIcon,
+.navItemCenter:active .navIcon {
+  transform: scale(0.9);
 }
 
 .navItemCenter {
@@ -58,9 +59,5 @@
   &:hover {
     transform: scale(1.05);
     box-shadow: 0 6px 16px rgba(76, 175, 80, 0.4);
-  }
-
-  &:active {
-    transform: scale(0.95);
   }
 }
