@@ -25,11 +25,11 @@ interface HeroProps {
 
 export default function Hero({
   badgeText = 'Jetzt live in Berlin & München',
-  headline = 'Meisterhafte Kultivierung mit',
-  headlineHighlight = 'lokalen Experten',
-  subheadline = 'Zertifizierte Meistergärtner in Ihrer Nähe — für Beratung, Diagnostik und Erfolg bei der Ernte.',
-  searchPlaceholder = 'Meistergärtner in Berlin, München ...',
-  ctaSearchLabel = 'Meistergärtner finden',
+  headline = 'Kultivierung auf Experten-Niveau mit',
+  headlineHighlight = 'lokalen Profis',
+  subheadline = 'Zertifizierte Anbau-Experten in Ihrer Nähe — für Beratung, Diagnostik und Erfolg bei der Ernte.',
+  searchPlaceholder = 'Experten in Berlin, München ...',
+  ctaSearchLabel = 'Experten finden',
   socialProofText = 'Join 2,000+ growers in Germany',
   socialProofCount = '+2k',
   avatarUrls = DEFAULT_AVATARS,

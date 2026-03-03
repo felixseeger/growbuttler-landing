@@ -213,12 +213,12 @@ function getFallbackHomeData() {
     fallback: {
       hero: {
         badge_text: 'Jetzt live in Berlin & München',
-        headline: 'Meisterhafte Kultivierung mit',
-        headline_highlight: 'lokalen Experten',
+        headline: 'Kultivierung auf Experten-Niveau mit',
+        headline_highlight: 'lokalen Profis',
         subheadline:
-          'Zertifizierte Meistergärtner in Ihrer Nähe — für Beratung, Diagnostik und Erfolg bei der Ernte.',
-        search_placeholder: 'Meistergärtner in Berlin, München ...',
-        cta_search_label: 'Meistergärtner finden',
+          'Zertifizierte Anbau-Experten in Ihrer Nähe — für Beratung, Diagnostik und Erfolg bei der Ernte.',
+        search_placeholder: 'Experten in Berlin, München ...',
+        cta_search_label: 'Experten finden',
         social_proof_text: 'Join 2,000+ growers in Germany',
         social_proof_count: '+2k',
       },
@@ -229,9 +229,9 @@ function getFallbackHomeData() {
         features: [
           {
             icon: 'verified_user',
-            title: 'Geprüfte Meister',
+            title: 'Geprüfte Experten',
             description:
-              'Arbeiten Sie mit verifizierten Meistergärtnern zusammen, die Ihre Region kennen — Klima, Wasser, Rahmenbedingungen.',
+              'Arbeiten Sie mit verifizierten Anbau-Experten zusammen, die Ihre Region kennen — Klima, Wasser, Rahmenbedingungen.',
           },
           {
             icon: 'video_camera_front',
@@ -428,8 +428,8 @@ function getFallbackExpertsData() {
   return {
     page_header: {
       title: 'Find Your Mentor',
-      subtitle: 'Connect with master cultivators for personalized guidance on your grow.',
-      badge_label: 'Vetted Masters',
+      subtitle: 'Connect with expert cultivators for personalized guidance on your grow.',
+      badge_label: 'Vetted Experts',
       badge_icon: 'verified_user',
       results_label: 'Results',
     },
@@ -473,7 +473,7 @@ function getFallbackExpertsData() {
           price_unit: '/hr',
           tags: [{ item: 'Hydroponics' }, { item: 'Tech Setup' }],
           bio_snippet:
-            'Master of DWC and automated systems. I help you dial in your environment for maximum yield and efficiency.',
+            'Expert of DWC and automated systems. I help you dial in your environment for maximum yield and efficiency.',
           cta_profile_label: 'View Profile',
           cta_book_label: 'Book Now',
           map_icon: 'water_drop',

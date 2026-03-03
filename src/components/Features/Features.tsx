@@ -15,8 +15,8 @@ interface FeaturesProps {
 const defaultFeatures: Feature[] = [
   {
     icon: 'verified_user',
-    title: 'Geprüfte Meister',
-    description: 'Arbeiten Sie mit verifizierten Meistergärtnern zusammen, die Ihre Region kennen — Klima, Wasser, Rahmenbedingungen.',
+    title: 'Geprüfte Experten',
+    description: 'Arbeiten Sie mit verifizierten Anbau-Experten zusammen, die Ihre Region kennen — Klima, Wasser, Rahmenbedingungen.',
   },
   {
     icon: 'video_camera_front',

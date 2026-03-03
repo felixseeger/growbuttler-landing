@@ -3,10 +3,13 @@
   min-height: 100vh;
   width: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  padding: 4rem 1rem;
   background: linear-gradient(135deg, #fdfbf7 0%, #f3f0eb 100%);
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .decoration {
