@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import styles from './Signup.module.scss'
+import Branding from '@/components/Branding/Branding'
 
 export default function SignupPage() {
   const [formData, setFormData] = useState({
@@ -95,10 +96,7 @@ export default function SignupPage() {
     <div className={styles.container}>
       <div className={styles.wrapper}>
         <div className={styles.header}>
-          <Link href="/" className={styles.logo}>
-            <span className="material-symbols-outlined">spa</span>
-            <span>GrowButler</span>
-          </Link>
+          <Branding className={styles.centeredBranding} />
         </div>
 
         <div className={styles.content}>

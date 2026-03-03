@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import styles from './Footer.module.scss'
+import Branding from '@/components/Branding/Branding'
 
 interface FooterLink {
   label: string
@@ -35,7 +36,7 @@ export default function Footer({
   platformLinks = defaultPlatform,
   communityLinks = defaultCommunity,
   legalLinks = defaultLegal,
-  copyrightText = '© 2024 GrowButler GmbH. Made with care in Berlin.',
+  copyrightText = '© 2024 GrowButtler GmbH. Made with care in Berlin.',
 }: FooterProps) {
   const safePlatform = Array.isArray(platformLinks) && platformLinks.length > 0 ? platformLinks : defaultPlatform
   const safeCommunity = Array.isArray(communityLinks) && communityLinks.length > 0 ? communityLinks : defaultCommunity
@@ -45,10 +46,7 @@ export default function Footer({
       <div className={styles.inner}>
         <div className={styles.grid}>
           <div className={styles.brand}>
-            <Link href="/" className={styles.logo}>
-              <span className={styles.logoIcon} aria-hidden>spa</span>
-              <span className={styles.logoText}>GrowButler</span>
-            </Link>
+            <Branding />
             <p className={styles.tagline}>{tagline}</p>
           </div>
           <div>

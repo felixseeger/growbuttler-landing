@@ -1,0 +1,35 @@
+.branding {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: var(--color-text-main);
+  font-weight: 700;
+  font-size: 1.5rem;
+  letter-spacing: -0.025em;
+  font-family: var(--font-serif);
+  transition: opacity 0.2s;
+
+  &:hover {
+    .logoIcon, .logoImg {
+      transform: rotate(12deg) scale(1.05);
+    }
+  }
+}
+
+.logoIcon {
+  font-family: 'Material Symbols Outlined';
+  font-variation-settings: 'FILL' 0, 'wght' 400;
+  font-size: 1.875rem;
+  color: var(--color-primary);
+  transition: transform 0.3s;
+}
+
+.logoImg {
+  object-fit: contain;
+  transition: transform 0.3s;
+}
+
+.logoText {
+  color: var(--color-text-main);
+}

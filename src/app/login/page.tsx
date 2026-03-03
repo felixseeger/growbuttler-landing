@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import styles from './Login.module.scss'
+import Branding from '@/components/Branding/Branding'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -43,10 +44,7 @@ export default function LoginPage() {
     <div className={styles.container}>
       <div className={styles.wrapper}>
         <div className={styles.header}>
-          <Link href="/" className={styles.logo}>
-            <span className="material-symbols-outlined">spa</span>
-            <span>GrowButler</span>
-          </Link>
+          <Branding className={styles.centeredBranding} />
         </div>
 
         <div className={styles.content}>

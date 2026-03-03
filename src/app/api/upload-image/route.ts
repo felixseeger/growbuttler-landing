@@ -1,8 +1,7 @@
+export const dynamic = "force-dynamic";
+
 import { NextRequest, NextResponse } from 'next/server'
 import { getAuthenticatedUser } from '@/lib/auth'
-import { writeFile, mkdir } from 'fs/promises'
-import path from 'path'
-import { v4 as uuidv4 } from 'uuid'
 
 export async function POST(request: NextRequest) {
   try {
@@ -23,41 +22,44 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'File must be an image' }, { status: 400 })
     }
 
-    // Generate unique filename
-    const fileExtension = file.name.split('.').pop() || 'jpg'
-    const uniqueFilename = `${uuidv4()}.${fileExtension}`
+    const backendUrl = process.env.BACKEND_URL
+    const wpUsername = process.env.WORDPRESS_USERNAME
+    const wpPassword = process.env.APPLICATION_PASSWORD?.replace(/\s/g, '')
 
-    // Save to public/uploads directory
-    const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'journal-images')
-    await mkdir(uploadDir, { recursive: true })
-
-    const filePath = path.join(uploadDir, uniqueFilename)
-    const bytes = await file.arrayBuffer()
-    const buffer = Buffer.from(bytes)
-
-    await writeFile(filePath, buffer)
-
-    // Generate URL for the uploaded image
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3006'
-    const imageUrl = `${baseUrl}/uploads/journal-images/${uniqueFilename}`
-
-    // Store metadata in a simple JSON file (temporary solution)
-    const metadataPath = path.join(uploadDir, `${uniqueFilename}.json`)
-    const metadata = {
-      id: uniqueFilename,
-      originalName: file.name,
-      size: file.size,
-      type: file.type,
-      uploadedBy: user.userId,
-      uploadedAt: new Date().toISOString(),
-      url: imageUrl,
+    if (!backendUrl || !wpUsername || !wpPassword) {
+      return NextResponse.json({ error: 'WordPress credentials not configured' }, { status: 500 })
     }
-    await writeFile(metadataPath, JSON.stringify(metadata, null, 2))
+
+    const authHeader = 'Basic ' + Buffer.from(`${wpUsername}:${wpPassword}`).toString('base64')
+
+    // Create a new form data for WordPress
+    const wpFormData = new FormData()
+    wpFormData.append('file', file)
+    wpFormData.append('title', file.name)
+    wpFormData.append('alt_text', 'Plant photo uploaded by ' + user.name)
+    wpFormData.append('status', 'publish')
+
+    // Upload to WordPress Media Library
+    const response = await fetch(`${backendUrl}/wp-json/wp/v2/media`, {
+      method: 'POST',
+      headers: {
+        'Authorization': authHeader,
+      },
+      body: wpFormData,
+    })
+
+    if (!response.ok) {
+      const errorData = await response.text()
+      console.error('WordPress Media API error:', errorData)
+      return NextResponse.json({ error: 'Failed to upload to WordPress' }, { status: response.status })
+    }
+
+    const data = await response.json()
 
     return NextResponse.json({
       success: true,
-      id: uniqueFilename,
-      url: imageUrl,
+      id: data.id,
+      url: data.source_url,
       mediaType: 'image',
     })
   } catch (error) {

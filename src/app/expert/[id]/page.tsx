@@ -1,8 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import styles from './ExpertProfile.module.scss'
+import BookingModal from '@/components/BookingModal'
 
 interface Service {
   id: string
@@ -67,8 +69,96 @@ const sampleExpert: Expert = {
 }
 
 export default function ExpertProfilePage({ params }: { params: { id: string } }) {
-  const expert = sampleExpert
+  const router = useRouter()
+  const [expert, setExpert] = useState<Expert | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [selectedService, setSelectedService] = useState<Service | null>(null)
+  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false)
+
+  useEffect(() => {
+    async function fetchExpert() {
+      try {
+        const response = await fetch(`/api/experts/${params.id}`)
+
+        if (response.status === 404) {
+          setError('Expert not found')
+          setLoading(false)
+          return
+        }
+
+        if (!response.ok) {
+          throw new Error('Failed to load expert')
+        }
+
+        const data = await response.json()
+
+        // Transform API data to match Expert interface
+        const transformedExpert: Expert = {
+          id: data.expert.id.toString(),
+          name: data.expert.name,
+          title: data.expert.title,
+          experience: data.expert.experience,
+          rating: data.expert.rating,
+          reviews: data.expert.reviews,
+          consultations: data.expert.consultations,
+          bio: stripHtml(data.expert.bio),
+          image: data.expert.image || sampleExpert.image,
+          specialties: data.expert.specialties,
+          services: data.expert.services.map((s: any) => ({
+            id: s.id.toString(),
+            icon: s.icon,
+            title: s.title,
+            description: s.description,
+            price: s.price,
+            unit: s.unit,
+          }))
+        }
+
+        setExpert(transformedExpert)
+      } catch (err) {
+        console.error('Error fetching expert:', err)
+        setError('Failed to load expert details')
+        // Fallback to sample data
+        setExpert(sampleExpert)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchExpert()
+  }, [params.id])
+
+  const stripHtml = (html: string) => {
+    const tmp = document.createElement('div')
+    tmp.innerHTML = html
+    return tmp.textContent || tmp.innerText || ''
+  }
+
+  if (loading) {
+    return (
+      <div className={styles.container}>
+        <div style={{ padding: '4rem', textAlign: 'center' }}>
+          <p>Loading expert profile...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (error && !expert) {
+    return (
+      <div className={styles.container}>
+        <div style={{ padding: '4rem', textAlign: 'center' }}>
+          <h2>{error}</h2>
+          <button onClick={() => router.push('/experts')} style={{ marginTop: '1rem' }}>
+            Back to Experts
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  if (!expert) return null
 
   return (
     <div className={styles.container}>
@@ -77,10 +167,18 @@ export default function ExpertProfilePage({ params }: { params: { id: string } }
         backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0.4), transparent), url('${expert.image}')`
       }}>
         <div className={styles.floatingNav}>
-          <button className={styles.navBtn}>
+          <button className={styles.navBtn} onClick={() => router.push('/experts')}>
             <span className="material-symbols-outlined">arrow_back</span>
           </button>
-          <button className={styles.navBtn}>
+          <button className={styles.navBtn} onClick={() => {
+            if (navigator.share) {
+              navigator.share({
+                title: expert.name,
+                text: `Check out ${expert.name} on GrowButtler`,
+                url: window.location.href
+              }).catch(err => console.log('Share failed:', err))
+            }
+          }}>
             <span className="material-symbols-outlined">share</span>
           </button>
         </div>
@@ -121,7 +219,18 @@ export default function ExpertProfilePage({ params }: { params: { id: string } }
         <section className={styles.bioSection}>
           <h3 className={styles.sectionLabel}>Biography</h3>
           <p className={styles.bioText}>
-            Specializing in <strong>organic pest management</strong> and <strong>living soil</strong>, Dr. Thorne brings a sophisticated, ecological approach to modern agronomy. His editorial expertise focuses on sustainable crop health and regenerative practices that bridge the gap between traditional wisdom and scientific innovation.
+            {expert.specialties.length > 0 && (
+              <>
+                Specializing in{' '}
+                {expert.specialties.map((specialty, i) => (
+                  <span key={i}>
+                    <strong>{specialty}</strong>
+                    {i < expert.specialties.length - 1 ? (i === expert.specialties.length - 2 ? ' and ' : ', ') : ''}
+                  </span>
+                ))}.{' '}
+              </>
+            )}
+            {expert.bio}
           </p>
         </section>
 
@@ -162,11 +271,28 @@ export default function ExpertProfilePage({ params }: { params: { id: string } }
 
       {/* Fixed Bottom Action */}
       <footer className={styles.footer}>
-        <button className={styles.bookBtn}>
+        <button
+          className={styles.bookBtn}
+          onClick={() => setIsBookingModalOpen(true)}
+        >
           <span className="material-symbols-outlined">calendar_today</span>
           Book Consultation
         </button>
       </footer>
+
+      {/* Booking Modal */}
+      <BookingModal
+        isOpen={isBookingModalOpen}
+        onClose={() => setIsBookingModalOpen(false)}
+        expert={{
+          id: expert.id,
+          name: expert.name,
+          title: expert.title,
+          image: expert.image,
+        }}
+        services={expert.services}
+        selectedService={selectedService}
+      />
     </div>
   )
 }

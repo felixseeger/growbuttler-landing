@@ -1,3 +1,4 @@
+
 'use client'
 
 import { Suspense, useState, useRef, DragEvent } from 'react'
@@ -423,4 +424,3 @@ export default function NewJournalEntryPage() {
   )
 }
 
-export const dynamic = 'force-dynamic'

@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server'
 import { sendEmail } from '@/lib/email'
 
+export const dynamic = 'force-dynamic'
+
 export async function POST(request: Request) {
   try {
     const formData = await request.formData()
@@ -21,8 +23,10 @@ export async function POST(request: Request) {
     const successStories = formData.get('successStories') as string
     const availableTimes = JSON.parse(formData.get('availableTimes') as string)
 
-    // Get portfolio images
-    const portfolioFiles = formData.getAll('portfolioImages') as File[]
+    // Get portfolio image URLs (already uploaded)
+    const portfolioImageUrls = formData.get('portfolioImageUrls')
+      ? JSON.parse(formData.get('portfolioImageUrls') as string)
+      : []
 
     if (!email || !password || !name) {
       return NextResponse.json(
@@ -89,7 +93,8 @@ export async function POST(request: Request) {
       available_interview_times: availableTimes.join(','),
       application_status: 'pending_review',
       application_date: new Date().toISOString(),
-      portfolio_image_count: portfolioFiles.length,
+      portfolio_image_count: portfolioImageUrls.length,
+      portfolio_images: portfolioImageUrls.join(','), // Store image URLs
     }
 
     // Update user meta
@@ -121,7 +126,7 @@ export async function POST(request: Request) {
 
     // Step 4: Send notification to admin
     await sendEmail({
-      to: 'felix@felixseeger.de',
+      to: process.env.ADMIN_EMAIL || 'felixseeger@googlemail.com',
       subject: `New Expert Application: ${name} (${location})`,
       templateType: 'expert_application_admin',
       data: {
@@ -132,7 +137,8 @@ export async function POST(request: Request) {
         specializations: specialization.join(', '),
         serviceRate,
         availableInterviewTimes: availableTimes.join(', '),
-        portfolioImagesCount: portfolioFiles.length,
+        portfolioImagesCount: portfolioImageUrls.length,
+        portfolioImageUrls: portfolioImageUrls.slice(0, 3).join('\n'), // First 3 URLs
       },
     })
 

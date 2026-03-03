@@ -36,26 +36,8 @@
   text-align: center;
 }
 
-.logo {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  color: var(--color-text-main);
-  text-decoration: none;
-  font-weight: 700;
-  font-size: 1.25rem;
-  font-family: var(--font-serif);
-  letter-spacing: -0.025em;
-  transition: opacity 0.2s;
-
-  &:hover {
-    opacity: 0.8;
-  }
-
-  span:first-child {
-    font-size: 2rem;
-    color: var(--color-primary);
-  }
+.centeredBranding {
+  justify-content: center;
 }
 
 .content {

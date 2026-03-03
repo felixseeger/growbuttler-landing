@@ -1,10 +1,9 @@
-import { NextResponse } from 'next/server'
-import { createToken, verifyWordPressCredentials } from '@/lib/auth'
+import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
+import { verifyWordPressCredentials } from '@/lib/auth'
+import { createToken } from '@/lib/auth'
 
-export const dynamic = 'force-dynamic'
-
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const { email, password } = await request.json()
 

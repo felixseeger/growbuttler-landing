@@ -2,7 +2,14 @@ import { Resend } from 'resend'
 
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null
 
-export type EmailTemplateType = 'welcome' | 'expert_application_received' | 'expert_application_admin' | 'expert_approved'
+export type EmailTemplateType =
+  | 'welcome'
+  | 'expert_application_received'
+  | 'expert_application_admin'
+  | 'expert_approved'
+  | 'booking_confirmation_customer'
+  | 'booking_notification_expert'
+  | 'booking_notification_admin'
 
 interface EmailParams {
   to: string
@@ -89,6 +96,71 @@ function getEmailTemplate(
         text: `Congratulations! Your expert application has been approved.\n\nYour profile is now live: ${baseUrl}/expert/${data.expertId}`,
       }
 
+    case 'booking_confirmation_customer':
+      return {
+        html: `
+          <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 12px;">
+            <h1 style="color: #13ec3b;">🗓️ Booking Confirmed!</h1>
+            <p>Hi ${data.customerName},</p>
+            <p>Your consultation with <strong>${data.expertName}</strong> has been confirmed.</p>
+            <div style="background: #f9fafb; padding: 20px; border-radius: 8px; margin: 20px 0;">
+              <p style="margin: 5px 0;"><strong>📅 Date:</strong> ${data.bookingDate}</p>
+              <p style="margin: 5px 0;"><strong>🕐 Time:</strong> ${data.bookingTime}</p>
+              <p style="margin: 5px 0;"><strong>👤 Expert:</strong> ${data.expertName}</p>
+              ${data.notes ? `<p style="margin: 5px 0;"><strong>📝 Notes:</strong> ${data.notes}</p>` : ''}
+            </div>
+            <p>You'll receive a reminder 24 hours before your consultation.</p>
+            <div style="margin: 30px 0;">
+              <a href="${baseUrl}/dashboard" style="background: #13ec3b; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold;">View Dashboard</a>
+            </div>
+            <p style="color: #6b7280; font-size: 14px;">Best regards,<br/>The GrowButtler Team</p>
+          </div>
+        `,
+        text: `Booking Confirmed!\n\nHi ${data.customerName},\n\nYour consultation with ${data.expertName} has been confirmed.\n\nDate: ${data.bookingDate}\nTime: ${data.bookingTime}\n\nView dashboard: ${baseUrl}/dashboard`,
+      }
+
+    case 'booking_notification_expert':
+      return {
+        html: `
+          <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 12px;">
+            <h1 style="color: #13ec3b;">📅 New Booking</h1>
+            <p>Hi ${data.expertName},</p>
+            <p>You have a new consultation booking!</p>
+            <div style="background: #f9fafb; padding: 20px; border-radius: 8px; margin: 20px 0;">
+              <p style="margin: 5px 0;"><strong>👤 Customer:</strong> ${data.customerName}</p>
+              <p style="margin: 5px 0;"><strong>📧 Email:</strong> ${data.customerEmail}</p>
+              <p style="margin: 5px 0;"><strong>📞 Phone:</strong> ${data.customerPhone}</p>
+              <p style="margin: 5px 0;"><strong>📅 Date:</strong> ${data.bookingDate}</p>
+              <p style="margin: 5px 0;"><strong>🕐 Time:</strong> ${data.bookingTime}</p>
+              ${data.notes ? `<p style="margin: 10px 0 5px;"><strong>📝 Customer Notes:</strong><br/>${data.notes}</p>` : ''}
+            </div>
+            <p>Please reach out to confirm the consultation details.</p>
+            <p style="color: #6b7280; font-size: 14px;">Best regards,<br/>The GrowButtler Team</p>
+          </div>
+        `,
+        text: `New Booking!\n\nHi ${data.expertName},\n\nCustomer: ${data.customerName}\nEmail: ${data.customerEmail}\nPhone: ${data.customerPhone}\nDate: ${data.bookingDate}\nTime: ${data.bookingTime}\n${data.notes ? `Notes: ${data.notes}` : ''}`,
+      }
+
+    case 'booking_notification_admin':
+      return {
+        html: `
+          <div style="font-family: sans-serif; padding: 20px; border: 1px solid #e5e7eb;">
+            <h2>New Booking Created</h2>
+            <p><strong>Booking ID:</strong> ${data.bookingId}</p>
+            <p><strong>Expert:</strong> ${data.expertName}</p>
+            <p><strong>Customer:</strong> ${data.customerName}</p>
+            <p><strong>Email:</strong> ${data.customerEmail}</p>
+            <p><strong>Phone:</strong> ${data.customerPhone}</p>
+            <p><strong>Date:</strong> ${data.bookingDate}</p>
+            <p><strong>Time:</strong> ${data.bookingTime}</p>
+            ${data.notes ? `<p><strong>Notes:</strong> ${data.notes}</p>` : ''}
+            <hr/>
+            <a href="${process.env.BACKEND_URL}/wp-admin/edit.php?post_type=booking">View in WordPress</a>
+          </div>
+        `,
+        text: `New Booking: ${data.customerName} with ${data.expertName} on ${data.bookingDate} at ${data.bookingTime}`,
+      }
+
     default:
       return {
         html: '<p>GrowButtler notification</p>',
@@ -98,15 +170,24 @@ function getEmailTemplate(
 }
 
 export async function sendEmail({ to, subject, templateType, data = {} }: EmailParams) {
+  const { html, text } = getEmailTemplate(templateType, data)
+
   if (!resend) {
-    console.log('--- EMAIL MOCK (NO API KEY) ---')
-    console.log(`To: ${to}`)
-    console.log(`Subject: ${subject}`)
-    console.log('------------------------------')
+    console.log('\n' + '='.repeat(80))
+    console.log('📧 EMAIL MOCK MODE (RESEND_API_KEY not configured)')
+    console.log('='.repeat(80))
+    console.log(`📨 To: ${to}`)
+    console.log(`📋 Subject: ${subject}`)
+    console.log(`🏷️  Template: ${templateType}`)
+    console.log('-'.repeat(80))
+    console.log('📝 Plain Text Content:')
+    console.log(text)
+    console.log('-'.repeat(80))
+    console.log('💡 To send real emails, add RESEND_API_KEY to .env.local')
+    console.log('   See EMAIL_SETUP.md for instructions')
+    console.log('='.repeat(80) + '\n')
     return { success: true, mocked: true }
   }
-
-  const { html, text } = getEmailTemplate(templateType, data)
 
   // Use onboarding@resend.dev as fallback if domain is not verified
   // Once domain is verified, use noreply@felixseeger.de

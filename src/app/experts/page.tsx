@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import SubpageLayout from '@/components/SubpageLayout/SubpageLayout'
 import { getExpertsContent, getExpertsPageData } from '@/lib/wordpress'
+import ExpertsClient from './ExpertsClient'
 import styles from './ExpertsPage.module.scss'
-import Image from 'next/image'
 
 export const metadata: Metadata = {
   title: 'GrowButler - Expert Directory',
@@ -77,95 +77,9 @@ export default async function ExpertsPage() {
             </div>
           </div>
 
-          <div className={styles.filtersBar}>
-            <div className={styles.search}>
-              <span className="material-symbols-outlined">search</span>
-              <input type="text" placeholder="Search by name, location, or keyword..." />
-            </div>
-            <div className={styles.chips}>
-              <button>Specialty <span className="material-symbols-outlined">expand_more</span></button>
-              <button>Price <span className="material-symbols-outlined">expand_more</span></button>
-              <button>Availability <span className="material-symbols-outlined">expand_more</span></button>
-            </div>
-          </div>
         </header>
 
-        <div className={styles.layout}>
-          <div className={styles.resultsSide}>
-            <div className={styles.resultsHeader}>
-              <h3>Top Experts in Berlin</h3>
-              <span className={styles.count}>12 Results</span>
-            </div>
-
-            <div className={styles.grid}>
-              {visibleExperts.map((expert, i) => (
-                <div key={i} className={styles.card}>
-                  <div className={styles.cardHeader}>
-                    <div className={styles.expertBrief}>
-                      <div className={styles.avatarWrap}>
-                        <Image 
-                          src={expert.avatar as string || 'https://lh3.googleusercontent.com/aida-public/AB6AXuAG6ZYFYopok3wpRZVkSy6v_dg33oo9RYzfGi8bDkC40Ee3W1e9m_4AzeN0QBIXEe9-r26YtOYud3jLKSdVcQ6K5a6_UH5orU_1_1gvaauehdtu9ESsWGMG-Yhe-HbXtd7I2DD1bkNpQU03xNkGuCV5zcoYhRdRIoz47sxuflH-XalvqJd1-17wkztxdLtckzpsKxsDXxsHWEfwlRTuv7z3X9fbX-z_rPD723z-QIGhgjeEcwrAR_KzNW6TFkdtlrRoR5SS60wUYnTF'} 
-                          alt={expert.name as string}
-                          width={64}
-                          height={64}
-                          className={styles.avatar}
-                          unoptimized
-                        />
-                        {!!expert.is_verified && <span className={styles.verifiedIcon}><span className="material-symbols-outlined">verified</span></span>}
-                      </div>
-                      <div className={styles.meta}>
-                        <h4>{expert.name as string}</h4>
-                        <div className={styles.rating}>
-                          <span className="material-symbols-outlined">star</span>
-                          <strong>{expert.rating as string}</strong>
-                          <span>({expert.reviews_count as number} reviews)</span>
-                        </div>
-                        <p className={styles.loc}>
-                          <span className="material-symbols-outlined">location_on</span>
-                          {expert.location as string}
-                        </p>
-                      </div>
-                    </div>
-                    <div className={styles.price}>
-                      <strong>€{expert.price_amount as number}</strong>
-                      <span>{expert.price_unit as string}</span>
-                    </div>
-                  </div>
-
-                  <div className={styles.tags}>
-                    {asArray<{item: string}>(expert.tags).map((tag, j) => (
-                      <span key={j} className={styles.tag}>{tag.item}</span>
-                    ))}
-                  </div>
-
-                  <p className={styles.bio}>{expert.bio_snippet as string}</p>
-
-                  <div className={styles.actions}>
-                    <button className={styles.btnSec}>View Profile</button>
-                    <button className={styles.btnPri}>Book Now</button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <aside className={styles.mapSide}>
-            <div className={styles.mapWrap}>
-              <div className={styles.mapOverlay}>
-                <div className={styles.mapTitle}>Expert Map</div>
-              </div>
-              <div className={styles.mapImage} />
-              
-              {/* Fake pins */}
-              <div className={styles.pin} style={{ top: '35%', left: '45%' }}>
-                <div className={styles.pinIcon}><span className="material-symbols-outlined">spa</span></div>
-              </div>
-              <div className={styles.pin} style={{ top: '55%', left: '30%' }}>
-                <div className={`${styles.pinIcon} ${styles.pinSec}`}><span className="material-symbols-outlined">water_drop</span></div>
-              </div>
-            </div>
-          </aside>
-        </div>
+        <ExpertsClient initialExperts={visibleExperts as any} />
       </div>
     </SubpageLayout>
   )

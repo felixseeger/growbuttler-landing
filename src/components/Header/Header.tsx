@@ -1,9 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import Link from 'next/link'
-import Image from 'next/image'
 import styles from './Header.module.scss'
+import Branding from '@/components/Branding/Branding'
 
 interface NavLink {
   label: string
@@ -34,7 +33,7 @@ const normalizeCtaLabel = (label: string): string => {
 }
 
 export default function Header({
-  logoLabel = 'GrowButler',
+  logoLabel = 'GrowButtler',
   logoImage = null,
   logoIcon = 'spa',
   links = defaultLinks,
@@ -51,21 +50,12 @@ export default function Header({
   return (
     <nav className={styles.nav}>
       <div className={styles.inner}>
-        <Link href="/" className={styles.logo} onClick={closeMobileMenu}>
-          {logoImage ? (
-            <Image
-              src={logoImage}
-              alt={logoLabel || 'Logo'}
-              width={40}
-              height={40}
-              className={styles.logoImg}
-              unoptimized
-            />
-          ) : (
-            <span className={styles.logoIcon} aria-hidden>{logoIcon}</span>
-          )}
-          <span className={styles.logoText}>{logoLabel}</span>
-        </Link>
+        <Branding 
+          logoLabel={logoLabel}
+          logoImage={logoImage}
+          logoIcon={logoIcon}
+          onClick={closeMobileMenu}
+        />
         <div className={styles.links}>
           {safeLinks.map((item) => (
             <Link key={item.label} href={item.url} className={styles.link}>

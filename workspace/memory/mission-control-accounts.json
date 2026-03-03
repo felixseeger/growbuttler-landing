@@ -1,0 +1,27 @@
+{
+  "expert_accounts": [
+    {
+      "name": "Expert One",
+      "username": "expert1_growbuttler",
+      "email": "felixseeger+expert1@googlemail.com",
+      "password": "PasswordExpert1_2026!",
+      "role": "contributor"
+    },
+    {
+      "name": "Expert Two",
+      "username": "expert2_growbuttler",
+      "email": "felixseeger+expert2@googlemail.com",
+      "password": "PasswordExpert2_2026!",
+      "role": "contributor"
+    },
+    {
+      "name": "Master Growbuttler",
+      "username": "master_growbuttler",
+      "email": "felixseeger+master@googlemail.com",
+      "password": "PasswordMaster_2026!",
+      "role": "contributor"
+    }
+  ],
+  "mission_control_status": "localhost:4000 unreachable via curl (sandbox restriction or server down). Data stored here for Mission Control ingestion.",
+  "timestamp": "2026-03-02T13:59:30Z"
+}

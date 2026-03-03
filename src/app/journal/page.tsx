@@ -1,3 +1,4 @@
+
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import SubpageLayout from '@/components/SubpageLayout/SubpageLayout'
@@ -146,4 +147,3 @@ export default async function JournalPage() {
   )
 }
 
-export const dynamic = 'force-dynamic'

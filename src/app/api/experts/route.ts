@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server'
 
+export const dynamic = 'force-dynamic'
+
 const WORDPRESS_API = process.env.WORDPRESS_API_URL || 'https://growbuttler-back.felixseeger.de/wp-json'
 const APP_PASSWORD = process.env.WORDPRESS_APP_PASSWORD
 

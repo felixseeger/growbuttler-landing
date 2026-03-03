@@ -1,0 +1,614 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+.modal {
+  background: white;
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  border-radius: 1.5rem 1.5rem 0 0;
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 0.3s ease-out;
+
+  @keyframes slideUp {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  @media (min-width: 768px) {
+    border-radius: 1.5rem;
+    max-height: 85vh;
+    margin: 2rem;
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
+  flex-shrink: 0;
+}
+
+.headerContent {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+}
+
+.backBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: #f1f5f9;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background: #e2e8f0;
+    color: #334155;
+  }
+
+  span {
+    font-size: 1.25rem;
+  }
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0;
+  color: #1e293b;
+}
+
+.closeBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background: #f1f5f9;
+    color: #64748b;
+  }
+
+  span {
+    font-size: 1.25rem;
+  }
+}
+
+.progressBar {
+  height: 4px;
+  background: #f1f5f9;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.progress {
+  height: 100%;
+  background: var(--color-primary);
+  transition: width 0.3s ease-out;
+}
+
+.expertInfo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+  flex-shrink: 0;
+}
+
+.expertAvatar {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+  border: 2px solid white;
+}
+
+.expertName {
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+.expertTitle {
+  font-size: 0.75rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+  }
+}
+
+/* Step 1: Service Selection */
+.servicesList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.serviceCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    border-color: rgba(19, 236, 59, 0.3);
+    background: rgba(19, 236, 59, 0.02);
+  }
+
+  &.selected {
+    border-color: var(--color-primary);
+    background: rgba(19, 236, 59, 0.05);
+  }
+}
+
+.serviceIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: rgba(19, 236, 59, 0.1);
+  color: var(--color-primary);
+  flex-shrink: 0;
+
+  span {
+    font-size: 1.25rem;
+  }
+}
+
+.serviceInfo {
+  flex: 1;
+  padding: 0 1rem;
+}
+
+.serviceTitle {
+  font-weight: 700;
+  font-size: 0.875rem;
+  color: #1e293b;
+  margin: 0 0 0.25rem;
+}
+
+.serviceDesc {
+  font-size: 0.75rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.servicePrice {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.price {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #1e293b;
+  margin: 0;
+}
+
+.unit {
+  font-size: 0.625rem;
+  color: #94a3b8;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Step 2: Date & Time Selection */
+.dateTimeSection {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.selectedSummary {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: #f8fafc;
+  border-radius: 0.75rem;
+  border: 1px solid #e2e8f0;
+
+  span.material-symbols-outlined {
+    color: var(--color-primary);
+    font-size: 1.5rem;
+  }
+}
+
+.summaryTitle {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: #1e293b;
+  margin: 0;
+}
+
+.summaryPrice {
+  font-size: 0.75rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.dateSelection,
+.timeSelection {
+  h3 {
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #64748b;
+    margin: 0 0 1rem;
+  }
+}
+
+.dateGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+  gap: 0.75rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+}
+
+.dateButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.75rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 0.75rem;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 70px;
+
+  &:hover {
+    border-color: rgba(19, 236, 59, 0.3);
+    background: rgba(19, 236, 59, 0.02);
+  }
+
+  &.selected {
+    border-color: var(--color-primary);
+    background: rgba(19, 236, 59, 0.1);
+
+    .dateDay,
+    .dateNumber,
+    .dateMonth {
+      color: var(--color-primary);
+    }
+
+    .dateNumber {
+      font-weight: 700;
+    }
+  }
+}
+
+.dateDay {
+  font-size: 0.625rem;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.25rem;
+}
+
+.dateNumber {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 0.25rem;
+}
+
+.dateMonth {
+  font-size: 0.625rem;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+.timeGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 0.5rem;
+}
+
+.timeButton {
+  padding: 0.75rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 0.5rem;
+  background: white;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #1e293b;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover:not(:disabled) {
+    border-color: rgba(19, 236, 59, 0.3);
+    background: rgba(19, 236, 59, 0.02);
+  }
+
+  &.selected {
+    border-color: var(--color-primary);
+    background: rgba(19, 236, 59, 0.1);
+    color: var(--color-primary);
+    font-weight: 700;
+  }
+
+  &.unavailable {
+    background: #f8fafc;
+    color: #cbd5e1;
+    cursor: not-allowed;
+    border-color: #f1f5f9;
+  }
+}
+
+/* Step 3: Details Form */
+.detailsForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.bookingSummary {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: #f8fafc;
+  border-radius: 0.75rem;
+  border: 1px solid #e2e8f0;
+}
+
+.summaryRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+  color: #334155;
+
+  span.material-symbols-outlined {
+    color: var(--color-primary);
+    font-size: 1.25rem;
+  }
+}
+
+.error {
+  padding: 0.75rem 1rem;
+  background: #fee;
+  border: 1px solid #fcc;
+  border-radius: 0.5rem;
+  color: #c33;
+  font-size: 0.875rem;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #334155;
+  }
+
+  input,
+  textarea {
+    padding: 0.75rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    font-family: inherit;
+    transition: all 0.2s;
+
+    &:focus {
+      outline: none;
+      border-color: var(--color-primary);
+    }
+
+    &::placeholder {
+      color: #cbd5e1;
+    }
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+}
+
+.submitBtn {
+  width: 100%;
+  padding: 1rem;
+  background: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: 0.75rem;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 0.5rem;
+
+  &:hover:not(:disabled) {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+/* Step 4: Confirmation */
+.confirmation {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.confirmIcon {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  background: rgba(19, 236, 59, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+
+  span {
+    font-size: 3rem;
+    color: var(--color-primary);
+  }
+}
+
+.confirmation h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 0.75rem;
+}
+
+.confirmMessage {
+  font-size: 0.875rem;
+  color: #64748b;
+  line-height: 1.6;
+  margin: 0 0 2rem;
+}
+
+.confirmDetails {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: #f8fafc;
+  border-radius: 0.75rem;
+  border: 1px solid #e2e8f0;
+  margin-bottom: 2rem;
+}
+
+.confirmRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  text-align: left;
+
+  span.material-symbols-outlined {
+    color: var(--color-primary);
+    font-size: 1.5rem;
+    margin-top: 0.125rem;
+  }
+}
+
+.confirmLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #94a3b8;
+  margin: 0 0 0.25rem;
+}
+
+.confirmValue {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0;
+}
+
+.doneBtn {
+  width: 100%;
+  padding: 1rem;
+  background: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: 0.75rem;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    opacity: 0.9;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
