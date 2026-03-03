@@ -31,42 +31,42 @@ export default async function ExpertsPage() {
   // Default experts from design if WordPress is empty
   const visibleExperts = experts.length > 0 ? experts : [
     {
-      id: 1,
-      name: 'Hanna K.',
-      is_verified: true,
-      rating: '4.9',
-      reviews_count: 128,
-      location: 'Berlin, Mitte',
-      price_amount: 45,
-      price_unit: '/hr',
-      tags: [{ item: 'Living Soil' }, { item: 'Organic' }, { item: 'Indoor' }],
-      bio_snippet: 'Specializing in organic regenerative soil practices for small-space urban grows. Let\'s build a sustainable ecosystem.',
-      avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop'
-    },
-    {
-      id: 2,
-      name: 'Marco R.',
+      id: 257,
+      name: 'Master Growbuttler',
       is_verified: true,
       rating: '5.0',
-      reviews_count: 42,
-      location: 'Munich, Altstadt',
-      price_amount: 60,
+      reviews_count: 342,
+      location: 'Berlin, Kreuzberg',
+      price_amount: 85,
       price_unit: '/hr',
-      tags: [{ item: 'Hydroponics' }, { item: 'Tech Setup' }, { item: 'DWC' }],
-      bio_snippet: 'Master of DWC and automated systems. I help you dial in your environment for maximum yield and efficiency.',
+      tags: [{ item: 'Pro Grow' }, { item: 'Large Scale' }, { item: 'Master' }],
+      bio_snippet: 'Certified master grower for industrial and boutique setups. Specializing in high-yield optimization and automated environmental control.',
       avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop'
     },
     {
-      id: 3,
-      name: 'Sophie T.',
+      id: 256,
+      name: 'Expert Two',
       is_verified: true,
       rating: '4.8',
       reviews_count: 89,
-      location: 'Hamburg, Altona',
-      price_amount: 35,
+      location: 'Berlin, Neukölln',
+      price_amount: 55,
       price_unit: '/hr',
-      tags: [{ item: 'Pest Control' }, { item: 'Cloning' }],
-      bio_snippet: 'Expert in biological pest management and high-success cloning techniques. Keep your garden healthy and productive.',
+      tags: [{ item: 'Cloning' }, { item: 'Mother Plants' }],
+      bio_snippet: 'Focusing on genetics and plant health. I help you maintain a healthy mother garden and ensure 100% clone success rates.',
+      avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop'
+    },
+    {
+      id: 255,
+      name: 'Expert One',
+      is_verified: true,
+      rating: '4.9',
+      reviews_count: 156,
+      location: 'Berlin, Mitte',
+      price_amount: 45,
+      price_unit: '/hr',
+      tags: [{ item: 'Living Soil' }, { item: 'Organic' }],
+      bio_snippet: 'Specializing in organic regenerative soil practices for small-space urban grows. Let\'s build a sustainable ecosystem.',
       avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop'
     }
   ]
