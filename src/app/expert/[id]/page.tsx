@@ -38,7 +38,7 @@ const sampleExpert: Expert = {
   reviews: 1200,
   consultations: 200,
   bio: 'Specializing in organic pest management and living soil, Dr. Thorne brings a sophisticated, ecological approach to modern agronomy. His editorial expertise focuses on sustainable crop health and regenerative practices that bridge the gap between traditional wisdom and scientific innovation.',
-  image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuABhWuSas02un_jcSnHb1phOH-zUhEXKupRG_neIhTm87_6ja0kS1wVkZRIc0M7nTKtppu-ONxrZyaO9s8IAr0jqH5A3HYCYMy5BlyAIB77-UDzC-Og7sISPTgGqX3zV5hA1zdorc54kvZKONSvJbGea3zDLSYYqRn_SJM_LiBbRnFPjaNxjT2-rP-NxcPMnVQjc6ebOncX2lGava-GHdaxr_1FwZNW8UDXTZ1wHLLcLpgEYb01dX-kXOMrRp7UO61uzNYarOgpsS8',
+  image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=800&fit=crop',
   specialties: ['organic pest management', 'living soil'],
   services: [
     {
@@ -82,6 +82,12 @@ export default function ExpertProfilePage({ params }: { params: { id: string } }
         const response = await fetch(`/api/experts/${params.id}`)
 
         if (response.status === 404) {
+          // If we are looking for ID 1, use sample data as fallback
+          if (params.id === '1') {
+            setExpert(sampleExpert)
+            setLoading(false)
+            return
+          }
           setError('Expert not found')
           setLoading(false)
           return

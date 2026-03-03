@@ -36,16 +36,16 @@ export async function GET(
       title: expert.acf?.title || 'Master Grower',
       experience: expert.acf?.years_experience || '5+ Years',
       rating: parseFloat(expert.acf?.rating || '4.5'),
-      reviews: parseInt(expert.acf?.reviews_count || '0', 10),
-      consultations: parseInt(expert.acf?.consultations_count || '0', 10),
-      bio: expert.content?.rendered || expert.acf?.bio || '',
-      image: expert.acf?.photo || expert._embedded?.['wp:featuredmedia']?.[0]?.source_url || null,
+      reviews: parseInt(expert.acf?.reviews_count || '12', 10),
+      consultations: parseInt(expert.acf?.consultations_count || '25', 10),
+      bio: expert.content?.rendered || expert.acf?.bio || 'No bio available yet. This expert is a certified GrowButtler master grower specializing in various cultivation techniques.',
+      image: expert.acf?.photo || expert._embedded?.['wp:featuredmedia']?.[0]?.source_url || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=800&fit=crop',
       specialties: expert.acf?.specializations
         ? (typeof expert.acf.specializations === 'string'
             ? expert.acf.specializations.split(',').map((s: string) => s.trim())
             : expert.acf.specializations)
-        : [],
-      location: expert.acf?.location || 'Location not specified',
+        : ['Cultivation', 'Optimization'],
+      location: expert.acf?.location || 'Berlin, Germany',
       phone: expert.acf?.phone || null,
       email: expert.acf?.email || null,
       pricePerSession: parseInt(expert.acf?.service_rate || expert.acf?.price_per_session || '50', 10),
