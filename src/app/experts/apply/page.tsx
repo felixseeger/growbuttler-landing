@@ -168,8 +168,30 @@ export default function ExpertApplyPage() {
   const handleSubmitApplication = async () => {
     setIsLoading(true)
     try {
+      // Step 1: Upload portfolio images
+      const uploadedImageUrls: string[] = []
+
+      for (const file of formData.portfolioImages) {
+        const imageFormData = new FormData()
+        imageFormData.append('file', file)
+
+        const uploadRes = await fetch('/api/upload-image', {
+          method: 'POST',
+          credentials: 'include',
+          body: imageFormData,
+        })
+
+        if (uploadRes.ok) {
+          const uploadData = await uploadRes.json()
+          uploadedImageUrls.push(uploadData.url)
+        } else {
+          console.error('Image upload failed for:', file.name)
+        }
+      }
+
+      // Step 2: Submit application with image URLs
       const formDataToSend = new FormData()
-      
+
       // Add text fields
       formDataToSend.append('name', formData.name)
       formDataToSend.append('email', formData.email)
@@ -185,11 +207,7 @@ export default function ExpertApplyPage() {
       formDataToSend.append('serviceRate', formData.serviceRate)
       formDataToSend.append('successStories', formData.successStories)
       formDataToSend.append('availableTimes', JSON.stringify(formData.availableTimes))
-
-      // Add files
-      formData.portfolioImages.forEach((file, index) => {
-        formDataToSend.append(`portfolioImages`, file)
-      })
+      formDataToSend.append('portfolioImageUrls', JSON.stringify(uploadedImageUrls))
 
       const response = await fetch('/api/experts/apply', {
         method: 'POST',
@@ -203,7 +221,7 @@ export default function ExpertApplyPage() {
       }
 
       // Success - show confirmation
-      alert('Application submitted! Check your email for confirmation.')
+      alert('Application submitted successfully! Check your email for confirmation.')
       window.location.href = '/experts'
     } catch (err: any) {
       setError(err.message || 'An error occurred. Please try again.')
@@ -220,7 +238,7 @@ export default function ExpertApplyPage() {
           <Link href="/experts" className={styles.backBtn}>
             <span className="material-symbols-outlined">arrow_back</span>
           </Link>
-          <h1>Become a Master Grower</h1>
+          <h1>Become a Growing Expert</h1>
           <div className={styles.progressBar}>
             <div
               className={styles.progress}
@@ -493,7 +511,7 @@ export default function ExpertApplyPage() {
             <section className={styles.section}>
               <h2>Schedule Your Interview</h2>
               <p className={styles.sectionDesc}>
-                All experts must complete a video interview with our master growers before approval
+                All experts must complete a video interview with our growing experts before approval
               </p>
 
               <div className={styles.interviewInfo}>
