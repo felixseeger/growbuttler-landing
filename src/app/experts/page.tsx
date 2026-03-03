@@ -31,6 +31,7 @@ export default async function ExpertsPage() {
   // Default experts from design if WordPress is empty
   const visibleExperts = experts.length > 0 ? experts : [
     {
+      id: 1,
       name: 'Hanna K.',
       is_verified: true,
       rating: '4.9',
@@ -40,9 +41,10 @@ export default async function ExpertsPage() {
       price_unit: '/hr',
       tags: [{ item: 'Living Soil' }, { item: 'Organic' }, { item: 'Indoor' }],
       bio_snippet: 'Specializing in organic regenerative soil practices for small-space urban grows. Let\'s build a sustainable ecosystem.',
-      avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCnY8sRuovGvR7FdRY0a8Gp6w2HV295_oVPhyw2VM332K_2OXDfMBnV_i6C35tzoanCVWK46FZYJcFPIwEDBcMYnQ4QJu6MzcUip7jogle65qEri-CRusRQtUafB2eVUt9rB05_G4TN2fa86ZZM70H9-O4hZRTLj_ufkQmf_TEJP7EO9rbiUcatkl34i-dfoqL5BQ5gPTVkwTD7GIkToiltV5QWIzsDBNiih0QlUshinrOS5GxU-LFRnyIKq1PGHhqSJY7CdFNS51dX'
+      avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop'
     },
     {
+      id: 2,
       name: 'Marco R.',
       is_verified: true,
       rating: '5.0',
@@ -50,9 +52,22 @@ export default async function ExpertsPage() {
       location: 'Munich, Altstadt',
       price_amount: 60,
       price_unit: '/hr',
-      tags: [{ item: 'Hydroponics' }, { item: 'Tech Setup' }],
+      tags: [{ item: 'Hydroponics' }, { item: 'Tech Setup' }, { item: 'DWC' }],
       bio_snippet: 'Master of DWC and automated systems. I help you dial in your environment for maximum yield and efficiency.',
-      avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC4ETIDOhlgqNg2Fa99bALyHDze867NEb1mvemUiDtPcnsysi-MyEgWEpTFsOgG2ZodyHzuao4FjhcrfV314IftqGJhq-EJEmG9A8xcquLbRSRqVY4n8-JdMotkSXq7jirMztRi4Cwk3UeqKby3dYZdXxzxA3e4j7SyarWyVIKQMIjvky07WH7fljMy5VkVnSXPIOJ7ls2a3LieU7lLKaAU_38mu0hz4wVRq9cVV1TEDyZn72LKl5CfQFRQl6ts2x4CkJVWh9Q2mJek'
+      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop'
+    },
+    {
+      id: 3,
+      name: 'Sophie T.',
+      is_verified: true,
+      rating: '4.8',
+      reviews_count: 89,
+      location: 'Hamburg, Altona',
+      price_amount: 35,
+      price_unit: '/hr',
+      tags: [{ item: 'Pest Control' }, { item: 'Cloning' }],
+      bio_snippet: 'Expert in biological pest management and high-success cloning techniques. Keep your garden healthy and productive.',
+      avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop'
     }
   ]
 

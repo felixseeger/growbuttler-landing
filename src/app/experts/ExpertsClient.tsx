@@ -24,11 +24,12 @@ interface ExpertsClientProps {
 }
 
 export default function ExpertsClient({ initialExperts }: ExpertsClientProps) {
-  const [experts, setExperts] = useState<Expert[]>(initialExperts)
+  const [experts] = useState<Expert[]>(initialExperts)
   const [filteredExperts, setFilteredExperts] = useState<Expert[]>(initialExperts)
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedSpecialty, setSelectedSpecialty] = useState<string | null>(null)
   const [priceRange, setPriceRange] = useState<string | null>(null)
+  const [activeDropdown, setActiveDropdown] = useState<'specialty' | 'price' | null>(null)
 
   // Extract unique specialties from all experts
   const allSpecialties = Array.from(
@@ -80,6 +81,12 @@ export default function ExpertsClient({ initialExperts }: ExpertsClientProps) {
     setFilteredExperts(filtered)
   }, [searchQuery, selectedSpecialty, priceRange, experts])
 
+  const toggleDropdown = (name: 'specialty' | 'price') => {
+    setActiveDropdown(activeDropdown === name ? null : name)
+  }
+
+  const closeDropdowns = () => setActiveDropdown(null)
+
   return (
     <>
       {/* Search and Filters */}
@@ -94,52 +101,28 @@ export default function ExpertsClient({ initialExperts }: ExpertsClientProps) {
           />
         </div>
         <div className={styles.chips}>
-          <div style={{ position: 'relative' }}>
-            <button onClick={() => {
-              const next = selectedSpecialty ? null : (allSpecialties[0] || null)
-              setSelectedSpecialty(next)
-            }}>
-              Specialty <span className="material-symbols-outlined">expand_more</span>
+          {/* Specialty Filter */}
+          <div className={styles.filterGroup}>
+            <button 
+              className={selectedSpecialty ? styles.active : ''}
+              onClick={() => toggleDropdown('specialty')}
+            >
+              {selectedSpecialty || 'Specialty'} 
+              <span className="material-symbols-outlined">expand_more</span>
             </button>
-            {allSpecialties.length > 0 && (
-              <div style={{
-                position: 'absolute',
-                top: '100%',
-                left: 0,
-                background: 'white',
-                border: '1px solid #ddd',
-                borderRadius: '8px',
-                marginTop: '0.5rem',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-                zIndex: 10,
-                minWidth: '180px',
-                display: 'none'
-              }} className={styles.dropdown}>
+            {activeDropdown === 'specialty' && (
+              <div className={styles.dropdown}>
                 <button
-                  onClick={() => setSelectedSpecialty(null)}
-                  style={{
-                    width: '100%',
-                    textAlign: 'left',
-                    padding: '0.75rem 1rem',
-                    border: 'none',
-                    background: selectedSpecialty === null ? '#f3f4f6' : 'transparent',
-                    cursor: 'pointer'
-                  }}
+                  className={selectedSpecialty === null ? styles.selected : ''}
+                  onClick={() => { setSelectedSpecialty(null); closeDropdowns() }}
                 >
                   All Specialties
                 </button>
                 {allSpecialties.map(specialty => (
                   <button
                     key={specialty}
-                    onClick={() => setSelectedSpecialty(specialty)}
-                    style={{
-                      width: '100%',
-                      textAlign: 'left',
-                      padding: '0.75rem 1rem',
-                      border: 'none',
-                      background: selectedSpecialty === specialty ? '#f3f4f6' : 'transparent',
-                      cursor: 'pointer'
-                    }}
+                    className={selectedSpecialty === specialty ? styles.selected : ''}
+                    onClick={() => { setSelectedSpecialty(specialty); closeDropdowns() }}
                   >
                     {specialty}
                   </button>
@@ -147,13 +130,35 @@ export default function ExpertsClient({ initialExperts }: ExpertsClientProps) {
               </div>
             )}
           </div>
-          <button onClick={() => {
-            const options = ['under-40', '40-60', 'over-60']
-            const current = priceRange ? options.indexOf(priceRange) : -1
-            setPriceRange(current >= 0 && current < options.length - 1 ? options[current + 1] : null)
-          }}>
-            Price {priceRange === 'under-40' ? '< €40' : priceRange === '40-60' ? '€40-60' : priceRange === 'over-60' ? '> €60' : ''} <span className="material-symbols-outlined">expand_more</span>
-          </button>
+
+          {/* Price Filter */}
+          <div className={styles.filterGroup}>
+            <button 
+              className={priceRange ? styles.active : ''}
+              onClick={() => toggleDropdown('price')}
+            >
+              Price {priceRange === 'under-40' ? '< €40' : priceRange === '40-60' ? '€40-60' : priceRange === 'over-60' ? '> €60' : ''} 
+              <span className="material-symbols-outlined">expand_more</span>
+            </button>
+            {activeDropdown === 'price' && (
+              <div className={styles.dropdown}>
+                {[
+                  { label: 'Any Price', value: null },
+                  { label: 'Under €40', value: 'under-40' },
+                  { label: '€40 - €60', value: '40-60' },
+                  { label: 'Over €60', value: 'over-60' }
+                ].map(opt => (
+                  <button
+                    key={opt.label}
+                    className={priceRange === opt.value ? styles.selected : ''}
+                    onClick={() => { setPriceRange(opt.value); closeDropdowns() }}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -170,7 +175,7 @@ export default function ExpertsClient({ initialExperts }: ExpertsClientProps) {
           </div>
 
           {filteredExperts.length === 0 ? (
-            <div style={{ padding: '3rem', textAlign: 'center', color: '#666' }}>
+            <div className={styles.noResults}>
               <p>No experts found matching your criteria.</p>
               <button
                 onClick={() => {
@@ -178,15 +183,7 @@ export default function ExpertsClient({ initialExperts }: ExpertsClientProps) {
                   setSelectedSpecialty(null)
                   setPriceRange(null)
                 }}
-                style={{
-                  marginTop: '1rem',
-                  padding: '0.75rem 1.5rem',
-                  background: 'var(--color-primary)',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '8px',
-                  cursor: 'pointer'
-                }}
+                className={styles.clearFiltersBtn}
               >
                 Clear Filters
               </button>
