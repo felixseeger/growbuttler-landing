@@ -9,7 +9,7 @@ interface BrandingProps {
   logoIcon?: string
   showText?: boolean
   iconSize?: number
-  onClick?: () => void
+  onClick?: (e: React.MouseEvent) => void
 }
 
 export default function Branding({

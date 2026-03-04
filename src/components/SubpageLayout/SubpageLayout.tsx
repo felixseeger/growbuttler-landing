@@ -25,7 +25,7 @@ export default function SubpageLayout({
           {withSidebar && isCollapsed && (
             <div className={styles.topLogoToggle}>
               <Branding 
-                onClick={(e) => {
+                onClick={(e: React.MouseEvent) => {
                   e.preventDefault()
                   toggleCollapse()
                 }}
