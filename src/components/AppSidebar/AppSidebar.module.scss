@@ -121,7 +121,7 @@
   color: var(--color-text-main);
   min-width: 0;
   flex: 1;
-  height: 100%; // Fill parent height
+  height: 100%;
 
   &:hover .logoIcon {
     transform: rotate(12deg);
@@ -161,11 +161,14 @@
   font-size: 1.875rem;
   color: var(--color-primary);
   transition: transform 0.3s;
+  display: flex;
+  align-items: center;
 }
 
 .brandText {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  height: 100%;
 }
 
 .brandTitle {
@@ -177,7 +180,7 @@
   color: var(--color-text-main);
   display: flex;
   align-items: center;
-  margin-top: -2px; // Pull text up slightly for optical alignment with icon center
+  padding-top: 2px; // Optical alignment with material icon center
 }
 
 .brandSub {
