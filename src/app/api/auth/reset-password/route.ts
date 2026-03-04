@@ -18,7 +18,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Password must be at least 8 characters long' }, { status: 400 })
     }
 
-    // 1. Verify the reset token
     let payload
     try {
       const decoded = await jwtVerify(token, JWT_SECRET, { algorithms: ['HS256'] })
@@ -32,22 +31,26 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid reset token' }, { status: 400 })
     }
 
-    // 2. Update the password in WordPress
     const backendUrl = process.env.BACKEND_URL
-    const wpUser = process.env.WORDPRESS_USERNAME
-    const wpPass = process.env.APPLICATION_PASSWORD?.replace(/\s+/g, '')
-    
-    if (!backendUrl || !wpUser || !wpPass) {
+    const username = process.env.WORDPRESS_USERNAME
+    const appPassword = process.env.APPLICATION_PASSWORD
+
+    if (!backendUrl || !username || !appPassword) {
+      console.error('Reset Password - Missing env vars:', { 
+        backendUrl: !!backendUrl, 
+        username: !!username, 
+        appPassword: !!appPassword 
+      })
       return NextResponse.json({ error: 'Backend configuration missing' }, { status: 500 })
     }
 
-    const authHeader = `Basic ${Buffer.from(`${wpUser}:${wpPass}`).toString('base64')}`
+    const auth = Buffer.from(`${username}:${appPassword.replace(/\s+/g, '')}`).toString('base64')
     
     const response = await fetch(`${backendUrl}/wp-json/wp/v2/users/${payload.userId}`, {
       method: 'POST',
       headers: { 
         'Content-Type': 'application/json',
-        'Authorization': authHeader 
+        'Authorization': `Basic ${auth}` 
       },
       body: JSON.stringify({
         password: password
@@ -58,7 +61,7 @@ export async function POST(request: NextRequest) {
     if (!response.ok) {
       const errorData = await response.json()
       console.error('WordPress password update failed:', errorData)
-      return NextResponse.json({ error: 'Failed to update password in WordPress' }, { status: 500 })
+      return NextResponse.json({ error: 'Failed to update password' }, { status: 500 })
     }
 
     return NextResponse.json({ success: true, message: 'Password has been reset successfully' })

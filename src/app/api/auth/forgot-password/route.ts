@@ -15,27 +15,29 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Email is required' }, { status: 400 })
     }
 
-    // 1. Find user in WordPress to get their ID (and verify they exist)
     const backendUrl = process.env.BACKEND_URL
-    const wpUser = process.env.WORDPRESS_USERNAME
-    const wpPass = process.env.APPLICATION_PASSWORD?.replace(/\s+/g, '')
-    
-    if (!backendUrl || !wpUser || !wpPass) {
+    const username = process.env.WORDPRESS_USERNAME
+    const appPassword = process.env.APPLICATION_PASSWORD
+
+    if (!backendUrl || !username || !appPassword) {
+      console.error('Forgot Password - Missing env vars:', { 
+        backendUrl: !!backendUrl, 
+        username: !!username, 
+        appPassword: !!appPassword 
+      })
       return NextResponse.json({ error: 'Backend configuration missing' }, { status: 500 })
     }
 
-    const authHeader = `Basic ${Buffer.from(`${wpUser}:${wpPass}`).toString('base64')}`
+    const auth = Buffer.from(`${username}:${appPassword.replace(/\s+/g, '')}`).toString('base64')
     
     // Search for user by email
     const searchResponse = await fetch(`${backendUrl}/wp-json/wp/v2/users?search=${encodeURIComponent(email)}&context=edit`, {
-      headers: { 'Authorization': authHeader },
+      headers: { 'Authorization': `Basic ${auth}` },
       cache: 'no-store'
     })
 
     if (!searchResponse.ok) {
-      // Don't reveal if user exists or not for security, but log it
       console.error('WordPress user search failed:', searchResponse.status)
-      // We still return success to prevent user enumeration
       return NextResponse.json({ success: true })
     }
 
@@ -43,12 +45,9 @@ export async function POST(request: NextRequest) {
     const user = users.find((u: any) => u.email.toLowerCase() === email.toLowerCase())
 
     if (!user) {
-      console.log(`Password reset requested for non-existent user: ${email}`)
-      // Return success to prevent enumeration
       return NextResponse.json({ success: true })
     }
 
-    // 2. Generate a reset token (JWT)
     const resetToken = await new SignJWT({ 
       userId: user.id,
       email: user.email,
@@ -59,7 +58,6 @@ export async function POST(request: NextRequest) {
       .setExpirationTime('1h')
       .sign(JWT_SECRET)
 
-    // 3. Send the email
     const emailResult = await sendEmail({
       to: email,
       subject: 'Reset your GrowButtler password',
