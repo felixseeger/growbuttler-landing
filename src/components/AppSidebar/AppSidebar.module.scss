@@ -177,7 +177,7 @@
   color: var(--color-text-main);
   display: flex;
   align-items: center;
-  margin-top: 1px; // Fine-tune Y-alignment to match icon center exactly
+  margin-top: -2px; // Pull text up slightly for optical alignment with icon center
 }
 
 .brandSub {

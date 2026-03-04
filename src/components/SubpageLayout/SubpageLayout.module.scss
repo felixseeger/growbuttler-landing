@@ -34,6 +34,7 @@
 }
 
 .topLogoToggle {
+  margin-top: -2.5rem; // Align vertically with the Sidebar icon
   margin-bottom: 2rem;
   animation: fadeInLogo 0.3s ease-out;
   cursor: pointer;
