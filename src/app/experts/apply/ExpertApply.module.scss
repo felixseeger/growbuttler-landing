@@ -7,6 +7,11 @@
 .wrapper {
   max-width: 600px;
   margin: 0 auto;
+  transition: max-width 0.3s ease;
+
+  @media (min-width: 900px) {
+    max-width: 900px;
+  }
 }
 
 .header {
@@ -79,6 +84,32 @@
     font-size: 1.5rem;
     font-weight: 700;
     margin: 0;
+  }
+
+  @media (min-width: 900px) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 2rem;
+    row-gap: 1.5rem;
+
+    h2,
+    .sectionDesc,
+    .errorMsg,
+    .buttonGroup,
+    .interviewInfo,
+    .checkboxGroup,
+    .reviewCard {
+      grid-column: span 2;
+    }
+
+    // Exceptions for specific groups that should span full width
+    .formGroup:has(textarea),
+    .formGroup:has(.checkboxGrid),
+    .formGroup:has(.uploadArea),
+    .formGroup:has(.imageList),
+    .formGroup:has(.timeSlots) {
+      grid-column: span 2;
+    }
   }
 }
 
@@ -353,6 +384,13 @@
   display: flex;
   gap: 1rem;
 
+  @media (min-width: 900px) {
+    grid-column: span 2;
+    max-width: 500px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
   button {
     flex: 1;
     padding: 1rem;
@@ -375,6 +413,14 @@
   background: var(--color-primary);
   color: white;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+
+  @media (min-width: 900px) {
+    grid-column: span 2;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+  }
 
   &:hover:not(:disabled) {
     background: var(--color-primary-hover);
@@ -401,6 +447,7 @@
 
   &:not(.buttonGroup button:first-child) {
     margin-left: auto;
+    margin-right: auto;
   }
 }
 
