@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useSidebar } from '@/context/SidebarContext'
 import styles from './AppSidebar.module.scss'
 
 const navItems = [
@@ -16,10 +17,9 @@ const navItems = [
 export default function AppSidebar() {
   const pathname = usePathname()
   const [isOpen, setIsOpen] = useState(false)
-  const [isCollapsed, setIsCollapsed] = useState(false)
+  const { isCollapsed, toggleCollapse } = useSidebar()
 
   const closeSidebar = () => setIsOpen(false)
-  const toggleCollapse = () => setIsCollapsed(!isCollapsed)
 
   return (
     <>

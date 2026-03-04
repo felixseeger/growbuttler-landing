@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import '@/styles/globals.scss'
 import { organizationSchema, localBusinessSchema, serviceSchema, aggregateRatingSchema } from '@/lib/schema'
 import { BottomNav } from '@/components/BottomNav'
+import { SidebarProvider } from '@/context/SidebarContext'
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://growbuttler.com'
 
@@ -50,7 +51,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="flex flex-col min-h-screen">
         <div className="paper-texture" aria-hidden />
-        {children}
+        <SidebarProvider>
+          {children}
+        </SidebarProvider>
         <BottomNav />
       </body>
     </html>
