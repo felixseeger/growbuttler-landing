@@ -34,11 +34,13 @@
 }
 
 .topLogoToggle {
-  margin-top: -2.25rem; // Adjust to match center of sidebar icon
+  margin-top: -2.5rem; // Align the center of this element with the sidebar icon
   margin-bottom: 2rem;
   animation: fadeInLogo 0.3s ease-out;
   cursor: pointer;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  height: 2.25rem; // Same as .brandRow height to match vertical center
 
   :global(.material-symbols-outlined) {
     transition: transform 0.3s ease;
