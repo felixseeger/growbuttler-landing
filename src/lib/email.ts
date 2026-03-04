@@ -4,6 +4,7 @@ const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KE
 
 export type EmailTemplateType =
   | 'welcome'
+  | 'password_reset'
   | 'expert_application_received'
   | 'expert_application_admin'
   | 'expert_approved'
@@ -39,6 +40,24 @@ function getEmailTemplate(
           </div>
         `,
         text: `Welcome to GrowButtler, ${data.name}!\n\nYour account has been created successfully.\n\nGo to: ${baseUrl}/dashboard`,
+      }
+
+    case 'password_reset':
+      return {
+        html: `
+          <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 12px;">
+            <h1 style="color: #13ec3b;">Reset Your Password</h1>
+            <p>Hello,</p>
+            <p>We received a request to reset your password for your GrowButtler account.</p>
+            <p>Click the button below to choose a new password. This link will expire in 1 hour.</p>
+            <div style="margin: 30px 0;">
+              <a href="${baseUrl}/reset-password?token=${data.token}&email=${encodeURIComponent(data.email)}" style="background: #13ec3b; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold;">Reset Password</a>
+            </div>
+            <p>If you didn't request this, you can safely ignore this email.</p>
+            <p style="color: #6b7280; font-size: 14px;">Best regards,<br/>The GrowButtler Team</p>
+          </div>
+        `,
+        text: `Reset Your Password\n\nHello,\n\nWe received a request to reset your password for your GrowButtler account.\n\nReset your password here: ${baseUrl}/reset-password?token=${data.token}&email=${encodeURIComponent(data.email)}\n\nIf you didn't request this, you can safely ignore this email.`,
       }
 
     case 'expert_application_received':
