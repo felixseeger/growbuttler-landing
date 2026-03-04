@@ -15,9 +15,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Email is required' }, { status: 400 })
     }
 
-    const backendUrl = process.env.BACKEND_URL
-    const username = process.env.WORDPRESS_USERNAME
-    const appPassword = process.env.APPLICATION_PASSWORD
+    const backendUrl = process.env.BACKEND_URL || 'https://growbuttler-back.felixseeger.de'
+    const username = process.env.WORDPRESS_USERNAME || 'felix seeger'
+    const appPassword = process.env.APPLICATION_PASSWORD || '4bF7Z pLIo I2nw 99iM v0Zm yg0'
 
     if (!backendUrl || !username || !appPassword) {
       console.error('Forgot Password - Missing env vars:', { 
