@@ -43,6 +43,13 @@
     transition: transform 0.3s ease;
   }
 
+  // Target the branding logo icon inside the content toggle logo
+  .contentToggleLogo {
+    [class*="logoIcon"] {
+      display: none;
+    }
+  }
+
   &:hover {
     :global(.material-symbols-outlined) {
       transform: scale(1.1);

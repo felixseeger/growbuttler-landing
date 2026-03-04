@@ -81,7 +81,11 @@
     }
   }
 
-  .logoIcon,
+  .logoIcon {
+    display: flex !important; // Restore visibility of the icon in sidebar when collapsed
+    font-size: 1.5rem; // Slightly smaller to fit collapsed width
+  }
+
   .collapseBtn {
     display: none !important;
   }
@@ -169,10 +173,11 @@
   font-weight: 700;
   font-size: 1.5rem;
   letter-spacing: -0.025em;
-  line-height: 1; // Set to 1 for better vertical centering with the icon
+  line-height: 1;
   color: var(--color-text-main);
   display: flex;
   align-items: center;
+  margin-top: 1px; // Fine-tune Y-alignment to match icon center exactly
 }
 
 .brandSub {
