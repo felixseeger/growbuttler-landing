@@ -30,11 +30,18 @@ export async function POST(request: NextRequest) {
 
     const auth = Buffer.from(`${username}:${appPassword.replace(/\s+/g, '')}`).toString('base64')
     
-    // Search for user by email
-    const searchResponse = await fetch(`${backendUrl}/wp-json/wp/v2/users?search=${encodeURIComponent(email)}&context=edit`, {
+    // Search for user by email - use a simpler search if the first one fails
+    let searchResponse = await fetch(`${backendUrl}/wp-json/wp/v2/users?search=${encodeURIComponent(email)}&context=edit`, {
       headers: { 'Authorization': `Basic ${auth}` },
       cache: 'no-store'
     })
+
+    if (!searchResponse.ok) {
+      // Fallback search without edit context
+      searchResponse = await fetch(`${backendUrl}/wp-json/wp/v2/users?search=${encodeURIComponent(email)}`, {
+        cache: 'no-store'
+      })
+    }
 
     if (!searchResponse.ok) {
       console.error('WordPress user search failed:', searchResponse.status)
