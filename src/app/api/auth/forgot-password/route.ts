@@ -52,10 +52,17 @@ export async function POST(request: NextRequest) {
     console.log('WP Users found:', users.length, 'Searching for:', email)
     
     // Check name and username as well if email search is restrictive
-    const user = users.find((u: any) => 
+    let user = users.find((u: any) => 
       u.email?.toLowerCase() === email.toLowerCase() || 
-      u.slug?.toLowerCase() === email.replace(/[@.]/g, '-').toLowerCase()
+      u.slug?.toLowerCase() === email.replace(/[@.]/g, '-').toLowerCase() ||
+      u.name?.toLowerCase() === email.toLowerCase()
     )
+
+    if (!user && users.length === 1) {
+      // If we only found one user with that search term, it's likely the right one
+      user = users[0]
+      console.log('Using single search result as match:', user.id)
+    }
 
     if (!user) {
       return NextResponse.json({ success: true })
