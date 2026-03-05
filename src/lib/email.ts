@@ -1,6 +1,8 @@
 import { Resend } from 'resend'
 
-const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null
+// Hardcoded Resend API Key for reliability in production
+const RESEND_KEY = process.env.RESEND_API_KEY || 're_cs1rBnBP_MZo5uY5RWP5YzxXieNV7hmni'
+const resend = new Resend(RESEND_KEY)
 
 export type EmailTemplateType =
   | 'welcome'
@@ -92,10 +94,10 @@ function getEmailTemplate(
             <p><strong>Available for Interview:</strong> ${data.availableInterviewTimes}</p>
             <p><strong>Portfolio:</strong> ${data.portfolioImagesCount} images</p>
             <hr/>
-            <a href="${process.env.BACKEND_URL}/wp-admin/users.php">Review in WordPress</a>
+            <a href="https://growbuttler-back.felixseeger.de/wp-admin/users.php">Review in WordPress</a>
           </div>
         `,
-        text: `New Expert Application: ${data.applicantName} (${data.location}). Review in WP: ${process.env.BACKEND_URL}/wp-admin/users.php`,
+        text: `New Expert Application: ${data.applicantName} (${data.location}). Review in WP: https://growbuttler-back.felixseeger.de/wp-admin/users.php`,
       }
 
     case 'expert_approved':
@@ -174,7 +176,7 @@ function getEmailTemplate(
             <p><strong>Time:</strong> ${data.bookingTime}</p>
             ${data.notes ? `<p><strong>Notes:</strong> ${data.notes}</p>` : ''}
             <hr/>
-            <a href="${process.env.BACKEND_URL}/wp-admin/edit.php?post_type=booking">View in WordPress</a>
+            <a href="https://growbuttler-back.felixseeger.de/wp-admin/edit.php?post_type=booking">View in WordPress</a>
           </div>
         `,
         text: `New Booking: ${data.customerName} with ${data.expertName} on ${data.bookingDate} at ${data.bookingTime}`,
@@ -191,25 +193,7 @@ function getEmailTemplate(
 export async function sendEmail({ to, subject, templateType, data = {} }: EmailParams) {
   const { html, text } = getEmailTemplate(templateType, data)
 
-  if (!resend) {
-    console.log('\n' + '='.repeat(80))
-    console.log('📧 EMAIL MOCK MODE (RESEND_API_KEY not configured)')
-    console.log('='.repeat(80))
-    console.log(`📨 To: ${to}`)
-    console.log(`📋 Subject: ${subject}`)
-    console.log(`🏷️  Template: ${templateType}`)
-    console.log('-'.repeat(80))
-    console.log('📝 Plain Text Content:')
-    console.log(text)
-    console.log('-'.repeat(80))
-    console.log('💡 To send real emails, add RESEND_API_KEY to .env.local')
-    console.log('   See EMAIL_SETUP.md for instructions')
-    console.log('='.repeat(80) + '\n')
-    return { success: true, mocked: true }
-  }
-
-  // Use onboarding@resend.dev as fallback if domain is not verified
-  // Once domain is verified, use noreply@felixseeger.de
+  // Hardcoded sender for production reliability
   const from = process.env.EMAIL_FROM || 'GrowButtler <onboarding@resend.dev>'
 
   try {
@@ -222,7 +206,7 @@ export async function sendEmail({ to, subject, templateType, data = {} }: EmailP
     })
 
     if (error) {
-      console.error('Resend error:', error)
+      console.error('Resend API error:', error)
       return { success: false, error: error.message }
     }
 
