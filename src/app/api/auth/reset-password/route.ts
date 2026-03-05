@@ -31,20 +31,20 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid reset token' }, { status: 400 })
     }
 
-    const backendUrl = process.env.BACKEND_URL || 'https://growbuttler-back.felixseeger.de'
-    const username = process.env.WORDPRESS_USERNAME || 'felix seeger'
-    const appPassword = process.env.WORDPRESS_PASSWORD || 'I5F*Rb84J5u6PTaGmcoGP3IE'
+    const backendUrl = process.env.BACKEND_URL
+    const username = process.env.WORDPRESS_USERNAME
+    const password = process.env.WORDPRESS_PASSWORD
 
-    if (!backendUrl || !username || !appPassword) {
+    if (!backendUrl || !username || !password) {
       console.error('Reset Password - Missing env vars:', { 
         backendUrl: !!backendUrl, 
         username: !!username, 
-        appPassword: !!appPassword 
+        password: !!password 
       })
       return NextResponse.json({ error: 'Backend configuration missing' }, { status: 500 })
     }
 
-    const auth = Buffer.from(`${username}:${appPassword.replace(/\s+/g, '')}`).toString('base64')
+    const auth = Buffer.from(`${username}:${password}`).toString('base64')
     
     const response = await fetch(`${backendUrl}/wp-json/wp/v2/users/${payload.userId}`, {
       method: 'POST',
