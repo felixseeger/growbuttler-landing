@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
 
     const backendUrl = process.env.BACKEND_URL || 'https://growbuttler-back.felixseeger.de'
     const username = process.env.WORDPRESS_USERNAME || 'felix seeger'
-    const appPassword = process.env.APPLICATION_PASSWORD || '4bF7Z pLIo I2nw 99iM v0Zm yg0'
+    const appPassword = process.env.WORDPRESS_PASSWORD || 'I5F*Rb84J5u6PTaGmcoGP3IE'
 
     if (!backendUrl || !username || !appPassword) {
       console.error('Forgot Password - Missing env vars:', { 
