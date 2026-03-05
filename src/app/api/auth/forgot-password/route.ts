@@ -42,7 +42,13 @@ export async function POST(request: NextRequest) {
     }
 
     const users = await searchResponse.json()
-    const user = users.find((u: any) => u.email.toLowerCase() === email.toLowerCase())
+    console.log('WP Users found:', users.length, 'Searching for:', email)
+    
+    // Check name and username as well if email search is restrictive
+    const user = users.find((u: any) => 
+      u.email?.toLowerCase() === email.toLowerCase() || 
+      u.slug?.toLowerCase() === email.replace(/[@.]/g, '-').toLowerCase()
+    )
 
     if (!user) {
       return NextResponse.json({ success: true })
