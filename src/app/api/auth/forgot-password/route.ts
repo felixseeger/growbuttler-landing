@@ -91,7 +91,7 @@ export async function POST(request: NextRequest) {
 
     if (!emailResult.success) {
       console.error('Failed to send reset email:', emailResult.error)
-      return NextResponse.json({ error: 'Failed to send reset email' }, { status: 500 })
+      return NextResponse.json({ error: `Failed to send reset email: ${emailResult.error}` }, { status: 500 })
     }
 
     return NextResponse.json({ success: true })
